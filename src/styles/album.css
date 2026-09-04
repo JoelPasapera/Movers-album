@@ -1,0 +1,60 @@
+.layout{display:grid;grid-template-columns:196px 1fr;gap:14px}
+
+.tabs{display:flex;flex-direction:column;gap:7px}
+.tab{
+  font-family:var(--font-display);font-weight:600;font-size:16px;text-align:left;
+  background:var(--paper);border:var(--stroke);border-radius:var(--r-sm);
+  padding:8px 12px;display:flex;align-items:center;gap:9px;width:100%;
+  transition:transform .1s;
+}
+.tab:hover{transform:translateX(3px)}
+.tab .dot{width:14px;height:14px;border-radius:50%;border:var(--stroke);flex:none}
+.tab[aria-selected="true"]{background:var(--yellow);transform:translateX(5px)}
+.tab small{margin-left:auto;font-family:var(--font-body);font-size:12px;opacity:.65}
+
+.album-head{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.album-head h2{font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1}
+.album-head p{font-size:13px;opacity:.7;padding-bottom:4px}
+
+.bar{
+  height:12px;background:var(--page);border:var(--stroke);
+  border-radius:999px;margin:12px 0 16px;overflow:hidden;
+}
+.bar i{display:block;height:100%;background:var(--green);transition:width .4s}
+
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.cromo{
+  aspect-ratio:1/1.15;border:var(--stroke);border-radius:var(--r-sm);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  padding:6px;text-align:center;transition:transform .1s;
+}
+.cromo:hover{transform:rotate(-3deg) scale(1.05)}
+.cromo b{font-family:var(--font-display);font-weight:800;font-size:13px;line-height:1.1;word-break:break-word}
+.cromo .face{font-size:26px;line-height:1}
+.cromo--locked{background:var(--page);border-style:dashed;opacity:.75}
+.cromo--locked b{opacity:.5}
+
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.game-card{
+  border:var(--stroke-thick);border-radius:var(--r-md);padding:12px 14px;color:#fff;
+  text-align:left;transition:transform .1s;
+}
+.game-card:hover{transform:translateY(-4px)}
+.game-card h3{font-family:var(--font-display);font-weight:800;font-size:19px;line-height:1.1}
+.game-card p{font-size:12px;line-height:1.35;margin-top:3px}
+.game-card .tag{
+  display:inline-block;font-size:11px;font-weight:700;background:rgba(255,255,255,.28);
+  border-radius:999px;padding:2px 9px;margin-top:8px;
+}
+.game-card--soon{opacity:.55;cursor:not-allowed}
+
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .tabs{flex-direction:row;overflow-x:auto;padding-bottom:4px}
+  .tab{flex:none}
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .games{grid-template-columns:1fr}
+}
+
+.cromo--text{justify-content:center}
+.cromo--text b{font-size:16px;line-height:1.15}
