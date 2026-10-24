@@ -1,0 +1,12 @@
+{
+  "name": "movers-album",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Web de practica para el examen Cambridge A1 Movers",
+  "scripts": {
+    "check": "node checks/run.js",
+    "check:update": "node checks/run.js --update-baseline",
+    "start": "npx serve ."
+  }
+}

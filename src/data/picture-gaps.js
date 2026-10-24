@@ -1,0 +1,38 @@
+// "What are the Movers doing today?" del picture book: una frase con hueco y
+// un banco de dibujos. La frase da el contexto; el dibujo da la palabra.
+// Todas las palabras objetivo tienen dibujo en el album.
+
+export const PICTURE_GAPS = [
+  { target: 'sweater', text: 'Charlie is cold so he puts on his best grey ___.' },
+  { target: 'scarf', text: 'Daisy is hot so she takes off her pink ___.' },
+  { target: 'coffee', text: 'Fred\u2019s dad is thirsty so Fred gives him a hot ___.' },
+  { target: 'toothbrush', text: 'Jane has toothache so she cleans her teeth with a new ___.' },
+  { target: 'lift', text: 'Jim is too tired to climb the stairs so he takes the ___.' },
+  { target: 'coat', text: 'Lily is going out in the rain so she puts on her black ___.' },
+  { target: 'countryside', text: 'Paul is going to have a picnic in the ___.' },
+  { target: 'computer', text: 'Peter does his homework on the ___.' },
+  { target: 'hospital', text: 'Sally would like to see her aunt, who is a nurse at the ___.' },
+  { target: 'pasta', text: 'Vicky cooks ___ for her hungry family.' },
+  { target: 'helmet', text: 'Jack rides his bike to school, so he wears a ___.' },
+  { target: 'ticket', text: 'Mary wants to take the train, so she buys a ___.' },
+  { target: 'library', text: 'Zoe loves reading, so she goes to the ___.' },
+  { target: 'kite', text: 'It is windy today, so Fred flies his ___ in the park.' },
+  { target: 'towel', text: 'After swimming, Daisy dries her hair with a ___.' },
+  { target: 'sandwich', text: 'For lunch, Jim eats a cheese ___.' },
+  { target: 'boots', text: 'The grass is wet, so Vicky puts on her ___.' },
+  { target: 'guitar', text: 'Peter is in a band and he plays the ___.' },
+  { target: 'milkshake', text: 'Sally is thirsty, so she drinks a cold ___.' },
+  { target: 'kitten', text: 'Lily has a new pet. It is a small ___.' },
+  { target: 'jacket', text: 'It is raining, so Jack puts on his ___.' },
+  { target: 'mountain', text: 'Paul and his dad climb a big ___ on Sunday.' },
+  { target: 'tractor', text: 'The farmer drives his ___ in the field.' },
+  { target: 'penguin', text: 'At the zoo, Jane watches a black and white ___.' },
+  { target: 'glasses', text: 'Grandpa can\u2019t read the book, so he puts on his ___.' },
+  { target: 'cake', text: 'It is Zoe\u2019s birthday, so her mum makes a big ___.' },
+  { target: 'shell', text: 'On the beach, Fred finds a pink ___ in the sand.' },
+  { target: 'skateboard', text: 'Jim goes to the park to ride his new ___.' },
+  { target: 'salad', text: 'Mary is not very hungry, so she has a small ___.' },
+  { target: 'clock', text: 'Charlie looks at the ___ on the wall. It is nine.' },
+  { target: 'rainbow', text: 'After the rain, Daisy sees a ___ in the sky.' },
+  { target: 'balloon', text: 'At the party, every child gets a red ___.' },
+];

@@ -1,0 +1,76 @@
+/* Informe imprimible por alumno (ui/report.js). En pantalla es una tarjeta
+   mas; al imprimir se queda solo el informe, en una hoja, sin colores de fondo. */
+.report-head{margin-top:10px}
+.report-kicker{font-family:var(--font-display);font-weight:600;font-size:13px;opacity:.65;text-transform:uppercase;letter-spacing:.04em}
+.report-head h2{font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1.05}
+.report-head p{font-size:14px;opacity:.75}
+
+.report-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 6px}
+.report-box{
+  border:var(--stroke);border-radius:var(--r-md);padding:10px 12px;background:var(--page);
+  display:flex;flex-direction:column;gap:2px;
+}
+.report-box b{font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1}
+.report-box span{font-size:12px;opacity:.75}
+
+.report-title{font-family:var(--font-display);font-weight:800;font-size:19px;margin:20px 0 6px;line-height:1.1}
+.report-small{font-size:12px;opacity:.75;line-height:1.4}
+.report-muted{opacity:.6;font-size:14px}
+
+.report-table{width:100%;border-collapse:collapse;font-size:14px}
+.report-table th{font-family:var(--font-display);font-weight:600;font-size:12px;opacity:.7;text-align:left;padding:4px 6px}
+.report-table td{padding:5px 6px;border-top:1px solid var(--line);vertical-align:middle}
+.report-table td b{display:block;font-family:var(--font-display);font-weight:800;line-height:1.1}
+.report-table td small{display:block;font-size:11px;opacity:.65}
+.report-paper{font-family:var(--font-display);font-weight:800;white-space:nowrap}
+.report-status{font-family:var(--font-display);font-weight:700;font-size:13px;white-space:nowrap}
+.report-status--ready{color:var(--green)}
+.report-status--nearly{color:var(--orange)}
+.report-status--practise{color:var(--red)}
+.report-status--new{opacity:.5}
+
+.report-shields{display:inline-flex;gap:2px;vertical-align:middle}
+.report-shields i{
+  display:inline-block;width:12px;height:14px;border:2px solid var(--ink);
+  border-radius:3px 3px 6px 6px;background:var(--paper);
+}
+.report-shields i.is-on{background:var(--yellow);border-width:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.report-bands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.report-band{border:var(--stroke);border-radius:var(--r-sm);padding:8px 10px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.report-band b{font-family:var(--font-display);font-weight:800;font-size:18px}
+
+.report-practise{margin:0 0 0 20px;display:grid;gap:6px;font-size:14px;line-height:1.4}
+.report-practise b{font-family:var(--font-display);font-weight:800}
+
+.report-pages{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 14px;font-size:12px}
+.report-page{display:grid;grid-template-columns:1fr 70px 38px;gap:6px;align-items:center}
+.report-page small{text-align:right;opacity:.7}
+.report-bar{height:8px;border:2px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--paper)}
+.report-bar i{display:block;height:100%;background:var(--green);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.report-foot{margin-top:22px;border-top:var(--stroke);padding-top:10px;font-size:13px;line-height:1.6}
+
+@media(max-width:720px){
+  .report-summary{grid-template-columns:repeat(2,1fr)}
+  .report-pages{grid-template-columns:1fr}
+  .report-bands{grid-template-columns:1fr}
+}
+
+@media print{
+  @page{margin:12mm}
+  body{background:#fff;padding:0;color:#000}
+  #shell,.footnote,.report-actions,.voice-notice{display:none !important}
+  .app{max-width:none}
+  .card.report{border:none;border-radius:0;padding:0;box-shadow:none}
+  .report-box,.report-band,.report-bar{background:#fff}
+  .report-summary,.report-table,.report-bands{break-inside:avoid}
+  .report-title{break-after:avoid}
+  .report-head h2{font-size:28px}
+  /* Los escudos y las barras se ven aunque la impresora no pinte fondos:
+     el escudo ganado lleva el borde grueso y el relleno pide imprimirse. */
+  .report-shields i.is-on{background:#000}
+  .report-bar i{background:#000}
+  .report-box b,.report-band b{color:#000}
+  .report-status--ready,.report-status--nearly,.report-status--practise{color:#000}
+}

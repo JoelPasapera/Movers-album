@@ -1,0 +1,26 @@
+:root{
+  --ink:#14204A;
+  --page:#E8F0FF;
+  --paper:#FFFFFF;
+  --line:#C6D6F2;
+
+  --red:#E33B2E;
+  --orange:#F5811F;
+  --yellow:#FFC523;
+  --green:#2BA84A;
+  --blue:#1F7BE0;
+  --purple:#8A4FC8;
+  --pink:#FF6EA6;
+  --brown:#96602F;
+  --grey:#8B93A6;
+  --black:#14204A;
+
+  --font-display:"Baloo 2", system-ui, sans-serif;
+  --font-body:"Atkinson Hyperlegible", system-ui, sans-serif;
+
+  --stroke:3px solid var(--ink);
+  --stroke-thick:4px solid var(--ink);
+  --r-sm:12px;
+  --r-md:16px;
+  --r-lg:20px;
+}

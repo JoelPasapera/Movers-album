@@ -1,0 +1,32 @@
+/* Fuentes empaquetadas. Sin esto la web dependia de Google Fonts y en un aula
+   sin internet cambiaba la tipografia entera. Licencia OFL, ficheros de
+   @fontsource (Baloo 2 y Atkinson Hyperlegible), solo el subconjunto latino. */
+
+@font-face{
+  font-family:'Baloo 2';
+  font-style:normal;
+  font-weight:600;
+  font-display:swap;
+  src:url('../fonts/baloo-2-latin-600-normal.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Baloo 2';
+  font-style:normal;
+  font-weight:800;
+  font-display:swap;
+  src:url('../fonts/baloo-2-latin-800-normal.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Atkinson Hyperlegible';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url('../fonts/atkinson-hyperlegible-latin-400-normal.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Atkinson Hyperlegible';
+  font-style:normal;
+  font-weight:700;
+  font-display:swap;
+  src:url('../fonts/atkinson-hyperlegible-latin-700-normal.woff2') format('woff2');
+}

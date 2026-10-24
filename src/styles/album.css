@@ -1,0 +1,112 @@
+.layout{display:grid;grid-template-columns:196px 1fr;gap:14px}
+
+.tabs{display:flex;flex-direction:column;gap:7px}
+.tab{
+  font-family:var(--font-display);font-weight:600;font-size:16px;text-align:left;
+  background:var(--paper);border:var(--stroke);border-radius:var(--r-sm);
+  padding:8px 12px;display:flex;align-items:center;gap:9px;width:100%;
+  transition:transform .1s;
+}
+.tab:hover{transform:translateX(3px)}
+.tab .dot{width:14px;height:14px;border-radius:50%;border:var(--stroke);flex:none}
+.tab[aria-selected="true"]{background:var(--yellow);transform:translateX(5px)}
+.tab small{margin-left:auto;font-family:var(--font-body);font-size:12px;opacity:.65}
+
+.album-head{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.album-head h2{font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1}
+.album-head p{font-size:13px;opacity:.7;padding-bottom:4px}
+
+.bar{
+  height:12px;background:var(--page);border:var(--stroke);
+  border-radius:999px;margin:12px 0 16px;overflow:hidden;
+}
+.bar i{display:block;height:100%;background:var(--green);transition:width .4s}
+
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.cromo{
+  aspect-ratio:1/1.15;border:var(--stroke);border-radius:var(--r-sm);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  padding:6px;text-align:center;transition:transform .1s;
+}
+.cromo:hover{transform:rotate(-3deg) scale(1.05)}
+.cromo b{font-family:var(--font-display);font-weight:800;font-size:13px;line-height:1.1;word-break:break-word}
+.cromo .face{font-size:26px;line-height:1}
+.cromo--locked{background:var(--page);border-style:dashed;opacity:.75}
+.cromo--locked b{opacity:.5}
+
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.game-card{
+  border:var(--stroke-thick);border-radius:var(--r-md);padding:12px 14px;color:#fff;
+  text-align:left;transition:transform .1s;
+}
+.game-card:hover{transform:translateY(-4px)}
+.game-card h3{font-family:var(--font-display);font-weight:800;font-size:19px;line-height:1.1}
+.game-card p{font-size:12px;line-height:1.35;margin-top:3px}
+.game-card .tag{
+  display:inline-block;font-size:11px;font-weight:700;background:rgba(255,255,255,.28);
+  border-radius:999px;padding:2px 9px;margin-top:8px;
+}
+.game-card--soon{opacity:.55;cursor:not-allowed}
+
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .tabs{flex-direction:row;overflow-x:auto;padding-bottom:4px}
+  .tab{flex:none}
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .games{grid-template-columns:1fr}
+}
+
+.cromo--text{justify-content:center}
+.cromo--text b{font-size:16px;line-height:1.15}
+
+/* Tableros tematicos (picture boards) */
+.boards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:4px}
+.board-card{
+  border:var(--stroke-thick);border-radius:var(--r-md);padding:12px 14px;
+  background:var(--paper);text-align:left;position:relative;overflow:hidden;
+  transition:transform .1s;
+}
+.board-card::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--board);
+}
+.board-card:hover{transform:translateY(-4px)}
+.board-card__icons{display:flex;gap:4px;font-size:26px;line-height:1;margin-left:6px}
+.board-card h3{font-family:var(--font-display);font-weight:800;font-size:17px;line-height:1.1;margin:6px 0 0 6px}
+.board-card p{font-size:12px;opacity:.7;margin:3px 0 0 6px}
+
+.board-intro{
+  display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;
+  background:var(--page);border:var(--stroke);border-radius:var(--r-md);
+  padding:14px 16px;margin-bottom:14px;
+}
+.board-intro p{flex:1;min-width:220px;font-size:17px;line-height:1.5}
+.grid--board .cromo{position:relative}
+.cromo--known{box-shadow:0 0 0 3px var(--green) inset}
+.cromo__tick{
+  position:absolute;top:4px;right:6px;font-size:13px;font-weight:800;color:var(--green);
+}
+.board-talk{margin:0 0 6px 0;padding:0;list-style:none;display:grid;gap:8px}
+.board-talk li{
+  display:flex;align-items:center;gap:10px;font-family:var(--font-display);
+  font-weight:600;font-size:18px;line-height:1.3;
+}
+.board-talk__say{padding:4px 10px;font-size:18px}
+
+/* La lamina de un tablero dentro de Let's talk! */
+.board-picture{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:8px;
+  background:var(--page);border:var(--stroke);border-radius:var(--r-md);padding:12px;
+}
+.board-tile{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  background:var(--paper);border:var(--stroke);border-radius:var(--r-sm);padding:6px 4px;
+  text-align:center;
+}
+.board-tile__face{font-size:30px;line-height:1}
+.board-tile b{font-family:var(--font-display);font-weight:800;font-size:12px;line-height:1.1}
+.board-tile--text b{font-size:15px}
+
+@media(max-width:860px){
+  .boards{grid-template-columns:repeat(2,1fr)}
+  .board-picture{grid-template-columns:repeat(4,1fr)}
+}
