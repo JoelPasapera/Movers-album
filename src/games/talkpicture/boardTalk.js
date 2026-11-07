@@ -24,7 +24,10 @@ import { wordById } from '../../engine/vocabulary.js';
  * @property {string} icon  vacio si la palabra no tiene dibujo
  */
 
-/** @param {string} text */
+/**
+ * @param {string} text
+ * @returns {string[]}
+ */
 export const words = (text) => String(text)
   .toLowerCase()
   .replace(/’/g, "'")

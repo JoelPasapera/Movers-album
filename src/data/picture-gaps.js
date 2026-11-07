@@ -9,7 +9,7 @@ export const PICTURE_GAPS = [
   { target: 'toothbrush', text: 'Jane has toothache so she cleans her teeth with a new ___.' },
   { target: 'lift', text: 'Jim is too tired to climb the stairs so he takes the ___.' },
   { target: 'coat', text: 'Lily is going out in the rain so she puts on her black ___.' },
-  { target: 'countryside', text: 'Paul is going to have a picnic in the ___.' },
+  { target: 'countryside', text: 'Paul wants to have a picnic in the ___.' },
   { target: 'computer', text: 'Peter does his homework on the ___.' },
   { target: 'hospital', text: 'Sally would like to see her aunt, who is a nurse at the ___.' },
   { target: 'pasta', text: 'Vicky cooks ___ for her hungry family.' },

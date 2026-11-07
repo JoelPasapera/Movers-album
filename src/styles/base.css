@@ -13,6 +13,12 @@ button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
 input{font:inherit;color:inherit}
 
 .app{max-width:1080px;margin:0 auto}
+#view:focus{outline:none}
+
+/* Quien usa el teclado ve siempre donde esta. Las zonas que solo reciben el
+   foco al repintarse (tabindex -1) no se recuadran. */
+:focus-visible{outline:3px solid var(--blue-deep);outline-offset:3px}
+[tabindex="-1"]:focus{outline:none}
 
 .card{
   background:var(--paper);
@@ -56,3 +62,17 @@ input{font:inherit;color:inherit}
   75%{transform:translateX(7px)}
 }
 .shake{animation:shake .3s ease-in-out}
+
+/* Movil: menos margen alrededor, que la pantalla es pequena. */
+@media (max-width:640px){
+  body{padding:10px}
+  .card{padding:14px}
+}
+
+/* Quien pide menos movimiento en su aparato no ve saltos ni sacudidas. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;scroll-behavior:auto !important;
+  }
+}

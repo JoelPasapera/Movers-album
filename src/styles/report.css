@@ -5,7 +5,7 @@
 .report-head h2{font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1.05}
 .report-head p{font-size:14px;opacity:.75}
 
-.report-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 6px}
+.report-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0 6px}
 .report-box{
   border:var(--stroke);border-radius:var(--r-md);padding:10px 12px;background:var(--page);
   display:flex;flex-direction:column;gap:2px;
@@ -15,7 +15,7 @@
 
 .report-title{font-family:var(--font-display);font-weight:800;font-size:19px;margin:20px 0 6px;line-height:1.1}
 .report-small{font-size:12px;opacity:.75;line-height:1.4}
-.report-muted{opacity:.6;font-size:14px}
+.report-muted{opacity:.72;font-size:14px}
 
 .report-table{width:100%;border-collapse:collapse;font-size:14px}
 .report-table th{font-family:var(--font-display);font-weight:600;font-size:12px;opacity:.7;text-align:left;padding:4px 6px}
@@ -27,7 +27,7 @@
 .report-status--ready{color:var(--green)}
 .report-status--nearly{color:var(--orange)}
 .report-status--practise{color:var(--red)}
-.report-status--new{opacity:.5}
+.report-status--new{opacity:.7}
 
 .report-shields{display:inline-flex;gap:2px;vertical-align:middle}
 .report-shields i{
@@ -36,14 +36,16 @@
 }
 .report-shields i.is-on{background:var(--yellow);border-width:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
-.report-bands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.report-bands{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:6px}
 .report-band{border:var(--stroke);border-radius:var(--r-sm);padding:8px 10px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
 .report-band b{font-family:var(--font-display);font-weight:800;font-size:18px}
 
 .report-practise{margin:0 0 0 20px;display:grid;gap:6px;font-size:14px;line-height:1.4}
 .report-practise b{font-family:var(--font-display);font-weight:800}
+.report-hearing{margin:10px 0 0;font-size:14px;line-height:1.4}
+.report-hearing b{font-family:var(--font-display);font-weight:800}
 
-.report-pages{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 14px;font-size:12px}
+.report-pages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 14px;font-size:12px}
 .report-page{display:grid;grid-template-columns:1fr 70px 38px;gap:6px;align-items:center}
 .report-page small{text-align:right;opacity:.7}
 .report-bar{height:8px;border:2px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--paper)}
@@ -52,9 +54,20 @@
 .report-foot{margin-top:22px;border-top:var(--stroke);padding-top:10px;font-size:13px;line-height:1.6}
 
 @media(max-width:720px){
-  .report-summary{grid-template-columns:repeat(2,1fr)}
+  .report-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
   .report-pages{grid-template-columns:1fr}
   .report-bands{grid-template-columns:1fr}
+}
+
+/* En un movil las tablas caben enteras: letra y escudos mas pequenos, y las
+   etiquetas largas ("Reading and Writing", "Not tried yet") pasan de linea. */
+@media(max-width:560px){
+  .report-table{font-size:12px}
+  .report-table th,.report-table td{padding:4px 3px}
+  .report-paper,.report-status{white-space:normal}
+  .report-shields{gap:1px}
+  .report-shields i{width:8px;height:10px;border-width:1.5px;border-radius:2px 2px 4px 4px}
+  .report-shields i.is-on{border-width:3px}
 }
 
 @media print{
@@ -73,4 +86,21 @@
   .report-bar i{background:#000}
   .report-box b,.report-band b{color:#000}
   .report-status--ready,.report-status--nearly,.report-status--practise{color:#000}
+}
+
+/* Las preguntas del cuaderno de errores para repasar en casa. */
+.report-mistakes{margin:10px 0 0;font-size:14px}
+.report-mistakes ol{margin:6px 0 0;padding-left:22px;display:grid;gap:4px}
+@media print{.report-mistakes{break-inside:avoid}}
+
+/* La tabla de notas a escudos (ui/components/shieldTable.js), en Class
+   progress y en las hojas del profesor del examen para imprimir. */
+.shield-table{margin:8px 0 12px;overflow-x:auto}
+.shield-table td{text-align:center;font-variant-numeric:tabular-nums}
+.shield-table thead th{text-align:center}
+.shield-table thead th:first-child{text-align:left}
+.shield-table tbody th{font-size:13px;opacity:1}
+.shield-table__note{font-size:12px;opacity:.75;margin:6px 0 0}
+@media print{
+  .shield-table{break-inside:avoid;overflow:visible}
 }

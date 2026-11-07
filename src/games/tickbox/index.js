@@ -2,15 +2,17 @@ import { h, mount as fill } from '../../core/dom.js';
 import { speakLines, cue, stop as stopVoice, playsLeft, countPlay } from '../../core/audio.js';
 import { buildRound, isCorrect } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { recordShields } from '../../engine/progress.js';
-import * as state from '../../core/state.js';
+import { recordShields, practised } from '../../engine/progress.js';
 import { shieldRow } from '../../ui/components/rewards.js';
+import { isQuiet, QUIET_PAUSE_MS, PICKED, hideScoreInExam } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'tickbox', title: 'Listen and tick' };
 
 // Listening, parte 4: la pregunta, tres dibujos y un dialogo que nombra los
 // tres. Igual que en el examen, cada dialogo suena entero y se elige al final.
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   let questions = buildRound();
   let index = 0;
   let locked = false;
@@ -19,9 +21,10 @@ export function mount(root, ctx = {}) {
 
   const counter = h('span', { class: 'counter' });
   const marks = h('span', { class: 'marks-chip' });
+  hideScoreInExam(marks, ctx);
   const questionLine = h('p');
   const grid = h('div', { class: 'tick-grid' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const again = h('button', {
@@ -62,6 +65,14 @@ export function mount(root, ctx = {}) {
     const ok = isCorrect(q, option.word);
     answers.push({ q, ok, chosen: option.word });
     marks.textContent = `${answers.filter((a) => a.ok).length} / ${questions.length}`;
+    if (quiet) {
+      // La casilla que marco el nino, sin decir si es la buena.
+      for (const card of grid.children) {
+        if (/** @type {HTMLElement} */ (card).dataset.word === option.word) card.classList.add(PICKED);
+      }
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
     feedback.textContent = ok ? 'Yes!' : `It was ${q.answer}. Listen to the whole dialogue: they change their minds.`;
     feedback.className = `spell-feedback spell-feedback--${ok ? 'ok' : 'no'}`;
     cue(ok ? 'correct' : 'wrong');
@@ -107,7 +118,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: correct, total: questions.length });
     const shields = shieldsFor(correct, questions.length);
     recordShields('tickbox', shields);
-    state.touchStreak();
+    practised(meta.id);
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, correct === questions.length ? 'All correct!' : `${correct} out of ${questions.length}`),
       shieldRow(shields),

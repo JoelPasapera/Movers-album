@@ -27,7 +27,7 @@
 
 .streak{
   font-family:var(--font-display);font-weight:800;font-size:17px;
-  background:var(--orange);color:#fff;
+  background:var(--orange-deep);color:#fff;
   border:var(--stroke);border-radius:999px;
   padding:3px 14px;white-space:nowrap;
 }
@@ -40,11 +40,12 @@
 }
 .who-chip:hover{background:var(--yellow)}
 
-.mute{font-size:14px;padding:5px 14px}
-.mute[aria-pressed="true"]{background:var(--grey);color:#fff}
+.mute{font-size:14px;padding:5px 14px;display:inline-flex;align-items:center;gap:6px}
+.mute__icon{font-size:15px;line-height:1}
+.mute--off{background:var(--grey-deep);color:#fff}
 
 .voice-notice{
-  background:var(--orange);color:#fff;border:var(--stroke);border-radius:var(--r-sm);
+  background:var(--orange-deep);color:#fff;border:var(--stroke);border-radius:var(--r-sm);
   padding:9px 14px;margin-bottom:14px;font-size:14px;
 }
 
@@ -77,3 +78,64 @@
 .teacher td.sh--3{color:var(--orange)}
 .teacher td.sh--4,.teacher td.sh--5{color:var(--green)}
 .teacher td.weak{font-size:13px;opacity:.8}
+.teacher td.mixes{font-family:var(--font-display);font-weight:700}
+.class-mistakes__list{margin:8px 0 0;padding-left:22px;display:grid;gap:8px}
+.class-mistakes__list small{display:block;font-size:13px;opacity:.8}
+
+/* Ajustes y avisos */
+.settings-chip{font-size:18px;padding:4px 10px;line-height:1}
+.voice-notice--listening{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.voice-notice--listening span{flex:1;min-width:220px}
+.voice-notice--listening .btn{color:#fff;border-color:#fff;font-size:14px;padding:4px 14px}
+
+.settings .bank-hint{margin-top:6px}
+.settings-block{border-top:2px solid var(--line);padding:14px 0 6px;margin-top:10px}
+.settings-block h3{font-family:var(--font-display);font-weight:800;font-size:20px;margin-bottom:4px}
+.settings-block p{font-size:14px;line-height:1.45;max-width:720px;margin-bottom:8px}
+.settings-warn{background:#FFF1D6;border:var(--stroke);border-radius:var(--r-sm);padding:8px 12px}
+.settings-note{opacity:.75}
+.choices{display:flex;gap:8px;flex-wrap:wrap}
+.choice{font-size:15px}
+.choice[aria-pressed="true"]{background:var(--yellow)}
+.voice-notice--update{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--blue-deep)}
+.voice-notice--update span{flex:1;min-width:200px}
+.voice-notice--update .btn{color:#fff;border-color:#fff;font-size:14px;padding:4px 14px}
+
+/* Tablet y movil: la barra pasa a dos filas (marca y botones arriba; quien
+   juega, escudos y racha abajo). En un iPad en vertical (768 px) ya no cabe
+   en una. */
+@media (max-width:900px){
+  .topbar{flex-wrap:wrap;gap:8px 10px;padding:10px 14px}
+  .topbar::after{content:'';flex-basis:100%;height:0;order:3}
+  .brand{white-space:nowrap;margin-right:auto;order:0}
+  .settings-chip{order:1}
+  .mute{order:2}
+  .who-chip{order:4;max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .topbar__spacer{order:5}
+  .shields{order:6}
+  .streak{order:7}
+}
+/* Movil: todo mas pequeno y el boton de sonido se queda en su dibujo (su
+   nombre sigue ahi para el lector de pantalla). */
+@media (max-width:640px){
+  .topbar{padding:10px 12px}
+  .brand{font-size:21px}
+  .mute{padding:5px 10px}
+  .mute__label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .who-chip{font-size:15px;padding:3px 12px;max-width:40%}
+  .shields{gap:4px}
+  .shield{width:17px;height:20px}
+  .streak{font-size:14px;padding:2px 10px}
+}
+/* Moviles muy estrechos (320-360 px): un poco mas pequeno para que la barra
+   siga en dos filas. */
+@media (max-width:360px){
+  .topbar{gap:6px 8px;padding:8px 10px}
+  .brand{font-size:19px}
+  .settings-chip{padding:4px 8px}
+  .mute{padding:4px 8px}
+  .who-chip{max-width:34%;padding:3px 10px}
+  .shields{gap:3px}
+  .shield{width:13px;height:16px}
+  .streak{font-size:13px;padding:2px 8px}
+}

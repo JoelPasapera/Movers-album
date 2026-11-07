@@ -51,14 +51,71 @@ function chooseQuestion(word) {
 
 const spellQuestion = (word) => ({ kind: 'spell', word, say: word.word });
 
-export function buildRound({ size = 10, topicId = null, ids = null } = {}) {
-  return pickBatch(size, topicId, ids).map((word) => {
-    const task = taskFor(word);
-    if (task === 'picture') return pictureQuestion(word);
-    if (task === 'choose') return chooseQuestion(word);
-    return spellQuestion(word);
-  });
+/**
+ * La pregunta de una palabra, con el tipo que le toca (dibujo, escribir o
+ * elegir). Otra vez la misma palabra da opciones nuevas.
+ * @param {any} word
+ */
+export function questionFor(word) {
+  const task = taskFor(word);
+  if (task === 'picture') return pictureQuestion(word);
+  if (task === 'choose') return chooseQuestion(word);
+  return spellQuestion(word);
 }
+
+/**
+ * Las preguntas de una ronda. Con `maxNew`, no mas palabras nuevas que esas
+ * (engine/vocabulary.js, NEW_PER_ROUND).
+ * @param {{ size?: number, topicId?: string | null, ids?: Iterable<string> | null, maxNew?: number }} [options]
+ */
+export function buildRound({ size = 10, topicId = null, ids = null, maxNew = Infinity } = {}) {
+  return pickBatch(size, topicId, ids, { maxNew }).map(questionFor);
+}
+
+/**
+ * Un paso de la ronda: conocer una palabra nueva (meet) o contestar una
+ * pregunta (test). `retry` es la segunda oportunidad de una palabra fallada.
+ * @typedef {{ type: 'meet', word: any } | { type: 'test', question: any, retry: boolean }} Step
+ */
+
+/** Pasos que hay entre conocer una palabra nueva y que se pregunte. */
+export const MEET_GAP = 2;
+
+/**
+ * El orden de la ronda. Las palabras nuevas van primero y cada una se presenta
+ * (meet) antes de preguntarla, con al menos MEET_GAP pasos en medio: asi hay
+ * que recordarla, no copiarla de la pantalla de antes. Las conocidas van
+ * despues y separan las ultimas nuevas de su pregunta.
+ * @param {any[]} questions @param {(id: string) => boolean} isNew
+ * @returns {Step[]}
+ */
+export function sessionSteps(questions, isNew) {
+  const ordered = [...questions.filter((q) => isNew(q.word.id)), ...questions.filter((q) => !isNew(q.word.id))];
+  /** @type {Step[]} */
+  const steps = [];
+  /** @type {{ question: any, at: number }[]} */
+  const waiting = [];
+  const release = () => {
+    while (waiting.length && steps.length - waiting[0].at > MEET_GAP) {
+      const next = /** @type {{ question: any, at: number }} */ (waiting.shift());
+      steps.push({ type: 'test', question: next.question, retry: false });
+    }
+  };
+  for (const question of ordered) {
+    if (isNew(question.word.id)) {
+      steps.push({ type: 'meet', word: question.word });
+      waiting.push({ question, at: steps.length - 1 });
+    } else {
+      steps.push({ type: 'test', question, retry: false });
+    }
+    release();
+  }
+  for (const rest of waiting) steps.push({ type: 'test', question: rest.question, retry: false });
+  return steps;
+}
+
+/** Pasos que espera una palabra fallada para volver en la misma ronda. */
+export const RETRY_GAP = 3;
 
 export function check(question, answer) {
   if (question.kind === 'spell') {

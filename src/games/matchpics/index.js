@@ -4,13 +4,15 @@ import { getTopic } from '../../data/topics.js';
 import { randomSet } from '../../data/matching.js';
 import { buildRound, isMatch } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { isQuiet, QUIET_PAUSE_MS, PICKED } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'matchpics', title: 'Listen and match' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let source = randomSet();
   let round = buildRound(source);
@@ -87,6 +89,15 @@ export function mount(root, ctx = {}) {
     const ok = isMatch(question, letter);
     if (ok) score += 1;
     answers.push({ question, ok, given: letter });
+    if (quiet) {
+      // La letra que eligio el nino, en su sitio y sin color.
+      stamp(question.left, letter, 'picked');
+      qsa('.match-card', cardGrid).forEach((card) => {
+        if (card.dataset.letter === letter) card.classList.add(PICKED);
+      });
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
     cue(ok ? 'correct' : 'wrong');
     toast(ok ? 'ok' : 'no', ok ? 'Yes!' : `It was ${question.letter}`);
     stamp(question.left, question.letter, ok ? 'ok' : 'no');
@@ -109,7 +120,7 @@ export function mount(root, ctx = {}) {
     counter.textContent = `${index + 1} of ${round.questions.length}`;
     prompt.textContent = question.say;
     prompt.classList.toggle('masked', masked);
-    qsa('.match-card', cardGrid).forEach((c) => c.classList.remove('is-right', 'is-wrong'));
+    qsa('.match-card', cardGrid).forEach((c) => c.classList.remove('is-right', 'is-wrong', PICKED));
     qsa('.match-item', leftCol).forEach((item) => {
       item.classList.toggle('is-active', item.dataset.left === question.left);
     });
@@ -123,7 +134,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total });
     const shields = shieldsFor(score, total);
     recordShields('matchpics', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, score);
     const spare = round.cards
       .filter((c) => c.letter !== round.example.letter
@@ -183,7 +194,7 @@ export function mount(root, ctx = {}) {
 
     fill(stage,
       h('p', { class: 'bank-hint' },
-        `${round.intro} Seven pictures, five answers. Two pictures are never used.`),
+        `${round.intro} Eight pictures and five answers. The first one is done for you. Two pictures are never used.`),
       h('div', { class: 'match-pair' }, [leftCol, cardGrid]),
       h('div', { class: 'instruction instruction--clue' }, [prompt, sayAgain, maskToggle]));
 

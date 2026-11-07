@@ -1,33 +1,14 @@
+// @ts-check
 // Cada nino juega con su propio perfil. Sin esto, tres alumnos en la misma
 // tablet comparten cromos y el progreso no significa nada.
 
+import { wipeFor, readText, writeText } from './storage.js';
+
 const KEY = 'movers-profiles-v1';
-const memory = new Map();
-let usesLocalStorage = true;
 
-try {
-  window.localStorage.setItem('__movers_p__', '1');
-  window.localStorage.removeItem('__movers_p__');
-} catch {
-  usesLocalStorage = false;
-}
-
-function readRaw() {
-  try {
-    return usesLocalStorage ? window.localStorage.getItem(KEY) : memory.get(KEY);
-  } catch {
-    return memory.get(KEY);
-  }
-}
-
-function writeRaw(value) {
-  try {
-    if (usesLocalStorage) window.localStorage.setItem(KEY, value);
-    else memory.set(KEY, value);
-  } catch {
-    memory.set(KEY, value);
-  }
-}
+const readRaw = () => readText(KEY);
+/** @param {string} value */
+const writeRaw = (value) => writeText(KEY, value);
 
 function read() {
   try {
@@ -46,15 +27,38 @@ function write(data) {
   return data;
 }
 
-const slug = (name) => name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 24) || 'player';
+/** @param {string} name */
+const slug = (name) => name.trim().toLowerCase()
+  .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+  .slice(0, 24) || 'player';
 
+/** @param {string} name */
+const sameName = (name) => {
+  const clean = name.trim().toLowerCase();
+  return (/** @type {{ id: string, name: string }} */ p) => p.name.trim().toLowerCase() === clean;
+};
+
+/** @returns {{ id: string, name: string }[]} */
 export const list = () => read().list;
+
+/** El perfil con ese nombre (sin distinguir mayusculas), si ya existe. @param {string} name */
+export const findByName = (name) => list().find(sameName(name)) ?? null;
 
 export const currentId = () => read().current;
 
 export const current = () => list().find((p) => p.id === read().current) ?? null;
 
-export function add(name) {
+/** El que juega, solo si sigue existiendo. */
+export const validCurrentId = () => current()?.id ?? null;
+
+/**
+ * Crea un perfil. Con `select: false` (al importar una copia) no cambia quien
+ * esta jugando.
+ * @param {string} name
+ * @param {{ select?: boolean }} [options]
+ */
+export function add(name, { select: choose = true } = {}) {
   const data = read();
   const clean = name.trim().slice(0, 18);
   if (!clean) return null;
@@ -66,7 +70,7 @@ export function add(name) {
   }
   const profile = { id, name: clean };
   data.list.push(profile);
-  data.current = id;
+  if (choose) data.current = id;
   write(data);
   return profile;
 }
@@ -82,10 +86,12 @@ export function select(id) {
 export function remove(id) {
   const data = read();
   data.list = data.list.filter((p) => p.id !== id);
-  if (data.current === id) data.current = data.list[0]?.id ?? null;
+  // Si se borra al que estaba jugando, no juega nadie (la app pregunta quien
+  // juega): otro nino no puede heredar la sesion sin darse cuenta.
+  if (data.current === id) data.current = null;
   write(data);
-  try {
-    if (usesLocalStorage) window.localStorage.removeItem(`movers-album-v1:${id}`);
-  } catch { /* ignore */ }
+  // Su album se borra tambien: si no, un nino nuevo con el mismo nombre
+  // heredaria los cromos del que se borro.
+  wipeFor(id);
   return data.list;
 }

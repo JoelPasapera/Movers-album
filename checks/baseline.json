@@ -11,11 +11,13 @@
   "partesEnSimulacro": 15,
   "palabrasEjercitables": 883,
   "tiposDeActividad": 18,
-  "piezasDeContenido": 591,
-  "escenasDibujadas": 8,
+  "piezasDeContenido": 639,
+  "escenasDibujadas": 16,
   "actividadesPictureBook": 7,
   "criteriosDeSpeaking": 3,
   "tableros": 8,
   "palabrasDeTablero": 155,
-  "partesEnInforme": 15
+  "partesEnInforme": 15,
+  "partidasJugadas": 126,
+  "juegosQueApuntanFallos": 12
 }

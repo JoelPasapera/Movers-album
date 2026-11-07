@@ -1,9 +1,13 @@
+// @ts-check
 // Puntuacion de Speaking con la escala del handbook (data/speaking-scale.js):
-// tres criterios de 0 a 5, sumados y convertidos a escudos como cualquier
-// otra prueba. Guarda la autoevaluacion del nino y la nota del profesor.
+// tres criterios de 0 a 5. Los escudos son la banda media de los tres: Speaking
+// no tiene tabla de notas (lo puntua el examinador con la escala), asi que no
+// se usa la de Listening ni la de Reading and Writing. Guarda la autoevaluacion
+// del nino y la nota del profesor.
 
+import { localDate } from '../core/time.js';
 import { SPEAKING_SCALE, BAND_MAX, PRONUNCIATION_CAP } from '../data/speaking-scale.js';
-import { shieldsFor } from './scoring.js';
+import { MAX_SHIELDS } from './scoring.js';
 import * as state from '../core/state.js';
 
 const HISTORY = 20;
@@ -16,7 +20,17 @@ export const validBands = (bands) => Boolean(bands) && CRITERIA.every((id) => is
 
 export const scaleTotal = (bands) => CRITERIA.reduce((sum, id) => sum + bands[id], 0);
 
-export const scaleShields = (bands) => shieldsFor(scaleTotal(bands), CRITERIA.length * BAND_MAX);
+/**
+ * Escudos de Speaking: la banda media de los tres criterios, hacia abajo, y
+ * siempre al menos 1, como en el examen. Banda 5 en todo, 5 escudos; banda 4
+ * en todo, 4; una mezcla como 5, 4 y 4 (media 4,3), 4.
+ * @param {Record<string, number>} bands
+ */
+export function scaleShields(bands) {
+  const average = scaleTotal(bands) / CRITERIA.length;
+  // Una milesima de margen para que 12/3 sea 4 aunque la division no sea exacta.
+  return Math.max(1, Math.min(MAX_SHIELDS, Math.floor(average + 1e-9)));
+}
 
 // Con muy poca lengua no se puede juzgar la pronunciacion: tope de 3.
 export function capPronunciation(bands, evidence) {
@@ -24,7 +38,7 @@ export function capPronunciation(bands, evidence) {
   return { ...bands, pronunciation: Math.min(bands.pronunciation, PRONUNCIATION_CAP.max) };
 }
 
-const today = () => new Date().toISOString().slice(0, 10);
+const today = () => localDate();
 
 function push(kind, entry) {
   state.update((s) => {

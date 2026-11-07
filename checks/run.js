@@ -18,6 +18,12 @@ const MODULES = [
   './14-speaking.js',
   './15-boards.js',
   './16-report.js',
+  './17-screens.js',
+  './18-voice.js',
+  './19-offline.js',
+  './20-data.js',
+  './21-plan.js',
+  './22-mistakes.js',
 ];
 
 const BASELINE = 'checks/baseline.json';
@@ -31,13 +37,37 @@ const numbers = {};
 
 heading('Comprobaciones');
 
+// La app no lanza sus errores hacia fuera en algunos sitios (un aviso que
+// falla, un juego que no arranca): los escribe en la consola y sigue. Durante
+// la revision, escribir un error en la consola cuenta como fallo.
+const realError = console.error;
+/** @type {string[]} */
+let consoleErrors = [];
+console.error = (...args) => {
+  consoleErrors.push(args.map((a) => (a instanceof Error ? a.message : String(a))).join(' ').slice(0, 220));
+};
+
 for (const path of MODULES) {
-  const mod = await import(path);
+  /** @type {any} */
+  let mod = { name: path };
   let result;
+  consoleErrors = [];
   try {
-    result = mod.run();
+    // Una comprobacion rota (un error de sintaxis) cuenta como fallo y las
+    // demas siguen: antes tumbaba la bateria entera sin decir TODO EN VERDE
+    // ni FALLO.
+    mod = await import(path);
+    // Una comprobacion puede ser asincrona (la 17 importa modulos y espera).
+    result = await mod.run();
   } catch (error) {
     result = { ok: false, problems: [`la comprobacion se rompio: ${error.message}`] };
+  }
+  if (consoleErrors.length) {
+    result = {
+      ...result,
+      ok: false,
+      problems: [...(result.problems ?? []), ...[...new Set(consoleErrors)].map((m) => `error en la consola: ${m}`)],
+    };
   }
   line(result.ok, mod.name, result.detail ?? '');
   if (result.ok) passed += 1;
@@ -50,6 +80,7 @@ for (const path of MODULES) {
   }
   Object.assign(numbers, result.numbers ?? {});
 }
+console.error = realError;
 
 // --------- el trinquete: lo que ya se consiguio no puede bajar ---------
 
@@ -75,6 +106,7 @@ const LABELS = {
   tableros: 'tableros tematicos del picture book',
   palabrasDeTablero: 'palabras del wordlist en algun tablero',
   partesEnInforme: 'partes del examen que describe el informe para las familias',
+  partidasJugadas: 'partidas jugadas enteras por la comprobacion de pantallas',
 };
 
 if (updating) {

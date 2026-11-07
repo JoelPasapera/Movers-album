@@ -2,15 +2,19 @@ import { h, mount as fill, qs, qsa } from '../../core/dom.js';
 import { speak, cue, stop as stopVoice, playsLeft, countPlay } from '../../core/audio.js';
 import { PALETTE } from '../../data/palette.js';
 import { randomScene } from '../../data/scenes/index.js';
+import { getTopic } from '../../data/topics.js';
 import { buildRound, checkColour, checkWord } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
-import * as state from '../../core/state.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
+import { isQuiet, QUIET_PAUSE_MS } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'colour', title: 'Listen and colour' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
+  const topic = getTopic(ctx.topicId);
   let scene = randomScene();
   let questions = buildRound(scene);
   let index = 0;
@@ -63,9 +67,10 @@ export function mount(root, ctx = {}) {
     sayAgain.disabled = left <= 0;
   }
 
+  /** @param {'correct' | 'wrong' | 'info'} kind 'info' es una instruccion, no una nota. @param {string} message */
   function toast(kind, message) {
     fill(toastSlot, h('span', {
-      class: `toast toast--${kind === 'correct' ? 'ok' : 'no'} pop`,
+      class: `toast toast--${kind === 'correct' ? 'ok' : kind === 'info' ? 'info' : 'no'} pop`,
     }, message));
     setTimeout(() => fill(toastSlot), 1600);
   }
@@ -100,12 +105,12 @@ export function mount(root, ctx = {}) {
       autocomplete: 'off',
       spellcheck: 'false',
       placeholder: 'type the word',
-      'aria-label': 'Write the word on the sign',
+      'aria-label': 'Write the word in the picture',
     });
     const submit = () => {
       const value = input.value.trim();
       if (!value) {
-        toast('wrong', 'Type the word first');
+        toast('info', 'Type the word first');
         input.focus();
         return;
       }
@@ -119,14 +124,25 @@ export function mount(root, ctx = {}) {
   function answerColour(objectId) {
     const question = questions[index];
     if (!selectedColour) {
-      toast('wrong', 'Pick a colour first');
-      paletteRow.classList.add('shake');
-      setTimeout(() => paletteRow.classList.remove('shake'), 320);
+      toast('info', 'Pick a colour first');
+      if (!quiet) {
+        paletteRow.classList.add('shake');
+        setTimeout(() => paletteRow.classList.remove('shake'), 320);
+      }
       return;
     }
     const outcome = checkColour(question, objectId, selectedColour);
     const ok = outcome === 'correct';
     answers.push({ question, ok, outcome });
+    if (quiet) {
+      // Se pinta lo que pinto el nino, con su color, este bien o mal.
+      const chosen = PALETTE.find((colour) => colour.id === selectedColour);
+      if (chosen) paint(objectId, chosen.hex);
+      selectedColour = null;
+      buildPalette();
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
 
     if (ok) {
       paint(objectId, question.hex);
@@ -152,6 +168,12 @@ export function mount(root, ctx = {}) {
     const ok = checkWord(question, value);
     answers.push({ question, ok, outcome: ok ? 'correct' : 'wrong-spelling' });
     const target = qs('#sign-text', sceneWrap);
+    if (quiet) {
+      // En el dibujo queda lo que escribio el nino, como en el papel.
+      if (target) target.textContent = value;
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
     if (target) target.textContent = ok ? value : question.word;
     cue(ok ? 'correct' : 'wrong');
     toast(ok ? 'correct' : 'wrong', ok ? 'Perfect spelling!' : `It was "${question.word}"`);
@@ -186,8 +208,8 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: correct, total: questions.length });
     const shields = shieldsFor(correct, questions.length);
     recordShields('colour', shields);
-    state.touchStreak();
-    const unlocked = unlockNext(ctx.topicId ?? 'animals', correct);
+    practised(meta.id);
+    const unlocked = unlockNext(topic.id, correct);
 
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, correct === questions.length ? 'All correct!' : `${correct} out of ${questions.length}`),

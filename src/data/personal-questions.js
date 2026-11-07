@@ -56,7 +56,13 @@ export const EXPECT = {
   people: ['mum', 'dad', 'mother', 'father', 'brother', 'sister', 'friend', 'friends',
     'grandma', 'grandpa', 'grandmother', 'grandfather', 'aunt', 'uncle', 'cousin',
     'parents', 'grandparents', 'family', 'son', 'daughter', 'classmate', 'teacher',
-    'boy', 'girl', 'children', 'kid', 'kids'],
+    'boy', 'girl', 'children', 'kid', 'kids',
+    // Los nombres de Starters y Movers; los demas nombres (Mateo, Rosa...) los
+    // acepta el corrector porque no son palabras del syllabus (ver `names`).
+    'alex', 'alice', 'ann', 'anna', 'ben', 'bill', 'dan', 'eva', 'grace', 'hugo', 'jill',
+    'kim', 'lucy', 'mark', 'matt', 'may', 'nick', 'pat', 'sam', 'sue', 'tom', 'tony',
+    'charlie', 'clare', 'daisy', 'fred', 'jack', 'jane', 'jim', 'julia', 'lily', 'mary',
+    'paul', 'peter', 'sally', 'vicky', 'zoe', 'miss', 'mr', 'mrs'],
 
   anything: null,
 };
@@ -83,7 +89,7 @@ export const PERSONAL_QUESTIONS = [
     model: 'I like playing football with my brother.', hint: 'Say a sport or a hobby.',
   },
   {
-    id: 'friend', say: 'Who do you play with at school?', expect: 'people',
+    id: 'friend', say: 'Who do you play with at school?', expect: 'people', names: true,
     model: 'I play with my friends Jack and Lily.', hint: 'Say a person: a friend, your brother.',
   },
   {
@@ -111,15 +117,17 @@ PERSONAL_QUESTIONS.push(
     model: 'I like playing basketball.', hint: 'Say a sport.' },
   { id: 'breakfast', say: 'What do you eat for breakfast?', expect: 'food',
     model: 'I eat bread and drink some milk.', hint: 'Say something you eat.' },
-  { id: 'pet', say: 'Have you got a pet at home?', expect: 'animal',
+  { id: 'pet', say: 'Have you got a pet at home?', expect: 'animal', accept: ['no', 'yes'],
     model: 'Yes, I have got a dog.', hint: 'Say an animal, or say no.' },
   { id: 'town', say: 'What is your town like?', expect: 'place',
+    accept: ['big', 'small', 'beautiful', 'quiet', 'loud', 'nice', 'new', 'old', 'clean', 'dirty',
+      'great', 'fantastic', 'busy', 'fun', 'cool', 'hot', 'cold', 'boring', 'pretty', 'ugly'],
     model: 'It is small and there is a big park.', hint: 'Say a place in your town.' },
   { id: 'clothes', say: 'What are you wearing today?', expect: 'clothes',
     model: 'I am wearing jeans and a red T-shirt.', hint: 'Say some clothes.' },
   { id: 'lastholiday', say: 'Where did you go on your last holiday?', expect: 'past',
     model: 'I went to the beach with my family.', hint: 'Say what you did: I went.' },
-  { id: 'brother', say: 'Have you got a brother or a sister?', expect: 'people',
+  { id: 'brother', say: 'Have you got a brother or a sister?', expect: 'people', names: true, accept: ['no', 'yes'],
     model: 'Yes, I have got two sisters.', hint: 'Say a person in your family.' },
   { id: 'afterschool', say: 'What do you do after school on Mondays?', expect: 'hobby',
     model: 'I do my homework and then I play.', hint: 'Say what you do.' },
@@ -127,7 +135,7 @@ PERSONAL_QUESTIONS.push(
     model: 'I like the sun because I can swim.', hint: 'Say sun, rain, snow or wind.' },
   { id: 'birthday', say: 'What did you do on your birthday?', expect: 'past',
     model: 'I had a party with my friends.', hint: 'Say what you did: I had, I went.' },
-  { id: 'teacher', say: 'Who is your teacher?', expect: 'people',
+  { id: 'teacher', say: 'Who is your teacher?', expect: 'people', names: true,
     model: 'My teacher is called Mary.', hint: 'Say a person.' },
   { id: 'drink', say: 'What do you drink when you are thirsty?', expect: 'food',
     model: 'I drink water or juice.', hint: 'Say something you drink.' },

@@ -44,8 +44,9 @@
   font-family:var(--font-display);font-weight:800;font-size:18px;
   border:var(--stroke);border-radius:999px;padding:6px 18px;
 }
-.toast--ok{background:var(--green);color:#fff}
-.toast--no{background:var(--red);color:#fff}
+.toast--ok{background:var(--green-deep);color:#fff}
+.toast--no{background:var(--red-deep);color:#fff}
+.toast--info{background:var(--ink);color:#fff}
 
 .result{text-align:center;padding:24px 12px}
 .result h2{font-family:var(--font-display);font-weight:800;font-size:38px;line-height:1.05}
@@ -81,11 +82,11 @@
 
 .combo{
   font-family:var(--font-display);font-weight:800;font-size:17px;
-  background:var(--orange);color:#fff;border:var(--stroke);
+  background:var(--orange-deep);color:#fff;border:var(--stroke);
   border-radius:999px;padding:3px 14px;
 }
 
-.hunt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.hunt-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .hunt-card{
   aspect-ratio:1/1;background:var(--paper);
   border:var(--stroke-thick);border-radius:var(--r-md);
@@ -104,7 +105,7 @@
 .hunt-card.is-wrong{background:#FBD7D4}
 
 @media(max-width:720px){
-  .hunt-grid{grid-template-columns:repeat(2,1fr)}
+  .hunt-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .hunt-card__face{font-size:48px}
 }
 
@@ -125,7 +126,7 @@
 
 .bank-hint{font-size:13px;opacity:.7;margin:14px 0 8px}
 
-.bank{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.bank{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .bank-card{
   background:var(--page);border:var(--stroke);border-radius:var(--r-sm);
   padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;
@@ -137,11 +138,11 @@
 .bank-card.is-right{background:#CDEBD3}
 
 @media(max-width:720px){
-  .bank{grid-template-columns:repeat(2,1fr)}
+  .bank{grid-template-columns:repeat(2,minmax(0,1fr))}
   .writer{flex-wrap:wrap}
 }
 
-.odd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.odd-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .odd-card{
   aspect-ratio:1/1;background:var(--paper);
   border:var(--stroke-thick);border-radius:var(--r-md);
@@ -175,7 +176,7 @@
   transition:transform .1s;
 }
 .tile:hover{transform:translateY(-2px)}
-.tile.is-on{background:var(--green);color:#fff}
+.tile.is-on{background:var(--green-deep);color:#fff}
 
 .sayout{
   margin-top:16px;border:var(--stroke-thick);border-radius:var(--r-md);
@@ -188,7 +189,7 @@
 .btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
 
 @media(max-width:720px){
-  .odd-grid{grid-template-columns:repeat(2,1fr)}
+  .odd-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .odd-card__face{font-size:46px}
   .sentence{font-size:19px}
   .gap{min-width:80px}
@@ -204,6 +205,8 @@
 .diff-panel [data-slot]:hover{opacity:.75}
 .diff-panel [data-slot].is-found *{stroke:#2BA84A;stroke-width:5}
 .diff-panel [data-slot].is-found{cursor:default;pointer-events:none}
+/* En el simulacro el examinador senala cada diferencia (azul: no es una nota). */
+.diff-panel [data-slot].is-pointed *{stroke:#1D75D5;stroke-width:5}
 
 .diff-found{display:grid;gap:6px;margin-top:14px}
 .diff-found div{
@@ -216,7 +219,7 @@
   .diff-pair{grid-template-columns:1fr}
 }
 
-.story-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.story-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .story-panel{
   background:var(--paper);border:var(--stroke-thick);border-radius:var(--r-md);
   padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;
@@ -247,7 +250,7 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 .story-actions{display:flex;gap:12px;margin-top:14px}
 
 @media(max-width:720px){
-  .story-strip{grid-template-columns:repeat(2,1fr)}
+  .story-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
   .story-line{font-size:19px}
 }
 
@@ -284,7 +287,7 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 }
 .marks-chip{
   font-family:var(--font-display);font-weight:800;font-size:16px;
-  background:var(--green);color:#fff;border:var(--stroke);
+  background:var(--green-deep);color:#fff;border:var(--stroke);
   border-radius:999px;padding:3px 14px;white-space:nowrap;
 }
 .writer input{flex:1;min-width:180px;max-width:420px}
@@ -345,11 +348,11 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
   font-family:var(--font-display);font-weight:800;font-size:19px;
   flex:1;border-bottom:3px dotted var(--ink);padding:0 6px;
 }
-.note-gap.is-example{opacity:.55;border-bottom-style:solid}
+.note-gap.is-example{opacity:.72;border-bottom-style:solid}
 .note-gap.is-ok{color:var(--green);border-bottom-color:var(--green)}
 .note-gap.is-no{color:var(--red);border-bottom-color:var(--red)}
 
-.match-pair{display:grid;grid-template-columns:220px 1fr;gap:16px;margin-bottom:12px}
+.match-pair{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;margin-bottom:12px}
 .match-left{border:var(--stroke);border-radius:var(--r-md);padding:12px 14px;background:var(--page)}
 .match-left__title{
   font-family:var(--font-display);font-weight:800;font-size:17px;
@@ -367,23 +370,23 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 }
 .match-item__box.is-ok{background:#CDEBD3;color:var(--green)}
 .match-item__box.is-no{background:#FBD7D4;color:var(--red)}
-.match-item__box.is-example{opacity:.55}
+.match-item__box.is-example{opacity:.72}
 
-.match-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.match-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .match-card{
   aspect-ratio:1/1;background:var(--paper);border:var(--stroke-thick);
   border-radius:var(--r-md);display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:2px;transition:transform .1s;
 }
 .match-card:hover{transform:translateY(-4px) rotate(-2deg)}
-.match-card__letter{font-family:var(--font-display);font-weight:800;font-size:16px;opacity:.6}
+.match-card__letter{font-family:var(--font-display);font-weight:800;font-size:16px;opacity:.75}
 .match-card__face{font-size:38px;line-height:1}
 .match-card.is-right{background:#CDEBD3}
 .match-card.is-wrong{background:#FBD7D4}
 
 @media(max-width:720px){
-  .match-pair{grid-template-columns:1fr}
-  .match-cards{grid-template-columns:repeat(3,1fr)}
+  .match-pair{grid-template-columns:minmax(0,1fr)}
+  .match-cards{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
 .talk-mic{display:flex;align-items:center;gap:16px;margin:16px 0;flex-wrap:wrap}
@@ -408,7 +411,7 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 }
 
 .talk-privacy{
-  background:var(--orange);color:#fff;border:var(--stroke);border-radius:var(--r-sm);
+  background:var(--orange-deep);color:#fff;border:var(--stroke);border-radius:var(--r-sm);
   padding:9px 14px;margin-top:10px;font-size:14px;
 }
 
@@ -429,7 +432,7 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 }
 .chat-row{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}
 .chat-row--b{align-items:flex-end}
-.chat-who{font-size:12px;opacity:.6;padding:0 8px}
+.chat-who{font-size:12px;opacity:.75;padding:0 8px}
 .chat-bubble{
   font-family:var(--font-display);font-weight:600;font-size:18px;line-height:1.35;
   background:var(--paper);border:var(--stroke);border-radius:16px;
@@ -477,6 +480,21 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 .mock-cta:hover{transform:translateY(-3px)}
 .mock-cta b{font-family:var(--font-display);font-weight:800;font-size:20px}
 .mock-cta span{font-size:13px;opacity:.85}
+
+/* El cuaderno de errores en la portada del album (texto blanco sobre rojo
+   oscuro: contraste AA) y la pantalla de "Fix my mistakes". */
+.fix-cta{
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;
+  background:var(--red-deep);color:#fff;border:var(--stroke-thick);border-radius:var(--r-md);
+  padding:12px 16px;margin-bottom:12px;text-align:left;transition:transform .1s;
+}
+.fix-cta:hover{transform:translateY(-3px)}
+.fix-cta b{font-family:var(--font-display);font-weight:800;font-size:20px}
+.fix-cta span{font-size:14px}
+.fixit-from{font-size:14px;font-weight:600;margin:0 0 6px}
+.fixit-prompt{font-size:20px}
+.fixit-empty{text-align:center;padding:18px 8px}
+.fixit-empty__big{font-family:var(--font-display);font-weight:800;font-size:24px;margin:0 0 8px}
 
 .mock-intro{text-align:center;padding:12px 8px}
 .mock-intro h2{font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1.1}
@@ -527,11 +545,12 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 .statement__head span{font-size:15px;opacity:.8}
 .statement__head .shields{margin-left:auto}
 .statement__note{font-size:15px;opacity:.85;margin:-4px 0 10px}
+.statement__goal{font-family:var(--font-display);font-weight:700;font-size:15px;margin:-4px 0 10px}
 .gap-quote{font-style:italic;opacity:.85}
 .story-panel.is-current{box-shadow:0 0 0 4px var(--yellow)}
 .talk-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
 .talk-row input{flex:1;min-width:180px;font:inherit;padding:10px 12px;border:var(--stroke);border-radius:var(--r-sm)}
-.tick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.tick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:8px}
 .bank-card__letter{font-family:var(--font-display);font-weight:700;font-size:14px;opacity:.7}
 .bank-card.is-wrong{opacity:.55}
 .matter-face{font-size:1.6em;vertical-align:middle;margin:0 4px}
@@ -547,8 +566,16 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 .scale-detail{font-size:15px;margin:8px 0 0;min-height:1.4em}
 .teacher-select,.teacher-note{font:inherit;padding:8px 10px;border:var(--stroke);border-radius:var(--r-sm);background:var(--paper)}
 .teacher-note{width:100%;margin-top:12px}
+.paper-row{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:10px 0 0}
+.paper-row label{display:flex;align-items:center;gap:6px;font-weight:600}
+.paper-row .paper-grow{flex:1 1 260px}
+.paper-name{flex:1;min-width:0}
+.paper-mark{width:5.5em}
+.paper-preview{font-family:var(--font-display);font-weight:600;font-size:15px;min-height:1.4em;margin:10px 0 0}
+.paper-summary{margin-top:16px}
+.paper-summary td.weak{white-space:normal;min-width:170px}
 .statement__warn{
-  background:var(--red);color:#fff;border-radius:var(--r-sm);
+  background:var(--red-deep);color:#fff;border-radius:var(--r-sm);
   padding:8px 12px;font-size:14px;margin-bottom:10px;
 }
 .statement__rows{display:grid;gap:5px}
@@ -556,12 +583,12 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
   display:flex;align-items:center;gap:12px;font-size:15px;
   background:var(--paper);border:var(--stroke);border-radius:8px;padding:6px 12px;
 }
-.statement__row.is-skipped{opacity:.5}
+.statement__row.is-skipped{opacity:.7}
 .statement__row b{margin-left:auto;font-family:var(--font-display);font-weight:800}
-.statement__tag{font-size:12px;opacity:.6;min-width:112px}
+.statement__tag{font-size:12px;opacity:.75;min-width:112px}
 
-.gym-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.gym-words{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gym-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.gym-words{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .gym-card{
   background:var(--paper);border:var(--stroke-thick);border-radius:var(--r-md);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
@@ -586,7 +613,7 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 }
 
 @media(max-width:720px){
-  .gym-grid{grid-template-columns:repeat(2,1fr)}
+  .gym-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .gym-card__face{font-size:44px}
   .gym-words{grid-template-columns:1fr}
 }
@@ -616,9 +643,129 @@ button.story-panel:hover{transform:translateY(-5px) rotate(-2deg)}
 .ws-word.is-found{background:#CDEBD3;text-decoration:line-through;opacity:.7}
 .ws-grid{display:grid;gap:4px;max-width:440px;margin:0 auto}
 .ws-cell{
-  aspect-ratio:1/1;font-family:var(--font-display);font-weight:800;font-size:18px;
+  aspect-ratio:1/1;font-family:var(--font-display);font-weight:800;font-size:18px;min-width:0;padding:0;
   background:var(--paper);border:var(--stroke);border-radius:8px;transition:transform .08s;
+}
+@media(max-width:480px){
+  .ws-grid{gap:3px}
+  .ws-cell{font-size:15px;border-radius:6px}
 }
 .ws-cell:hover{transform:scale(1.08)}
 .ws-cell.is-first{background:var(--yellow)}
 .ws-cell.is-found{background:#CDEBD3;color:var(--green)}
+
+/* Movil: la instruccion arriba a lo ancho y sus botones debajo; titulos algo
+   mas pequenos para que quepa la parte del juego que importa. */
+@media(max-width:560px){
+  .instruction{flex-wrap:wrap}
+  .instruction p{flex:1 1 100%;font-size:18px}
+  .instruction--clue p{font-size:19px}
+  .game-head h2{font-size:23px}
+}
+
+/* Letters and numbers: la respuesta letra a letra (la que fallo, en rojo) y
+   los botones para oir otra vez las dos que se confundieron. */
+.letter-reveal{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6px}
+.letter-strip{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.letter-strip span{
+  min-width:42px;height:50px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:800;font-size:28px;line-height:1;
+  background:var(--paper);border:var(--stroke);border-radius:var(--r-sm);
+}
+.letter-strip span.is-ok{background:#CDEBD3}
+.letter-strip span.is-no{background:#FBD7D4}
+.letter-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.letter-chip{font-family:var(--font-display);font-weight:800}
+@media(max-width:480px){
+  .letter-strip span{min-width:34px;height:42px;font-size:23px;padding:0 7px}
+}
+
+/* Speaking cara a cara (ui/examiner.js): los dibujos grandes para el nino y la
+   caja gris para el profesor. */
+.ex-start p{font-size:16px;line-height:1.45}
+.ex-tips{margin:10px 0 0 20px;display:grid;gap:6px;font-size:15px;line-height:1.4}
+.ex-part{font-family:var(--font-display);font-weight:700;font-size:15px;opacity:.8;margin-bottom:8px}
+.ex-child{border:var(--stroke);border-radius:var(--r-md);overflow:hidden;background:#fff}
+.ex-child svg{display:block;width:100%;height:auto}
+.ex-child--hello{display:flex;align-items:center;justify-content:center;min-height:180px;font-size:96px;background:var(--page)}
+.ex-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px;background:var(--page)}
+.ex-panel{position:relative;border:2px solid var(--ink);border-radius:var(--r-sm);overflow:hidden;background:#fff}
+.ex-panel b{position:absolute;top:6px;left:8px;font-family:var(--font-display);font-weight:800;font-size:20px;
+  background:#fff;border:2px solid var(--ink);border-radius:999px;min-width:30px;text-align:center;z-index:1}
+.ex-icons{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:16px;background:var(--page)}
+.ex-icon{display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;font-size:72px;line-height:1;
+  background:#fff;border:var(--stroke);border-radius:var(--r-md)}
+.ex-layout{display:grid;gap:14px}
+@media(min-width:900px){
+  .ex-layout{grid-template-columns:minmax(0,3fr) minmax(0,2fr);align-items:start}
+  .ex-layout .ex-card{margin-top:0}
+  .ex-layout .ex-item{flex-direction:column;align-items:flex-start}
+}
+.ex-card{margin-top:14px;background:#EEF1F6;border:2px dashed var(--grey-deep);border-radius:var(--r-md);padding:12px 14px}
+.ex-card__label{font-family:var(--font-display);font-weight:700;font-size:13px;opacity:.75;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.ex-say{font-family:var(--font-display);font-weight:700;font-size:18px;line-height:1.35;margin:4px 0}
+.ex-listen{font-size:14px;opacity:.85;margin:2px 0}
+.ex-items{margin:8px 0 0 22px;display:grid;gap:10px}
+.ex-item{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.ex-marks{display:flex;gap:6px;flex:none}
+.ex-mark{font-size:14px;padding:4px 12px}
+.ex-mark[aria-pressed="true"]{background:var(--yellow);box-shadow:0 0 0 2px var(--ink)}
+.ex-mine{margin-top:10px}
+.ex-mine summary{cursor:pointer;font-weight:700}
+.ex-mine svg{display:block;width:100%;max-width:360px;height:auto;margin-top:6px;border-radius:8px}
+@media(max-width:560px){
+  .ex-icons{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ex-icon{font-size:60px}
+  .ex-panels{grid-template-columns:1fr}
+}
+
+/* La voz del profesor (ui/voice.js): las frases por grupos, con escuchar,
+   grabar y borrar. */
+.voice-actions{justify-content:flex-start;margin:10px 0 4px}
+.voice-groups{display:grid;gap:10px;margin-top:10px}
+.voice-group{border:var(--stroke);border-radius:var(--r-md);padding:10px 14px;background:var(--paper)}
+.voice-group summary{cursor:pointer;font-family:var(--font-display);font-size:17px}
+.voice-group__count{font-weight:600;opacity:.7}
+.voice-lines{margin:8px 0 0 22px;display:grid;gap:8px}
+.voice-line{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+.voice-line__text{flex:1 1 260px;font-size:15px;line-height:1.4}
+.voice-line__text small{opacity:.7}
+.voice-line.is-done .voice-line__text::before{content:'\2713 ';color:var(--green-deep);font-weight:800}
+.voice-line__buttons{display:flex;gap:6px;flex:none}
+.voice-line__buttons .btn{font-size:14px;padding:4px 12px}
+.btn--rec{background:var(--red-deep);color:#fff}
+
+/* Corregir un fallo de ortografia: mira, tapa, escribe (ui/components/spellingFix.js).
+   El fallo no se ve solo por el color: la letra que falta es un "_" y la que
+   sobra va tachada. */
+.spellfix{border:var(--stroke);border-radius:var(--r-md);background:var(--paper);padding:12px 14px;margin:10px 0}
+.spellfix__title{font-family:var(--font-display);font-weight:800;font-size:18px;margin:0 0 8px}
+.spellfix__grid{display:grid;gap:4px 2px;align-items:end;justify-content:start;overflow-x:auto;padding-bottom:2px}
+.spellfix__label{font-size:13px;font-weight:600;padding-right:10px;white-space:nowrap;align-self:center}
+.spellfix__cell{font-family:var(--font-display);font-weight:800;font-size:24px;line-height:1.3;text-align:center;border-bottom:3px solid var(--line)}
+.spellfix__cell--wrong,.spellfix__cell--missing{color:var(--red-deep);border-bottom-color:var(--red-deep)}
+.spellfix__cell--extra{color:var(--red-deep);text-decoration:line-through;border-bottom-color:var(--red-deep)}
+.spellfix__cell--fix{color:var(--green-deep);border-bottom-color:var(--green-deep)}
+.spellfix__cell--covered{background:var(--line);border-radius:4px 4px 0 0}
+.spellfix__cell--blank{border-bottom-color:transparent}
+.spellfix__hint{font-weight:700;margin:10px 0 8px}
+.spellfix__hint--ok{color:var(--green-deep)}
+.spellfix__hint--no{color:var(--red-deep)}
+.spellfix__actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.spellfix__actions input{flex:1 1 160px;min-width:0;font:inherit;font-size:20px;padding:10px 12px;border:var(--stroke);border-radius:var(--r-sm);background:var(--paper)}
+
+/* Word gym: conocer una palabra nueva antes de que se pregunte. */
+.meet{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:14px 10px 4px}
+.meet__face{font-size:84px;line-height:1}
+.meet__word{font-family:var(--font-display);font-weight:800;font-size:36px;margin:0}
+.meet__hint{margin:0;font-size:15px}
+.meet__actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+
+/* En el simulacro: lo que el nino eligio o escribio, igual este bien o mal
+   (ui/components/examQuiet.js). Ni verde ni rojo. */
+.is-picked{box-shadow:0 0 0 4px var(--blue-deep)}
+.gap-slot.is-picked,.note-gap.is-picked{box-shadow:none;color:var(--ink);border-bottom-color:var(--blue-deep)}
+.chat-bubble.is-picked{box-shadow:none;background:#E3ECFA}
+.crowd-tag--picked{fill:#14204A}
+.crowd [data-person].is-picked{box-shadow:none}

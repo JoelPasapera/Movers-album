@@ -2,8 +2,10 @@ import { PARK } from './park.js';
 import { BEACH } from './beach.js';
 import { CLASSROOM } from './classroom.js';
 import { KITCHEN } from './kitchen.js';
+import { FARM } from './farm.js';
+import { BEDROOM } from './bedroom.js';
 
-export const SCENES = [PARK, BEACH, CLASSROOM, KITCHEN];
+export const SCENES = [PARK, BEACH, CLASSROOM, KITCHEN, FARM, BEDROOM];
 
 export const getScene = (id) => SCENES.find((s) => s.id === id) ?? SCENES[0];
 

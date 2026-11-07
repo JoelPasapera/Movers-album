@@ -4,13 +4,15 @@ import { getTopic } from '../../data/topics.js';
 import { renderScene } from '../../data/scenes/garden.js';
 import { buildRound, findDifference } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
-import * as state from '../../core/state.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
+import { isQuiet } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'differences', title: 'Find the differences' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let round = buildRound();
   let found = new Set();
@@ -68,7 +70,8 @@ export function mount(root, ctx = {}) {
   }
 
   function onPanelClick(event) {
-    if (busy) return;
+    // En el simulacro no se busca tocando: el examinador senala (examinerLeads).
+    if (busy || quiet) return;
     const group = event.target.closest('[data-slot]');
     if (!group) return;
     const slotId = group.dataset.slot;
@@ -128,6 +131,35 @@ export function mount(root, ctx = {}) {
     speak(difference.examiner);
   }
 
+  /**
+   * En el simulacro, como en el examen: el examinador senala cada diferencia y
+   * dice como es en su dibujo; el nino dice como es en el suyo. Nadie dice si
+   * esta bien, ni se ensena una frase modelo.
+   * @param {number} position la diferencia que toca (0, 1, 2...)
+   */
+  function examinerLeads(position) {
+    if (position >= round.differences.length) {
+      finish();
+      return;
+    }
+    const difference = round.differences[position];
+    counter.textContent = `${position + 1} of ${round.differences.length}`;
+    for (const panel of [leftPanel, rightPanel]) {
+      panel.querySelectorAll('[data-slot]').forEach((group) => {
+        group.classList.toggle('is-pointed', /** @type {HTMLElement} */ (group).dataset.slot === difference.id);
+      });
+    }
+    fill(sayBox, [
+      h('p', { class: 'sayout__line' }, difference.examiner),
+      h('div', { class: 'sayout__actions' }, [
+        h('button', { class: 'btn', onClick: () => speak(difference.examiner) }, 'Hear it again'),
+        h('button', { class: 'btn btn--go', onClick: () => examinerLeads(position + 1) }, 'I said it \u2192'),
+      ]),
+    ]);
+    sayBox.classList.remove('hidden');
+    speak(difference.examiner);
+  }
+
   function finish() {
     stopVoice();
     cue('finish');
@@ -137,7 +169,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total });
     const shields = shieldsFor(score, total);
     recordShields('differences', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, Math.max(1, score - 1));
 
     fill(stage, h('div', { class: 'result' }, [
@@ -188,6 +220,11 @@ export function mount(root, ctx = {}) {
       h('div', { class: 'diff-pair' }, [leftPanel, rightPanel]),
       sayBox,
       foundList);
+    if (quiet) {
+      prompt.textContent = 'Four things are different. The examiner shows you each one: say what is different in your picture.';
+      examinerLeads(0);
+      return;
+    }
     speak('Four things are different. Can you find them?');
   }
 

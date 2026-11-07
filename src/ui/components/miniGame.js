@@ -1,3 +1,4 @@
+// @ts-check
 // Esqueleto comun de los juegos de eleccion multiple: cabecera, contador,
 // una pregunta cada vez, resultado final. Los seis juegos del picture book
 // lo usan para no repetir el mismo codigo seis veces.
@@ -6,7 +7,8 @@ import { h, mount as fill } from '../../core/dom.js';
 import { speak, cue, stop as stopVoice } from '../../core/audio.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
 import { shieldRow } from './rewards.js';
-import * as state from '../../core/state.js';
+import { practised } from '../../engine/progress.js';
+import { noteMistake } from '../../engine/mistakes.js';
 
 export function chooser(root, ctx, {
   id, title, hint, tip, build, renderPrompt, options, isRight, sayAfter, explain, again = 'Play again',
@@ -21,7 +23,7 @@ export function chooser(root, ctx, {
   const marks = h('span', { class: 'marks-chip' });
   const prompt = h('div', { class: 'instruction instruction--clue' });
   const grid = h('div', { class: 'chat-options' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const head = h('div', { class: 'game-head' }, [
@@ -39,6 +41,19 @@ export function chooser(root, ctx, {
     const ok = isRight(q, value);
     if (ok) score += 1;
     answers.push({ q, ok, value });
+    // El fallo vuelve otro dia en "Fix my mistakes" (engine/mistakes.js).
+    if (!ok) {
+      noteMistake({
+        game: id,
+        kind: 'choose',
+        prompt: prompt.textContent ?? '',
+        answer: String(q.answer),
+        options: options(q).map(String),
+        why: explain ? explain(q) : '',
+        after: sayAfter ? sayAfter(q) : '',
+        given: String(value),
+      });
+    }
     marks.textContent = `${score} / ${questions.length}`;
     // `explain` deja que el juego anada la regla que se acaba de aplicar.
     feedback.textContent = (ok ? 'Yes! ' : `It was "${q.answer}". `) + (explain ? explain(q) : '');
@@ -73,7 +88,7 @@ export function chooser(root, ctx, {
     cue('finish');
     const shields = shieldsFor(score, questions.length);
     if (ctx.onFinish) return ctx.onFinish({ score, total: questions.length });
-    state.touchStreak();
+    practised(id);
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, `${score} out of ${questions.length}`),
       shieldRow(shields),
@@ -100,6 +115,5 @@ export function chooser(root, ctx, {
 
   fill(root, h('div', { class: 'card' }, [head, stage]));
   start();
-  void id;
   return { destroy() { stopVoice(); } };
 }

@@ -3,7 +3,7 @@ import { speak, cue, stop as stopVoice } from '../../core/audio.js';
 import { buildRound, check } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
 import { shieldRow } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { practised } from '../../engine/progress.js';
 
 export const meta = { id: 'sentence', title: 'Use the word' };
 
@@ -17,12 +17,12 @@ export function mount(root, ctx = {}) {
   const counter = h('span', { class: 'counter' });
   const marks = h('span', { class: 'marks-chip' });
   const target = h('p', { class: 'p6-prompt' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const model = h('p', { class: 'talk-model hidden' });
   const stage = h('div');
   const input = h('input', {
     type: 'text', maxlength: '80', autocomplete: 'off', spellcheck: 'false',
-    placeholder: 'write a sentence with the word', 'aria-label': 'Write a sentence',
+    placeholder: 'write a sentence', 'aria-label': 'Write a sentence with the word',
   });
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
 
@@ -82,7 +82,7 @@ export function mount(root, ctx = {}) {
     const total = items.length * 2;
     const shields = shieldsFor(score, total);
     if (ctx.onFinish) return ctx.onFinish({ score, total });
-    state.touchStreak();
+    practised(meta.id);
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, `${score} out of ${total} marks`),
       shieldRow(shields),

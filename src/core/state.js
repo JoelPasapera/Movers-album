@@ -1,5 +1,7 @@
+// @ts-check
 import * as storage from './storage.js';
 import { emit } from './events.js';
+import { localDate, dayBefore } from './time.js';
 
 const DEFAULTS = {
   stickers: {},
@@ -8,6 +10,9 @@ const DEFAULTS = {
   streak: 0,
   speaking: { self: [], teacher: [] },
 };
+
+/** Un album vacio. */
+export const defaults = () => structuredClone(DEFAULTS);
 
 let state = storage.load(DEFAULTS);
 let activeId = null;
@@ -46,12 +51,19 @@ export function get() {
 // leer otro (el panel del profesor, el informe) lo usa para volver al suyo.
 export const activeProfile = () => activeId;
 
-export function update(mutator) {
+/**
+ * Cambia el album y lo guarda. Con `quiet`, no avisa a las pantallas (para
+ * lo que se guarda mientras se pinta, como el plan del dia: avisar haria
+ * repintar la pantalla a mitad de pintarla).
+ * @param {(draft: any) => void} mutator
+ * @param {{ quiet?: boolean }} [options]
+ */
+export function update(mutator, { quiet = false } = {}) {
   const next = structuredClone(state);
   mutator(next);
   state = next;
   storage.save(state);
-  emit('state:changed', state);
+  if (!quiet) emit('state:changed', state);
   return state;
 }
 
@@ -62,9 +74,9 @@ export function reset() {
 }
 
 export function touchStreak() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDate();
   if (state.lastPlayed === today) return;
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const yesterday = dayBefore(today);
   update((s) => {
     s.streak = s.lastPlayed === yesterday ? s.streak + 1 : 1;
     s.lastPlayed = today;

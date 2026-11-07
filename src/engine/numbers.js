@@ -1,3 +1,4 @@
+// @ts-check
 // Numeros en letra. El syllabus exige: 1-20 en Starters, 21-100 y ordinales
 // del 1st al 20th en Movers. Se generan, no se escriben a mano.
 

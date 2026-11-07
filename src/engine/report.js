@@ -9,6 +9,7 @@
 // el Statement of Results desaparecia al cerrar la pantalla.
 
 import * as state from '../core/state.js';
+import { localDate } from '../core/time.js';
 import * as profiles from '../core/profiles.js';
 import { GAMES } from '../games/registry.js';
 import { TOPICS } from '../data/topics.js';
@@ -16,6 +17,9 @@ import { BOARDS } from '../data/boards.js';
 import { PAPERS, statement, totalShields } from './mock.js';
 import { progress, progressOf } from './vocabulary.js';
 import { latestMark } from './speakingScale.js';
+import { weakSpots, twinOf } from './letters.js';
+import { paperTests, paperProgress } from './paperTests.js';
+import { mistakesOf } from './mistakes.js';
 import { MAX_SHIELDS } from './scoring.js';
 
 /** Simulacros que se guardan por alumno: los ultimos diez. */
@@ -23,6 +27,9 @@ export const MOCKS_KEPT = 10;
 
 /** Escudos a partir de los cuales una parte se considera lista. */
 export const READY_AT = 4;
+
+/** Preguntas del cuaderno de errores que salen en el informe para practicar en casa. */
+export const MISTAKES_FOR_HOME = 6;
 
 /**
  * @typedef {Object} SavedMock
@@ -54,13 +61,24 @@ export const READY_AT = 4;
  * @property {PartLine[]} practise   las partes mas flojas, hasta tres
  * @property {ReturnType<typeof latestMark>} speaking
  * @property {SavedMock[]} mocks
+ * @property {import('./paperTests.js').PaperTest[]} paperTests  los examenes en papel que
+ *   apunto el profesor, del mas antiguo al mas nuevo
+ * @property {ReturnType<typeof paperProgress>} paperProgress  como va cada prueba en papel
+ * @property {{ letters: string[], numbers: [number, number][] }} hearing  lo que confunde al
+ *   oido en el dictado de letras y numeros: letras, y parejas como 14 y 40
+ * @property {{ prompt: string, answer: string, misses: number }[]} mistakes  preguntas de su
+ *   cuaderno de errores para repasar en casa: las que mas falla, hasta seis
+ * @property {number} mistakesWaiting  cuantos errores tiene sin arreglar
  * @property {number} streak
  * @property {string | null} lastPlayed
  */
 
-const today = () => new Date().toISOString().slice(0, 10);
+const today = () => localDate();
 
-/** @param {number} shields @param {boolean} played */
+/**
+ * @param {number} shields @param {boolean} played
+ * @returns {'ready' | 'nearly' | 'practise' | 'new'}
+ */
 export function statusOf(shields, played) {
   if (!played) return 'new';
   if (shields >= READY_AT) return 'ready';
@@ -108,6 +126,7 @@ export function buildReport() {
     .sort((a, b) => (Number(b.played) - Number(a.played)) || (a.shields - b.shields))
     .slice(0, 3);
   const all = progress();
+  const weak = weakSpots(data.letters ?? {});
   return {
     profile: profiles.current() ? { id: profiles.current().id, name: profiles.current().name } : null,
     date: today(),
@@ -119,6 +138,17 @@ export function buildReport() {
     practise,
     speaking: latestMark(data),
     mocks: savedMocks(data),
+    paperTests: paperTests(data),
+    paperProgress: paperProgress(data),
+    hearing: {
+      letters: weak.letters,
+      numbers: weak.numbers.map((n) => /** @type {[number, number]} */ ([n, twinOf(n) ?? n])),
+    },
+    mistakes: [...mistakesOf(data)]
+      .sort((a, b) => (b.misses - a.misses) || a.first.localeCompare(b.first))
+      .slice(0, MISTAKES_FOR_HOME)
+      .map((m) => ({ prompt: m.prompt, answer: m.answer, misses: m.misses })),
+    mistakesWaiting: mistakesOf(data).length,
     streak: data.streak ?? 0,
     lastPlayed: data.lastPlayed ?? null,
   };
@@ -142,8 +172,7 @@ export function reportFor(profileId) {
 /** Que puede hacer la familia con cada parte floja: una linea por juego. */
 export const HOME_TIPS = {
   matchnames: 'Listen to short talks about who is who. Ask: Which one is Jim? What is he doing?',
-  notetaking: 'Play at writing down names, numbers and days while someone speaks slowly.',
-  matchpics: 'Match what people say to pictures: What did Daisy do on Sunday?',
+  notetaking: 'Play at writing down names, numbers and days while someone speaks slowly.',  matchpics: 'Match what people say to pictures: What did Daisy do on Sunday?',
   tickbox: 'Listen to a short conversation and say which picture is right.',
   colour: 'Give colouring instructions: Colour the small bird on the tree green.',
   spellit: 'Read a definition and write the word. Spelling must be perfect.',

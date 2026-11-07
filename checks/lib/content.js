@@ -24,6 +24,73 @@ import { WHERE_ARE_THEY, whereSentence } from '../../src/data/where-are-they.js'
 import { TICKBOX } from '../../src/data/tickbox.js';
 import { PARTS, hurtSentence } from '../../src/games/matter/questions.js';
 import { BOARDS } from '../../src/data/boards.js';
+import { NUMBER_LINES, NAMES } from '../../src/data/letters.js';
+import { buildPrintTest, listeningScript, RUBRICS } from '../../src/engine/printTest.js';
+import { buildRound as colourRound } from '../../src/games/colour/questions.js';
+import { EXAMINER, examinerScript, buildSpeakingTest, oddAnswer } from '../../src/engine/examiner.js';
+import { allSets } from '../../src/data/oddoneout.js';
+import { examinerLines } from '../../src/games/differences/questions.js';
+import {
+  spellItem, numberItem, feedbackFor as letterFeedback, promptFor as letterPrompt, emptyHint as letterHint,
+} from '../../src/games/letters/questions.js';
+
+/**
+ * Todo lo que dice el dictado de letras y numeros: las frases con un numero
+ * (con el mas pequeno y el mas grande de cada una), las instrucciones y cada
+ * respuesta posible. En las respuestas las letras son A e I, que ademas son
+ * palabras del syllabus: lo que se revisa es lo que va alrededor de la letra.
+ */
+/**
+ * Lo que dice y ensena el examen para imprimir: sus instrucciones y el guion de
+ * Listening de varios examenes (que es tambien lo que dicen Match the names,
+ * Listen and write, Listen and match, Listen and tick y Listen and colour,
+ * incluida la frase de donde se escribe la palabra en cada escena de colorear).
+ */
+function printTexts() {
+  const scripts = [1, 2, 3, 4, 5, 6, 7, 8].flatMap((seed) => listeningScript(buildPrintTest(seed)));
+  return [
+    ...Object.values(RUBRICS),
+    ...scripts.flatMap((p) => [...p.intro, ...p.items.flat()].map((l) => l.text)),
+    ...SCENES.flatMap((scene) => colourRound(scene, { colourCount: scene.objects.length }).flatMap((q) => [q.say, q.shortSay])),
+  ];
+}
+
+/**
+ * Lo que dice el examinador en el Speaking cara a cara: sus frases fijas, el
+ * titulo de cada historia, la respuesta modelo de cada conjunto de la parte 3,
+ * la linea y la respuesta de cada diferencia posible del jardin, y el guion de
+ * varias pruebas enteras.
+ */
+function examinerTexts() {
+  const scripts = Array.from({ length: 12 }, () => examinerScript(buildSpeakingTest())).flat();
+  return [
+    ...Object.values(EXAMINER).filter((v) => typeof v === 'string'),
+    ...STORIES.map((s) => EXAMINER.p2(s.title)),
+    EXAMINER.p2now,
+    ...allSets().map(oddAnswer),
+    ...SLOTS.flatMap((slot) => slot.values.flatMap((a) => slot.values.filter((b) => b !== a).flatMap((b) => {
+      const lines = examinerLines(slot.sentence(a, b));
+      return [lines.examiner, lines.model];
+    }))),
+    ...scripts.flatMap((part) => [...part.intro, ...part.lines].flatMap((l) => [l.say, l.listen ?? ''])),
+  ];
+}
+
+function letterTexts() {
+  const name = spellItem(NAMES[0], true);
+  const word = spellItem('cat', false);
+  const num = numberItem(14, NUMBER_LINES[0]);
+  /** @type {any[]} */
+  const results = [
+    { kind: 'correct' }, { kind: 'writtenNumber' }, { kind: 'letter', want: 'A', got: 'I' },
+    { kind: 'missing', want: 'A', double: true }, { kind: 'missing', want: 'A', double: false },
+    { kind: 'extra', got: 'I' }, { kind: 'twin', want: 14, got: 40 }, { kind: 'wrong' },
+  ];
+  return [
+    ...NUMBER_LINES.flatMap((l) => [numberItem(l.min, l).say, numberItem(l.max, l).say]),
+    ...[name, word, num].flatMap((item) => [letterPrompt(item), letterHint(item), ...results.map((r) => letterFeedback(r, item))]),
+  ];
+}
 
 export function contentStrings() {
   return [
@@ -34,7 +101,13 @@ export function contentStrings() {
       ...s.sections.map((x) => x.text),
       ...s.questions.flatMap((q) => [q.text, ...q.answers]),
     ]),
-    ...DIALOGUES.flatMap((d) => d.turns.flatMap((t) => [t.line, ...t.options])),
+    // Los titulos tambien se ven (en los juegos y en el examen para imprimir).
+    ...DIALOGUES.flatMap((d) => [d.title, ...d.turns.flatMap((t) => [t.line, ...t.options])]),
+    ...CLOZE_TEXTS.map((c) => c.title),
+    ...READING_STORIES.map((s) => s.title),
+    ...NOTE_FORMS.flatMap((f) => [f.title, f.intro]),
+    ...STORIES.map((s) => s.title),
+    ...PART6_SCENES.map((s) => s.title),
     ...CLOZE_TEXTS.flatMap((c) => [...c.parts, ...c.gaps.flatMap((g) => g.options)]),
     ...GAP_STORIES.flatMap((g) => [...g.parts, ...g.titles, ...g.bank]),
     ...PERSONAL_QUESTIONS.flatMap((q) => [q.say, q.model, q.hint]),
@@ -62,6 +135,9 @@ export function contentStrings() {
     ...WHERE_ARE_THEY.flatMap((w) => [w.clue, whereSentence('He', w.place), whereSentence('She', w.place)]),
     ...PARTS.map((p) => hurtSentence(p.word)),
     ...TICKBOX.flatMap((t) => [t.question, ...t.options, ...t.lines.map((l) => l.text)]),
+    ...letterTexts(),
+    ...printTexts(),
+    ...examinerTexts(),
     ...BOARDS.flatMap((b) => [
       b.title, b.intro, ...b.words,
       ...b.talk.flatMap((q) => [q.say, q.model, q.hint]),

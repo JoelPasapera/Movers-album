@@ -1,3 +1,4 @@
+// @ts-check
 import { h, mount as fill } from '../core/dom.js';
 import { TOPICS, getTopic } from '../data/topics.js';
 import { BOARDS } from '../data/boards.js';
@@ -5,22 +6,21 @@ import { unlockedIds, topicProgress } from '../engine/progress.js';
 import { isMastered, progress as vocabProgress, progressOf, wordById } from '../engine/vocabulary.js';
 import { GAMES, PRACTICE } from '../games/registry.js';
 import * as router from '../core/router.js';
+import { planCard } from './components/planCard.js';
+import { dueMistakes, mistakesOf } from '../engine/mistakes.js';
+import { tabNav, centreCurrent } from './components/tabNav.js';
 
+/** @param {string} activeId */
 function tabList(activeId) {
-  return h('nav', { class: 'tabs', 'aria-label': 'Album topics' }, TOPICS.map((topic) => {
-    const v = vocabProgress(topic.id);
-    const have = Math.max(topicProgress(topic.id).have, v.mastered);
-    const total = v.total;
-    return h('button', {
-      class: 'tab',
-      'aria-selected': String(topic.id === activeId),
-      onClick: () => router.go(`/topic/${topic.id}`),
-    }, [
-      h('span', { class: 'dot', style: `background:var(--${topic.colour})` }),
-      topic.label,
-      h('small', {}, `${have}/${total}`),
-    ]);
-  }));
+  return tabNav({
+    label: 'Album topics',
+    activeId,
+    items: TOPICS.map((topic) => {
+      const v = vocabProgress(topic.id);
+      const have = Math.max(topicProgress(topic.id).have, v.mastered);
+      return { id: topic.id, label: topic.label, colour: topic.colour, count: `${have}/${v.total}`, route: `/topic/${topic.id}` };
+    }),
+  });
 }
 
 function stickerGrid(topic) {
@@ -42,8 +42,7 @@ function stickerGrid(topic) {
 
 function cardsFor(list, topicId) {
   return h('div', { class: 'games' }, list.map((game) => h('button', {
-    class: `game-card${game.ready ? '' : ' game-card--soon'}`,
-    style: `background:var(--${game.colour})`,
+    class: `game-card game-card--${game.colour}${game.ready ? '' : ' game-card--soon'}`,
     disabled: !game.ready,
     onClick: () => game.ready && router.go(`/play/${game.id}/${topicId}`),
   }, [
@@ -72,6 +71,26 @@ function boardCards() {
   }));
 }
 
+/**
+ * El boton del cuaderno de errores, si hay alguno pendiente: cuantos tocan hoy
+ * o, si son todos de hoy, que vuelven manana.
+ * @param {string} topicId
+ */
+function mistakesButton(topicId) {
+  const pending = mistakesOf().length;
+  if (!pending) return null;
+  const due = dueMistakes().length;
+  return h('button', {
+    class: 'fix-cta',
+    onClick: () => router.go(`/play/fixit/${topicId}`),
+  }, [
+    h('b', {}, 'Fix my mistakes'),
+    h('span', {}, due
+      ? `${due} mistake${due === 1 ? '' : 's'} from other days to fix today.`
+      : `${pending} mistake${pending === 1 ? '' : 's'} from today. They come back tomorrow.`),
+  ]);
+}
+
 export function renderAlbum(container, topicId) {
   const topic = getTopic(topicId);
   const vocab = vocabProgress(topic.id);
@@ -79,14 +98,17 @@ export function renderAlbum(container, topicId) {
   const total = vocab.total;
   const pct = total ? Math.round((have / total) * 100) : 0;
 
+  const tabs = tabList(topic.id);
   fill(container, h('div', { class: 'layout' }, [
-    tabList(topic.id),
+    tabs,
     h('div', { class: 'card' }, [
       h('div', { class: 'album-head' }, [
         h('h2', {}, topic.label),
         h('p', {}, `${have} of ${total} words known${have < total ? ` \u00b7 ${total - have} to go` : ' \u00b7 page complete!'}`),
       ]),
       h('div', { class: 'bar' }, h('i', { style: `width:${pct}%` })),
+      planCard(),
+      mistakesButton(topic.id),
       h('button', {
         class: 'mock-cta',
         onClick: () => router.go('/mock'),
@@ -103,4 +125,5 @@ export function renderAlbum(container, topicId) {
       gameCards(topic.id),
     ]),
   ]));
+  centreCurrent(tabs);
 }

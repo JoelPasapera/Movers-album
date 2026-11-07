@@ -5,8 +5,12 @@ import { PAPERS, createRun, currentGameId, record, advance } from '../src/engine
 import { recordShields } from '../src/engine/progress.js';
 import { mark } from '../src/engine/vocabulary.js';
 import { recordTeacherMark } from '../src/engine/speakingScale.js';
+import { heardAll } from '../src/engine/letters.js';
+import { recordPaperTest, MARKS } from '../src/engine/paperTests.js';
+import { noteMistake } from '../src/engine/mistakes.js';
+import { paperShields, marksToGo, MAX_SHIELDS } from '../src/engine/scoring.js';
 import {
-  buildReport, reportFor, saveMock, savedMocks, statusOf, HOME_TIPS, MOCKS_KEPT, READY_AT,
+  buildReport, reportFor, saveMock, savedMocks, statusOf, HOME_TIPS, MOCKS_KEPT, READY_AT, MISTAKES_FOR_HOME,
 } from '../src/engine/report.js';
 
 export const name = 'El informe para las familias dice la verdad del perfil';
@@ -42,6 +46,8 @@ export function run() {
   if (empty.mocks.length || empty.speaking || empty.streak) problems.push('un perfil nuevo ya tiene simulacros, nota de Speaking o racha');
   if (empty.practise.length !== 3) problems.push('el informe no propone tres cosas que practicar');
   if (empty.pages.reduce((a, p) => a + p.total, 0) !== empty.words.total) problems.push('las paginas del informe no suman el album entero');
+  if (empty.hearing.letters.length || empty.hearing.numbers.length) problems.push('un perfil nuevo ya confunde letras o numeros en el informe');
+  if (empty.paperTests.length || empty.paperProgress.some((p) => p.last)) problems.push('un perfil nuevo ya tiene examenes en papel en el informe');
 
   // 4. Lo que se juega llega al informe, y lo flojo va primero
   recordShields('spellit', 5);
@@ -60,6 +66,48 @@ export function run() {
   if (r.pages.find((p) => p.id === 'animals')?.mastered !== 1) problems.push('la palabra dominada no cuenta en su pagina');
   if (r.speaking?.by !== 'teacher' || r.speaking?.bands.interaction !== 5 || r.speaking?.note !== 'tell the story') problems.push('la nota de Speaking del profesor no llega al informe');
   if (r.shields.shields !== 10 || r.shields.outOf !== playable.length * 5) problems.push('los escudos no se suman bien');
+
+  // 4b. Lo que confunde al oido (dictado de letras y numeros) llega al
+  // informe; un despiste suelto no.
+  heardAll(['J', 'J', 'J', 'E', '14', '14'], [false, false, true, false, false, false]);
+  const heard = buildReport().hearing;
+  if (heard.letters.join() !== 'J') problems.push(`el informe no dice bien las letras que confunde: ${heard.letters.join()}`);
+  if (JSON.stringify(heard.numbers) !== '[[14,40]]') problems.push(`el informe no dice bien los numeros que confunde: ${JSON.stringify(heard.numbers)}`);
+
+  // 4b2. Las preguntas del cuaderno de errores llegan al informe para repasar
+  // en casa: las que mas falla primero, como mucho MISTAKES_FOR_HOME.
+  for (let i = 0; i < MISTAKES_FOR_HOME + 2; i += 1) {
+    noteMistake({ game: 'spellit', kind: 'write', prompt: `Clue ${i}.`, answer: `word ${i}` }, '2026-10-01');
+  }
+  noteMistake({ game: 'spellit', kind: 'write', prompt: 'Clue 3.', answer: 'word 3' }, '2026-10-02');
+  const home = buildReport();
+  if (home.mistakes.length !== MISTAKES_FOR_HOME || home.mistakesWaiting !== MISTAKES_FOR_HOME + 2) problems.push(`el informe no trae las preguntas del cuaderno de errores (${home.mistakes.length} de ${home.mistakesWaiting})`);
+  if (home.mistakes[0]?.answer !== 'word 3') problems.push('el informe no pone primero la pregunta que mas falla');
+
+  // 4c. Los examenes en papel llegan al informe, en orden, con lo que falta
+  // para los 5 escudos; y "lo que falta" es verdad con la tabla de Cambridge.
+  recordPaperTest({ when: '2026-10-27', name: 'Sample test 2', listening: 20, reading: null, speaking: 4 });
+  recordPaperTest({ when: '2026-10-20', name: 'Sample test 1', listening: 18, reading: 30, speaking: 3 });
+  const papers = buildReport();
+  if (papers.paperTests.map((t) => t.name).join() !== 'Sample test 1,Sample test 2') problems.push('los examenes en papel no llegan al informe en orden de fecha');
+  const lineOf = (/** @type {string} */ id) => papers.paperProgress.find((p) => p.id === id);
+  if (lineOf('listening')?.last?.marks !== 20 || lineOf('listening')?.shields.length !== 2) problems.push('el informe no sigue Listening en los examenes en papel');
+  if (lineOf('reading')?.last?.marks !== 30) problems.push('el informe no se queda con la ultima nota de Reading and Writing que hay');
+  if (lineOf('listening')?.toFive !== marksToGo('listening', 20).fiveAt - 20) problems.push('el informe calcula mal lo que falta para los 5 escudos');
+  if (lineOf('speaking')?.last?.shields !== 4 || lineOf('speaking')?.toFive !== null) problems.push('el Speaking en papel no llega bien al informe');
+  for (const paper of /** @type {const} */ (['listening', 'reading'])) {
+    const total = MARKS[paper];
+    for (let m = 0; m <= total; m += 1) {
+      const go = marksToGo(paper, m);
+      if (go.shields !== paperShields(paper, m, total)) problems.push(`con ${m}/${total} en ${paper} los escudos no son los de la tabla`);
+      if (go.nextAt !== null && (paperShields(paper, go.nextAt, total) <= go.shields || paperShields(paper, go.nextAt - 1, total) !== go.shields)) {
+        problems.push(`con ${m}/${total} en ${paper}, la nota del escudo siguiente esta mal`);
+      }
+      if (go.nextAt === null && go.shields < MAX_SHIELDS) problems.push(`con ${m}/${total} en ${paper} no se dice como subir de escudo`);
+    }
+    const five = marksToGo(paper, 0).fiveAt;
+    if (paperShields(paper, five, total) !== MAX_SHIELDS || (five > 0 && paperShields(paper, five - 1, total) === MAX_SHIELDS)) problems.push(`la nota de los 5 escudos en ${paper} esta mal`);
+  }
 
   // 5. Los simulacros terminados se guardan, con sus tres pruebas, y solo los ultimos
   const mock = createRun();

@@ -4,13 +4,15 @@ import { getTopic } from '../../data/topics.js';
 import { renderCrowd } from '../../data/scenes/crowd.js';
 import { buildRound, isMatch } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { isQuiet, QUIET_PAUSE_MS } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'matchnames', title: 'Match the names' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let round = buildRound();
   let index = 0;
@@ -95,6 +97,13 @@ export function mount(root, ctx = {}) {
     const ok = isMatch(question, slot);
     if (ok) score += 1;
     answers.push({ question, ok });
+    if (quiet) {
+      // El nombre va donde lo puso el nino, como la linea en el papel.
+      label(slot, question.name, 'picked');
+      markNameUsed(question.name);
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
     cue(ok ? 'correct' : 'wrong');
     toast(ok ? 'ok' : 'no', ok ? 'Yes!' : `That was not ${question.name}`);
     label(question.slot, question.name, ok ? 'ok' : 'no');
@@ -134,7 +143,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total });
     const shields = shieldsFor(score, total);
     recordShields('matchnames', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, score);
 
     fill(stage, h('div', { class: 'result' }, [

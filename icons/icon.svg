@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>My Movers album</title>
+  <rect width="512" height="512" fill="#14204A"/>
+  <rect x="122" y="92" width="268" height="328" rx="34" fill="#FFFFFF"/>
+  <rect x="152" y="122" width="208" height="268" rx="22" fill="#E8F0FF"/>
+  <path d="M256 150 L338 178 L338 258 C338 314 300 350 256 370 C212 350 174 314 174 258 L174 178 Z"
+        fill="#FFC523" stroke="#14204A" stroke-width="14" stroke-linejoin="round"/>
+  <path d="M212 316 L212 222 L256 270 L300 222 L300 316" fill="none" stroke="#14204A"
+        stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

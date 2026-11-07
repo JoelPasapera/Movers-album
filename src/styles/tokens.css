@@ -15,6 +15,15 @@
   --grey:#8B93A6;
   --black:#14204A;
 
+  /* Los mismos colores, oscurecidos para llevar texto blanco con contraste
+     de lectura (4.5:1 o mas, WCAG AA). */
+  --red-deep:#D8382C;
+  --orange-deep:#B35E17;
+  --green-deep:#22863B;
+  --blue-deep:#1D75D5;
+  --pink-deep:#BA5079;
+  --grey-deep:#6E7483;
+
   --font-display:"Baloo 2", system-ui, sans-serif;
   --font-body:"Atkinson Hyperlegible", system-ui, sans-serif;
 

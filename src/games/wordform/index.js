@@ -3,8 +3,9 @@ import { speak, cue, stop as stopVoice } from '../../core/audio.js';
 import { getTopic } from '../../data/topics.js';
 import { buildRound, isCorrect } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
+import { noteMistake } from '../../engine/mistakes.js';
 import { shieldRow } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { practised } from '../../engine/progress.js';
 
 export const meta = { id: 'wordform', title: 'Add -ly and -ing' };
 
@@ -20,7 +21,7 @@ export function mount(root, ctx = {}) {
   const marksChip = h('span', { class: 'marks-chip' });
   const sentence = h('p', { class: 'gap-text' });
   const options = h('div', { class: 'chat-options' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const head = h('div', { class: 'game-head' }, [
@@ -38,6 +39,18 @@ export function mount(root, ctx = {}) {
     const ok = isCorrect(question, value);
     if (ok) score += 1;
     answers.push({ question, ok, value });
+    if (!ok) {
+      noteMistake({
+        game: 'wordform',
+        kind: 'choose',
+        prompt: `${question.before}\u2026${question.after}`,
+        options: question.options,
+        answer: question.pair.formed,
+        why: question.rule,
+        after: `${question.before}${question.pair.formed}${question.after}`,
+        given: String(value),
+      });
+    }
     marksChip.textContent = `${score} / ${questions.length}`;
     fill(sentence, question.before,
       h('span', { class: `gap-slot ${ok ? 'is-ok' : 'is-no'}` }, question.pair.formed),
@@ -77,7 +90,7 @@ export function mount(root, ctx = {}) {
     cue('finish');
     const shields = shieldsFor(score, questions.length);
     if (ctx.onFinish) return ctx.onFinish({ score, total: questions.length });
-    state.touchStreak();
+    practised(meta.id);
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, `${score} out of ${questions.length}`),
       shieldRow(shields),

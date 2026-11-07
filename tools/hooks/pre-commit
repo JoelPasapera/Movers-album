@@ -1,0 +1,12 @@
+#!/bin/sh
+# Antes de cada commit: la lista de archivos sin internet (precache-list.js)
+# tiene que ir al dia. Si va desfasada, las tablets que ya tienen la web
+# guardada no se enteran de la version nueva.
+#
+# Es opcional. Se activa una vez en cada copia del repositorio:
+#   git config core.hooksPath tools/hooks
+node tools/build-precache.mjs --check --quiet 2>/dev/null && exit 0
+node tools/build-precache.mjs --quiet || exit 1
+echo "precache-list.js iba desfasada y se ha regenerado." >&2
+echo "Anadela al commit (git add precache-list.js) y vuelve a hacer commit." >&2
+exit 1

@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Movers album</title>
-<link rel="icon" href="data:,">
+<meta name="theme-color" content="#14204A">
+<meta name="description" content="Practise English for the Cambridge A1 Movers test: stickers, games and a full mock test.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Movers album">
 <link rel="stylesheet" href="src/styles/fonts.css">
 <link rel="stylesheet" href="src/styles/tokens.css">
 <link rel="stylesheet" href="src/styles/base.css">
@@ -12,12 +19,13 @@
 <link rel="stylesheet" href="src/styles/album.css">
 <link rel="stylesheet" href="src/styles/game.css">
 <link rel="stylesheet" href="src/styles/report.css">
+<link rel="stylesheet" href="src/styles/print-test.css">
 </head>
 <body>
   <h1 class="sr-only">My Movers album — practise English for the Cambridge A1 Movers test</h1>
   <div class="app">
     <div id="shell"></div>
-    <main id="view"></main>
+    <main id="view" tabindex="-1"></main>
     <p class="footnote">Original practice material built on the public A1 Movers syllabus. Not affiliated with Cambridge.</p>
   </div>
   <script type="module" src="src/main.js"></script>

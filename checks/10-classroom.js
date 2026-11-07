@@ -8,13 +8,62 @@ import { checkSpelling } from '../src/ui/components/writer.js';
 import { SOURCE_ENTRIES } from '../src/data/wordlist-source.js';
 import { buildRound as forms, isCorrect as formOk } from '../src/games/wordform/questions.js';
 import { buildRound as yesno, isCorrect as ynOk } from '../src/games/yesno/questions.js';
-import { PART6_SCENES } from '../src/data/scenes/part6.js';
+import {
+  PART6_SCENES, placesOf, mentionsItself, isPerson, doingOf,
+} from '../src/data/scenes/part6.js';
 import { CLOZE_TEXTS } from '../src/data/cloze.js';
 import { inSyllabus } from '../src/data/syllabus.js';
 import { GAMES, PRACTICE } from '../src/games/registry.js';
 import { CLASSROOM, withGame, withoutGame } from './lib/activities.js';
 
 export const name = 'Las actividades del libro de aula tienen juego';
+
+/**
+ * Una frase de Yes or no, mirada contra el modelo de la escena: lo que dice
+ * que es verdad lo es, lo que dice que es mentira lo es, y suena a ingles de
+ * verdad (de una persona, el color de su camiseta; lo que hay varias veces, en
+ * plural; lo que hace, con su complemento).
+ * @param {any} scene @param {{ text: string, answer: boolean, about?: { noun: string, kind: string, value: string } }} q
+ * @param {Map<string, number>} shared
+ * @returns {string[]}
+ */
+function yesNoProblems(scene, q, shared) {
+  /** @type {string[]} */
+  const out = [];
+  const about = q.about;
+  if (!about) return [`Yes or no hace una frase sin decir de que habla: "${q.text}"`];
+  const entity = scene.entities.find((/** @type {any} */ e) => e.noun === about.noun);
+  if (about.kind === 'exists') {
+    if (Boolean(entity) !== q.answer) out.push(`Yes or no se equivoca sobre lo que hay en el dibujo: "${q.text}"`);
+    if (entity?.plural && !q.text.startsWith(`There are ${entity.plural} `)) out.push(`Yes or no habla de uno cuando hay varios: "${q.text}"`);
+    return out;
+  }
+  if (!entity) return [`Yes or no habla de algo que no esta en la escena: "${q.text}"`];
+  const { kind, value } = about;
+  const isTrue = kind === 'colour' ? entity.colours.includes(value)
+    : kind === 'place' ? placesOf(scene, entity).has(value) || (shared.get(value) ?? 0) >= 3
+      : kind === 'action' ? value === doingOf(entity)
+        : null;
+  if (isTrue === null) out.push(`Yes or no hace una frase de un tipo desconocido: "${q.text}"`);
+  else if (q.answer && !isTrue) out.push(`Yes or no marca como cierta una frase falsa: "${q.text}"`);
+  else if (!q.answer && isTrue) out.push(`Yes or no marca como falsa una frase cierta: "${q.text}"`);
+  if (!q.text.includes(value)) out.push(`Yes or no no dice lo que cree que dice: "${q.text}" (${value})`);
+  if (kind === 'place' && !q.answer && mentionsItself(entity, value)) out.push(`Yes or no dice algo sin sentido: "${q.text}"`);
+  if (kind === 'place' && !q.answer && entity.ground) out.push(`Yes or no pone en otro sitio el suelo o el cielo: "${q.text}"`);
+  // Que suene a ingles de verdad.
+  if (kind === 'colour' && isPerson(entity) && !/\bT-shirt\b/.test(q.text)) {
+    out.push(`Yes or no dice el color de una persona, no el de su camiseta: "${q.text}"`);
+  }
+  const several = entity.plural && !(kind === 'colour' && isPerson(entity));
+  if (several && !q.text.includes(`${entity.plural} are `) && !/^One /.test(q.text)) {
+    out.push(`Yes or no habla de uno cuando en el dibujo hay varios: "${q.text}"`);
+  }
+  if (several && /^One /.test(q.text) && entity.colours.length < 2) out.push(`Yes or no dice "one" sin motivo: "${q.text}"`);
+  if (entity.plural && kind === 'colour' && entity.colours.length > 1 && q.answer && !/^One /.test(q.text)) {
+    out.push(`Yes or no da un solo color a varios de colores distintos: "${q.text}"`);
+  }
+  return out;
+}
 
 // Formas que la regla ortografica no acierta sola y hay que vigilar.
 const SPELLING = {
@@ -69,16 +118,11 @@ export function run() {
       if (yes === 0 || yes === round.questions.length) problems.push('Yes or no da todas la misma respuesta');
       for (const q of [...round.questions, ...round.examples]) {
         if (!ynOk(q, q.answer)) problems.push('el corrector de Yes or no falla');
-        for (const w of q.text.toLowerCase().match(/[a-z']+/g) ?? []) {
+        // "T-shirt" y "boy's" son una palabra cada una.
+        for (const w of q.text.toLowerCase().replace(/\u2019/g, "'").match(/[a-z]+(?:['-][a-z]+)*/g) ?? []) {
           if (!inSyllabus(w)) problems.push(`Yes or no usa "${w}", que no esta en el syllabus`);
         }
-        const m = q.text.match(/^The (\w+) is (.+)\.$/);
-        if (!m || q.answer) continue;
-        const entity = scene.entities.find((e) => e.noun === m[1]);
-        if (!entity) continue;
-        const reallyTrue = entity.colours.includes(m[2]) || entity.place === m[2]
-          || entity.action === m[2] || (shared.get(m[2]) ?? 0) >= 3;
-        if (reallyTrue) problems.push(`Yes or no marca como falsa una frase cierta: "${q.text}"`);
+        problems.push(...yesNoProblems(scene, q, shared));
       }
     }
   }

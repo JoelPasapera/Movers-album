@@ -4,13 +4,16 @@ import { getTopic } from '../../data/topics.js';
 import { randomForm } from '../../data/notes.js';
 import { buildRound, checkRow, feedbackFor, marksFor } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
+import { noteMistake } from '../../engine/mistakes.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { isQuiet, QUIET_PAUSE_MS, PICKED } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'notetaking', title: 'Listen and write' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let source = randomForm();
   let round = buildRound(source);
@@ -22,7 +25,7 @@ export function mount(root, ctx = {}) {
   const counter = h('span', { class: 'counter' });
   const toastSlot = h('span');
   const form = h('div', { class: 'note-form' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const input = h('input', {
@@ -82,7 +85,7 @@ export function mount(root, ctx = {}) {
     const result = checkRow(row, input.value);
     if (result.kind === 'empty') {
       feedback.textContent = 'Write what you hear.';
-      feedback.className = 'spell-feedback spell-feedback--no';
+      feedback.className = quiet ? 'spell-feedback' : 'spell-feedback spell-feedback--no';
       input.focus();
       return;
     }
@@ -90,8 +93,31 @@ export function mount(root, ctx = {}) {
     const marks = marksFor(result);
     score += marks;
     answers.push({ row, value: input.value.trim(), marks, kind: result.kind });
+    // Lo que no se escribio bien vuelve otro dia en "Fix my mistakes": se oye
+    // la frase otra vez y se escribe.
+    if (!marks) {
+      noteMistake({
+        game: 'notetaking',
+        kind: 'write',
+        prompt: row.label,
+        say: row.say,
+        answer: row.answer,
+        // Como en el juego: "the sports centre" y "sports centre" valen igual.
+        accept: [String(row.answer).replace(/^the\s+/i, '')],
+        given: input.value,
+      });
+    }
 
     const slot = qsa('.note-gap', form)[round.rows.indexOf(row)];
+    if (quiet) {
+      // En la nota queda lo que escribio el nino, sin decir si esta bien.
+      if (slot) {
+        slot.textContent = input.value.trim();
+        slot.classList.add(PICKED);
+      }
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
     if (slot) {
       slot.textContent = row.answer;
       slot.classList.add(marks ? 'is-ok' : 'is-no');
@@ -132,7 +158,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total });
     const shields = shieldsFor(score, total);
     recordShields('notetaking', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, score);
     const spelledMiss = answers.filter((a) => a.kind === 'spelledWrong').length;
 
@@ -142,7 +168,7 @@ export function mount(root, ctx = {}) {
       h('p', {}, verdict(shields)),
       h('p', { class: 'spell-tip' }, spelledMiss
         ? 'When they spell a name letter by letter, your spelling has to be perfect. '
-          + 'Practise the alphabet, especially G and J.'
+          + 'Practise with Letters and numbers in the album: it knows which letters you mix up.'
         : 'In this part some small spelling mistakes are allowed, but never in a name '
           + 'that was spelled out for you.'),
       stickerBlock(topic, unlocked, score),

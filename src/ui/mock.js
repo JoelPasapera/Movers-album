@@ -1,11 +1,13 @@
+// @ts-check
 import { h, mount as fill } from '../core/dom.js';
 import { setExamMode, stop as stopVoice, cue } from '../core/audio.js';
 import { getTopic } from '../data/topics.js';
 import * as router from '../core/router.js';
 import * as state from '../core/state.js';
-import { recordShields } from '../engine/progress.js';
+import { recordShields, practised } from '../engine/progress.js';
 import { saveMock } from '../engine/report.js';
 import { shieldRow } from './components/rewards.js';
+import { shieldsFor, marksToGo, MAX_SHIELDS } from '../engine/scoring.js';
 import {
   PAPERS, createRun, currentPaper, currentGameId, gameFor,
   record, advance, timeUp, statement, totalShields, recordScale,
@@ -23,7 +25,12 @@ const clockText = (ms) => {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 };
 
+/** Cambia cada vez que se deja el simulacro: una parte que termina de cargar
+ * despues no se monta (seguiria sonando sin verse). */
+let generation = 0;
+
 export function unmountMock() {
+  generation += 1;
   if (active?.destroy) active.destroy();
   active = null;
   if (ticker) clearInterval(ticker);
@@ -52,13 +59,16 @@ function intro(container) {
         h('b', {}, paper.label),
         h('span', {}, paper.timed ? `${paper.minutes} minutes` : 'about 7 minutes'),
         h('span', {}, `${paper.parts.length} parts`),
+        h('span', {}, paper.marks
+          ? `5 shields from ${marksToGo(/** @type {'listening' | 'reading'} */ (paper.id), 0).fiveAt} of ${paper.marks} marks`
+          : '5 shields: the examiner\u2019s scale'),
         h('small', {}, paper.tip),
       ]))),
       h('ul', { class: 'mock-rules' }, [
         h('li', {}, 'You hear every recording twice. There is no third time.'),
         h('li', {}, 'The words on the screen stay hidden.'),
-        h('li', {}, 'Nobody tells you if an answer is right until the end.'),
-        h('li', {}, 'When the clock runs out, that paper stops.'),
+        h('li', {}, 'Nobody tells you if an answer is right until the end, like in the real test.'),
+        h('li', {}, 'When the clock runs out, that paper stops. Questions you did not answer get no marks.'),
       ]),
       h('div', { class: 'result__actions' }, [
         h('button', {
@@ -121,7 +131,7 @@ function beginPaper(container) {
 
 function tick(container) {
   const left = deadline - Date.now();
-  const bar = document.querySelector('.mock-clock__fill');
+  const bar = /** @type {HTMLElement | null} */ (document.querySelector('.mock-clock__fill'));
   const label = document.querySelector('.mock-clock__time');
   const paper = currentPaper(run);
   if (label) label.textContent = clockText(left);
@@ -171,8 +181,10 @@ async function mountPart(container) {
   if (!game?.load) return onPartDone(container, gameId, 0, 0);
 
   fill(slot, h('div', { class: 'card' }, h('p', {}, 'Loading\u2026')));
+  const mine = generation;
   try {
     const module = await game.load();
+    if (mine !== generation) return;
     active = module.mount(slot, {
       topicId: getTopic().id,
       exam: true,
@@ -252,6 +264,29 @@ function quit(container) {
 
 // ---------- Statement of Results ----------
 
+/** "1 more mark", "4 more marks" @param {number} n */
+const moreMarks = (n) => `${n} more mark${n === 1 ? '' : 's'}`;
+
+/**
+ * Lo que le falta a una prueba entera, con la tabla de Cambridge: las notas
+ * para el escudo siguiente y para los 5. Solo si la prueba se puntua con notas
+ * y la nota es sobre el total del examen (25 o 39).
+ * @param {{ id: string, score: number, total: number, marks: number, scale?: unknown }} paper
+ */
+function goalLine(paper) {
+  if (paper.scale || !paper.marks || paper.total !== paper.marks) return null;
+  const go = marksToGo(/** @type {'listening' | 'reading'} */ (paper.id), paper.score);
+  const fiveFrom = `5 shields start at ${go.fiveAt} of ${paper.marks}`;
+  let text = `${fiveFrom}. Well done!`;
+  if (go.nextAt !== null && go.nextAt === go.fiveAt) {
+    text = `${moreMarks(go.fiveAt - paper.score)} for 5 shields (${fiveFrom}).`;
+  } else if (go.nextAt !== null) {
+    text = `${moreMarks(go.nextAt - paper.score)} for ${go.shields + 1} shields, `
+      + `and ${go.fiveAt - paper.score} for ${MAX_SHIELDS} (${fiveFrom}).`;
+  }
+  return h('p', { class: 'statement__goal' }, text);
+}
+
 function finish(container) {
   if (ticker) clearInterval(ticker);
   ticker = null;
@@ -262,12 +297,14 @@ function finish(container) {
   const papers = statement(run);
   for (const paper of papers) {
     for (const row of paper.rows) {
-      if (row.total > 0) recordShields(row.gameId, Math.round((row.score / row.total) * 5));
+      // La misma regla que al jugar esa parte suelta (engine/scoring.js).
+      if (row.total > 0) recordShields(row.gameId, shieldsFor(row.score, row.total));
     }
   }
   // El Statement of Results se guarda en el perfil: el informe para las
   // familias lo ensena, y el nino ve si mejora de un simulacro al siguiente.
   saveMock(run);
+  practised('mock');
   const minutes = Math.round((Date.now() - run.startedAt) / 60000);
   const shields = totalShields(run);
 
@@ -289,6 +326,7 @@ function finish(container) {
           ? h('p', { class: 'statement__note' },
             `You answered ${paper.score} of ${paper.total} marks. In the real test the examiner uses this scale, not the marks.`)
           : null,
+        goalLine(paper),
         paper.ranOut
           ? h('p', { class: 'statement__warn' },
             'The clock ran out before you finished this paper. In the real test those '

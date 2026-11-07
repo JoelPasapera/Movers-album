@@ -162,6 +162,15 @@ export const PRACTICE = [
     load: () => import('./wordhunt/index.js'),
   },
   {
+    id: 'letters',
+    title: 'Letters and numbers',
+    blurb: 'Listen to the letters and write the name. Fourteen or forty? Write the number.',
+    tag: 'Listening · spelling and numbers',
+    colour: 'blue',
+    ready: true,
+    load: () => import('./letters/index.js'),
+  },
+  {
     id: 'vocab',
     title: 'Word gym',
     blurb: 'Every word in the wordlist. The ones you miss come back sooner.',
@@ -286,6 +295,15 @@ export const PRACTICE = [
     colour: 'brown',
     ready: true,
     load: () => import('./sentence/index.js'),
+  },
+  {
+    id: 'fixit',
+    title: 'Fix my mistakes',
+    blurb: 'The questions you got wrong come back the next day. Right on two different days and they are fixed.',
+    tag: 'Your mistakes',
+    colour: 'red',
+    ready: true,
+    load: () => import('./fixit/index.js'),
   },
 ];
 

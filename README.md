@@ -1,7 +1,8 @@
 # Mi Álbum Movers
 
 Web de práctica para el examen **Cambridge English A1 Movers**, para niños de 8 a 10
-años. Interfaz en inglés. Sin build, sin dependencias, sin conexión a internet.
+años. Interfaz en inglés. Sin build, sin dependencias. Se instala como una app y
+funciona sin internet.
 
 Este archivo es el punto de entrada. Si eres una sesión nueva de Claude, léelo
 entero antes de tocar nada, y después lee `CLAUDE.md` y `REVIEW.md`.
@@ -14,9 +15,10 @@ entero antes de tocar nada, y después lee `CLAUDE.md` y `REVIEW.md`.
 npm run check
 ```
 
-Son 35 comprobaciones (16 baterías y 19 medidas del trinquete). Si sale **TODO EN
+Son 43 comprobaciones (22 baterías y 21 medidas del trinquete). Si sale **TODO EN
 VERDE**, el proyecto está sano y puedes construir encima. Si sale algo rojo, eso es
-lo primero que se arregla.
+lo primero que se arregla. Escribir un error en la consola durante la revisión
+también cuenta como fallo.
 
 Para ver la web:
 
@@ -49,45 +51,93 @@ Habla en español con él. La interfaz de la web va en inglés.
 | Páginas del álbum | **24**; las 591 palabras que Cambridge clasifica por tema están en la página que dicta su tabla temática |
 | Gramática oficial de Movers | **25 de 25** estructuras |
 | Escala de Speaking del handbook | **3 de 3** criterios, bandas 0–5, con la regla de la pronunciación |
+| De notas a escudos | la **tabla de Cambridge** para exámenes de práctica (Listening: 5 escudos desde 21 de 25; Reading and Writing: desde 33 de 39), en proporción para partes y juegos |
 | Actividades del libro de aula con juego | **18 de 18** |
 | Actividades del picture book con juego | **7 de 7** |
 | Tableros del picture book | **8 de 8**, con 155 palabras del wordlist, 32 preguntas y 48 frases |
-| Piezas de contenido | **591** |
-| Escenas dibujadas | **8**, más 24 viñetas de las historias de Reading 5 |
+| Piezas de contenido | **639**: 16 diálogos, 16 historias con huecos, 16 textos de gramática, 12 historias de lectura, 12 formularios, 10 juegos de emparejar, 24 diálogos de Listening 4, 12 historias de Speaking 2, 123 definiciones… |
+| Escenas dibujadas | **16** (6 de colorear y 10 de la Parte 6), más 36 viñetas de Reading 5 y 48 de Speaking 2, todas con el mismo estilo realista (proporciones, luz y detalle de verdad) y haciendo lo que dicen sus frases |
+| Partidas que la batería juega enteras | **126**: los 33 juegos en práctica y los 15 del examen también en examen, con voz y sin voz, y los de tablero |
 | Informe imprimible por alumno | las **15** partes, la escala de Speaking y los simulacros |
+| Sin internet | se instala (manifest e iconos) y guarda sus 188 archivos; avisa cuando hay versión nueva |
+| Datos de los niños | copia de seguridad de un alumno o de la clase en un archivo; al restaurar se junta sin perder nada |
 
 El PDF del wordlist tiene 894 líneas, pero una misma palabra puede aparecer dos
 veces con distinta función (*drive* como verbo y como nombre) y una línea puede
 dar dos cromos (*child/children*). El álbum cuenta palabras distintas: 883.
 
-31 juegos: 15 que corresponden a partes del examen y 16 de entrenamiento.
+33 juegos: 15 que corresponden a partes del examen y 18 de entrenamiento (entre
+ellos un dictado de letras y números para la parte 2 de Listening que recuerda lo
+que cada niño confunde al oído, y *Fix my mistakes*, donde vuelve otro día lo que
+cada niño falló en los demás juegos hasta acertarlo en dos días distintos).
+Cómo enseña: repaso espaciado de las 883 palabras (que sube como mucho un escalón
+al día), palabras nuevas presentadas antes de preguntarlas y repetidas en la misma
+ronda si se fallan, y la ortografía corregida letra a letra (mira, tapa, escribe).
 Más un simulacro completo cronometrado con Statement of Results (que se guarda en
-el perfil), ocho tableros del picture book y un informe imprimible por alumno.
+el perfil), un examen de práctica entero para imprimir (con su Listening para poner
+y las respuestas), el Speaking cara a cara con el profesor de examinador y la nota
+con la escala, las frases de los juegos grabadas con la voz del profesor (que suenan
+en lugar de la voz del navegador), un registro de los exámenes de práctica en papel con lo que falta
+para los 5 escudos de cada prueba, ocho tableros del picture book, un informe
+imprimible por alumno, el
+**plan del día** (tres actividades elegidas según lo que necesita cada niño) y una
+página de **ajustes** (voz inglesa, velocidad, sonido, reconocimiento de voz,
+instalación y copias de seguridad).
+
+Accesibilidad: contraste de lectura AA en todos los textos, avisos que lee un lector
+de pantalla, foco del teclado que no se pierde al contestar, título de pestaña por
+pantalla y menos animación si el aparato lo pide. En un móvil la barra pasa a dos
+filas y la lista de páginas se desliza con la página actual a la vista.
 
 ## 4. Cómo está montado
 
 ```
 index.html            arranque, sin peticiones externas
-package.json          scripts: check, check:update, start
+manifest.webmanifest  la web como app instalable (nombre, colores, iconos)
+sw.js                 service worker: guarda la web para usarla sin internet
+precache-list.js      lista de archivos y versión (generada por tools/build-precache.mjs)
+icons/                icono de la app (SVG y PNG de 192 y 512)
+package.json          scripts: check, check:update, precache, start
 src/
   main.js             rutas: album, tema, juego, tablero, simulacro, perfiles,
-                      profesor, informe
+                      profesor, informe, examen para imprimir, Speaking cara a
+                      cara, la voz del profesor, ajustes; foco y título al
+                      cambiar
   core/               dom, eventos, router, estado, almacenamiento, perfiles,
-                      audio (con modo examen) y voz (micrófono)
-  data/               syllabus, wordlist, temas, tableros, gramática y el
+                      ajustes del aparato, fechas locales, audio (con modo
+                      examen y reloj de seguridad), voz (micrófono), las
+                      grabaciones con la voz del profesor (IndexedDB) y sin
+                      internet
+  data/               syllabus, wordlist, temas, tableros, gramática, la tabla
+                      de escudos de Cambridge y el
                       contenido de cada juego, más las escenas dibujadas
-  engine/             puntuación, progreso, vocabulario, formas de palabra,
-                      números, escala de Speaking, el motor del simulacro y
-                      el informe
+                      (scenes/art: la luz y los filtros, el acabado de
+                      cámara, el estilo común,
+                      personas, animales —perro, gato, aves, ganado, con su
+                      pelaje en fur.js—, cosas, fondos y lo de las escenas
+                      de colorear)
+  engine/             puntuación (de notas a escudos), progreso, vocabulario, lo que cada niño
+                      confunde al oído (letras y números), formas de palabra,
+                      números, escala de Speaking, el motor del simulacro, los
+                      exámenes de práctica en papel, el examen para imprimir, el
+                      Speaking cara a cara, el informe, las copias de seguridad
+                      y el plan del día
   games/              registro + una carpeta por juego
-  ui/                 barra, álbum, tablero, perfiles, panel del profesor,
-                      informe, simulacro, contenedor de juegos y componentes
-                      compartidos
+  ui/                 barra, álbum, tablero, perfiles, panel del profesor (con
+                      los exámenes en papel), examen para imprimir, Speaking
+                      cara a cara, la voz del profesor, informe, simulacro,
+                      ajustes,
+                      copias, contenedor de juegos y componentes compartidos
+                      (voz, plan, lista de páginas, la tabla de escudos)
   styles/             fuentes, tokens, base, estilos por vista y el de imprimir
   fonts/              woff2 empaquetados (Baloo 2, Atkinson Hyperlegible)
-checks/               las 16 comprobaciones, el inventario de actividades de
-                      los libros (lib/activities.js) y la línea base del trinquete
-tools/                el generador del álbum desde el PDF oficial
+checks/               las 22 comprobaciones, el navegador y el niño de prueba
+                      (lib/dom.js, lib/browser.js, lib/bot.js), el inventario de
+                      actividades de los libros y la línea base del trinquete
+tools/                el generador del álbum desde el PDF oficial, la lista de
+                      archivos sin internet, dos ayudas opcionales (recorrido
+                      visual en Chromium y reloj movido para probar fechas) y un
+                      gancho de git opcional (hooks/pre-commit)
 ```
 
 Cada juego expone `mount(root, ctx)` y devuelve `{ destroy }`. Si `ctx.onFinish`
@@ -132,6 +182,41 @@ de verdad en este proyecto. Ejemplos reales que cazó:
   que el propio extractor había producido. La batería solo puede medir contra lo
   que el extractor le da: por eso `build-wordlist.py` lleva ahora un `--selftest`
   con cada caso que ya falló, y se ejecuta antes de regenerar.
+- La pantalla final de *Listen and colour* rompía con un error (usaba una variable
+  que no existía). Ninguna comprobación jugaba una partida entera; desde entonces la
+  17 juega todos los juegos hasta el final en un navegador de prueba.
+- *Tell the story* reconocía la voz sin enseñar el aviso de privacidad, y al salir de
+  la pantalla el micrófono seguía abierto. Lo caza la 18.
+- La web sin internet no se enteraba de las versiones nuevas: el navegador guardaba
+  en su caché la lista de archivos. Lo caza la 19.
+- La racha de días se rompía al jugar por la tarde en Lima: las fechas se tomaban en
+  UTC, que allí ya es el día siguiente. Las fechas son locales y la 20 lo prueba.
+- Un texto de Reading 4 decía que las ballenas suben a la superficie «a por agua del
+  cielo». Las palabras del syllabus no bastan: el contenido también tiene que ser
+  verdad. Una revisión independiente de todo el contenido (noviembre de 2026) encontró
+  26 problemas más que ninguna batería podía ver: canguros que «beben todos los días»,
+  palabras sobrantes que encajaban en un hueco, una madre que decía «I'm very thirsty,
+  Mum», un niño que se metía en el río a por una pelota, dibujos que enseñaban la
+  respuesta… Todos arreglados.
+- Yes or no marcaba como falsas frases que el dibujo hacía verdad («The boy is on
+  the floor» con el niño de pie en el suelo) y decía disparates («The table is on the
+  table»). Ahora cada objeto apunta todos sus sitios y la 10 lo vigila.
+- Mirando las frases que salían de verdad aparecieron «The girl is flying» (volaba
+  una cometa), «The boy is green» (era su camiseta), «Yes, I like the boy because it
+  is green» y «The duck is swimming» con dos patos. Y en los dibujos, un sombrero
+  detrás de la cabeza de un perro que parecía puesto, justo en la escena que dice
+  «The hat is next to the dog». Ahora cada frase se comprueba contra el modelo de la
+  escena y tiene que sonar a inglés de verdad (la 10, la 06 y la 12).
+- Una revisión independiente del código (noviembre de 2026) encontró catorce
+  problemas que la batería no veía. Algunos: al borrar al niño que estaba jugando,
+  su sesión seguía abierta y lo que jugaba se perdía; un simulacro abandonado seguía
+  con su reloj y acababa pintando sus resultados encima de otra pantalla; apagar el
+  reconocimiento de voz no cortaba lo que estaba escuchando; una copia con un nombre
+  como «toString» rompía la restauración; la versión nueva sin internet podía
+  guardarse con archivos viejos; el *Word gym* de cualquier página tachaba las
+  palabras del plan del día; y una comprobación con un error de escritura paraba la
+  batería sin decir nada. Todos arreglados, cada uno con su prueba, y cada prueba
+  comprobada rompiendo el arreglo a propósito para ver que lo caza.
 
 ### El trinquete
 
@@ -180,6 +265,13 @@ hacerse trampas al solitario.
 - **Nunca se puntúa a cero por un fallo del reconocimiento de voz.**
 - **El informe para las familias solo dice lo que el perfil guarda.** No estima ni
   redondea hacia arriba; la comprobación 16 lo verifica con perfiles de prueba.
+- **Las copias de seguridad nunca pierden progreso.** Restaurar junta lo que hay con
+  lo que trae el archivo (cromos de los dos, el mejor escudo, la racha del último día
+  jugado), da lo mismo hacerlo dos veces y no importa el orden. Lo prueba la 20.
+- **Las fechas son las del aparato, no UTC.** La racha y el plan del día cambian a
+  medianoche de donde está el niño.
+- **Todo texto se lee con contraste AA** (4.5:1). Para texto blanco sobre color se
+  usan los tonos `--*-deep` de `styles/tokens.css`.
 
 ## 7. Copyright: dónde está la línea
 
@@ -207,13 +299,11 @@ contenido. Díselo con claridad: lo entiende y lo agradece.
 
 Por orden de valor:
 
-1. **Más contenido**, siempre. Los mínimos están en `checks/11-volume.js`; las
-   partes que más lo agradecen son Reading 6 (4 escenas) y Listening 5 (4 escenas
-   de colorear), porque dibujar una escena cuesta más que escribir un texto.
-2. **Exportar e importar un perfil** (un archivo), para que un niño pueda seguir en
-   otro aparato sin servidor.
-3. **Voces**: probar con voces instaladas en las tablets del aula y, si hace falta,
-   bajar la velocidad por defecto en `core/audio.js`.
+1. **Más contenido**, siempre. Los mínimos están en `checks/11-volume.js`. Lo que
+   más lo agradece: escenas de Reading 6 y de colorear (8 y 6; dibujar cuesta más que
+   escribir) y definiciones de Reading 1 (123).
+2. **Probar en las tablets del aula**: voces instaladas, velocidad, instalación de la
+   app y una copia de seguridad de la clase restaurada en otro aparato.
 
 ## 9. Los PDFs originales
 
@@ -245,6 +335,6 @@ valen para el syllabus pero no son entradas: no tienen cromo.
 ## 10. Documentos hermanos
 
 - **`CLAUDE.md`** — la regla §0 y las reglas cortas. Léelo al empezar la sesión.
-- **`REVIEW.md`** — qué comprueba cada una de las 16 baterías y **por qué**, más
+- **`REVIEW.md`** — qué comprueba cada una de las 21 baterías y **por qué**, más
   las instrucciones para añadir un juego, una escena, un tablero o contenido nuevo.
 - **`LEEME.md`** — la guía para el profesor: qué hace cada juego y por qué.

@@ -4,15 +4,17 @@ import { getTopic } from '../../data/topics.js';
 import { randomScene, renderScene } from '../../data/scenes/part6.js';
 import { checkClosed, checkFree } from './checker.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { isQuiet, QUIET_PAUSE_MS, hideScoreInExam } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'writeit', title: 'Write about the picture' };
 
 const TOTAL_MARKS = 10;
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let scene = randomScene();
   let index = 0;
@@ -23,11 +25,12 @@ export function mount(root, ctx = {}) {
 
   const counter = h('span', { class: 'counter' });
   const marksChip = h('span', { class: 'marks-chip' });
+  hideScoreInExam(marksChip, ctx);
   const toastSlot = h('span');
   const picture = h('div', { class: 'p6-picture' });
   const promptLine = h('p', { class: 'p6-prompt' });
   const markLabel = h('span', { class: 'p6-marks' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const input = h('input', {
@@ -74,7 +77,7 @@ export function mount(root, ctx = {}) {
     const value = input.value.trim();
     if (!value) {
       feedback.textContent = 'Write something first.';
-      feedback.className = 'spell-feedback spell-feedback--no';
+      feedback.className = quiet ? 'spell-feedback' : 'spell-feedback spell-feedback--no';
       input.focus();
       return;
     }
@@ -89,6 +92,10 @@ export function mount(root, ctx = {}) {
     score += result.marks;
     answers.push({ prompt, value, marks: result.marks });
     marksChip.textContent = `${score} / ${TOTAL_MARKS} marks`;
+    if (quiet) {
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
 
     const full = result.marks === prompt.marks;
     feedback.textContent = result.note
@@ -132,7 +139,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: TOTAL_MARKS });
     const shields = shieldsFor(score, TOTAL_MARKS);
     recordShields('writeit', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, Math.round(score / 2));
     const freeMarks = answers.filter((a) => a.prompt.kind === 'free')
       .reduce((total, a) => total + a.marks, 0);

@@ -5,8 +5,9 @@
   "type": "module",
   "description": "Web de practica para el examen Cambridge A1 Movers",
   "scripts": {
-    "check": "node checks/run.js",
-    "check:update": "node checks/run.js --update-baseline",
+    "check": "node tools/build-precache.mjs --quiet && node checks/run.js",
+    "check:update": "node tools/build-precache.mjs --quiet && node checks/run.js --update-baseline",
+    "precache": "node tools/build-precache.mjs",
     "start": "npx serve ."
   }
 }

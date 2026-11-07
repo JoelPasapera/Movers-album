@@ -4,7 +4,7 @@ import { buildRound, isCorrect } from './questions.js';
 import { getBoard } from '../../data/boards.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
 import { shieldRow } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { practised } from '../../engine/progress.js';
 
 export const meta = { id: 'picturegap', title: 'What are they doing today?' };
 
@@ -22,7 +22,7 @@ export function mount(root, ctx = {}) {
   const marks = h('span', { class: 'marks-chip' });
   const sentence = h('p', { class: 'p6-prompt' });
   const bank = h('div', { class: 'bank' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const head = h('div', { class: 'game-head' }, [
@@ -83,7 +83,7 @@ export function mount(root, ctx = {}) {
     const total = round.questions.length;
     const shields = shieldsFor(score, total);
     if (ctx.onFinish) return ctx.onFinish({ score, total });
-    state.touchStreak();
+    practised(meta.id);
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, `${score} out of ${total}`),
       shieldRow(shields),

@@ -8,12 +8,12 @@ export const CLOZE_TEXTS = [
     id: 'penguins',
     title: 'Penguins',
     parts: [
-      'Penguins are birds, but they ', ' fly. They live in cold places ',
+      'Penguins are birds, but they ', ' fly. Many penguins live in cold places ',
       ' there is a lot of ice and snow. A penguin is ', ' at swimming than at walking. Penguins must swim every day ', ' they eat fish. Baby penguins are grey, but ',
       ' mothers and fathers are black and white.',
     ],
     gaps: [
-      { options: ['don\u2019t', 'can\u2019t', 'aren\u2019t'], answer: 1, why: '"Can\u2019t" is for something you are not able to do.' },
+      { options: ['doesn\u2019t', 'can\u2019t', 'aren\u2019t'], answer: 1, why: 'With "they" you can\u2019t say "doesn\u2019t". "Can\u2019t" is for something you are not able to do.' },
       { options: ['who', 'which', 'where'], answer: 2, why: '"Where" is for places.' },
       { options: ['good', 'better', 'best'], answer: 1, why: 'With "than" you need the comparative: better than.' },
       { options: ['but', 'so', 'because'], answer: 2, why: '"Because" gives the reason.' },
@@ -44,7 +44,7 @@ CLOZE_TEXTS.push({
   title: 'At the doctor\u2019s',
   parts: [
     'The doctor asks Vicky some questions. \u201c',
-    ' does your head hurt?\u201d \u201cIt started this morning.\u201d \u201c',
+    ' did your head start to hurt?\u201d \u201cThis morning.\u201d \u201c',
     ' are you here?\u201d \u201cBecause I am ill.\u201d \u201c',
     ' does it hurt?\u201d \u201cHere, next to my ear.\u201d \u201c',
     ' is with you today?\u201d \u201cMy mum.\u201d \u201c',
@@ -64,14 +64,14 @@ CLOZE_TEXTS.push(
   {
     id: 'elephants', title: 'Elephants',
     parts: [
-      'Elephants are the biggest animals ', ' walk on the ground. They eat leaves and fruit, ',
+      'Elephants are the biggest animals ', ' walk on the ground. They eat leaves and fruit. They are very big, ',
       ' they must eat all day. A baby elephant is smaller ',
       ' its mother, but it is not small! Elephants drink water with ',
       ' long noses. They ', ' swim, too.',
     ],
     gaps: [
       { options: ['who', 'which', 'where'], answer: 1, why: '"Which" is for animals and things.' },
-      { options: ['but', 'so', 'because'], answer: 1, why: '"So" tells you what happens next.' },
+      { options: ['but', 'so', 'because'], answer: 1, why: '"So" gives the result: they are very big, so they must eat a lot.' },
       { options: ['then', 'than', 'that'], answer: 1, why: 'After "smaller" you need "than".' },
       { options: ['they', 'them', 'their'], answer: 2, why: '"Their" says whose noses they are.' },
       { options: ['can', 'must', 'are'], answer: 0, why: '"Can" is for something you are able to do.' },
@@ -81,7 +81,7 @@ CLOZE_TEXTS.push(
     id: 'school2', title: 'A school in the mountains',
     parts: [
       'This school is ', ' a small village in the mountains. The children ',
-      ' to walk for an afternoon to get there, ', ' there is no bus. Last year the school ',
+      ' to walk up a mountain to get there, ', ' there is no bus. Last year the school ',
       ' very cold, so the parents made a new roof. Now it is the ', ' school in the country.',
     ],
     gaps: [
@@ -120,13 +120,13 @@ CLOZE_TEXTS.push(
       'Kangaroos are animals ', ' live in a hot country. They can’t walk well, ',
       ' they can jump very well. A baby kangaroo is ',
       ' than a mouse, and it sleeps in a bag on its mother’s body. Kangaroos eat grass and leaves, and ',
-      ' must drink water every day. At night they ', ' under the trees.',
+      ' don’t need a lot of water. When it is hot, they ', ' under the trees.',
     ],
     gaps: [
       { options: ['who', 'which', 'where'], answer: 1, why: '"Which" is for animals and things, "who" is for people.' },
       { options: ['so', 'but', 'because'], answer: 1, why: '"But" joins two different ideas: they can’t walk well, but they can jump.' },
       { options: ['small', 'smaller', 'smallest'], answer: 1, why: 'With "than" you need the comparative: smaller than.' },
-      { options: ['they', 'them', 'their'], answer: 0, why: '"They" is the one that does the action: they must drink.' },
+      { options: ['they', 'them', 'their'], answer: 0, why: '"They" is the one that does the action: they don’t need.' },
       { options: ['sleep', 'sleeps', 'sleeping'], answer: 0, why: '"They" takes the verb without an s: they sleep.' },
     ],
   },
@@ -149,14 +149,14 @@ CLOZE_TEXTS.push(
   {
     id: 'snow', title: 'Snow',
     parts: [
-      'Snow is water ', ' is very cold. It falls from the clouds ',
-      ' the weather is cold. Children love snow ',
+      'Snow is ice ', ' comes from the clouds. It falls ',
+      ' the weather is very cold. Children love snow ',
       ' they can play in it all day. In some countries it ', ' every year, but in hot countries children never see it. The ',
       ' mountains in the world have snow at the top all year.',
     ],
     gaps: [
-      { options: ['who', 'which', 'where'], answer: 1, why: '"Which" is for things. Water is a thing.' },
-      { options: ['when', 'where', 'who'], answer: 0, why: '"When" is for the time: when the weather is cold.' },
+      { options: ['who', 'which', 'where'], answer: 1, why: '"Which" is for things. Ice is a thing.' },
+      { options: ['when', 'what', 'who'], answer: 0, why: '"When" is for the time: when the weather is very cold.' },
       { options: ['because', 'but', 'so'], answer: 0, why: '"Because" tells you why they love it.' },
       { options: ['snow', 'snows', 'snowing'], answer: 1, why: '"It" takes the verb with an s: it snows.' },
       { options: ['big', 'bigger', 'biggest'], answer: 2, why: 'With "the" and more than two things, you need the superlative: the biggest.' },
@@ -165,17 +165,113 @@ CLOZE_TEXTS.push(
   {
     id: 'whales', title: 'Whales',
     parts: [
-      'Whales are the biggest animals in the sea, but they are not fish. A whale ', ' swim under the water all morning, but then it has to come up ',
-      ' get more water from the sky. Baby whales drink milk from ',
+      'Whales are the biggest animals in the sea, but they are not fish. A whale ', ' swim under the water, but then it has to come up ',
+      ' put its head out of the water. Baby whales drink milk from ',
       ' mothers. Some whales sing, and their friends can listen to ', ' from the next island. People ',
       ' to go to the sea in boats to watch whales.',
     ],
     gaps: [
       { options: ['can', 'must', 'is'], answer: 0, why: '"Can" is for something you are able to do.' },
-      { options: ['to', 'for', 'at'], answer: 0, why: '"To" + verb says why: it comes up to get.' },
+      { options: ['to', 'for', 'at'], answer: 0, why: '"To" + verb says why: it comes up to put its head out.' },
       { options: ['they', 'them', 'their'], answer: 2, why: '"Their" says whose mothers they are.' },
       { options: ['they', 'them', 'its'], answer: 1, why: 'After "listen to" you need "them".' },
       { options: ['like', 'likes', 'liking'], answer: 0, why: '"People" is plural, so the verb has no s: people like.' },
+    ],
+  },
+);
+
+// Seis textos mas: delfines, murcielagos, ranas, un hospital, un loro y los
+// trenes. Cada hueco prueba una cosa de la gramatica de Movers (relativos,
+// comparativos, adverbios, posesivos, -ing, "because", tiempos).
+CLOZE_TEXTS.push(
+  {
+    id: 'dolphins', title: 'Dolphins',
+    parts: [
+      'Dolphins live in the sea, but they are not fish. They are clever animals ', ' can learn games. Dolphins swim ',
+      ' than people, and they ', ' jump out of the water. A baby dolphin swims next to ',
+      ' mother all day. People love ', ' dolphins from their boats.',
+    ],
+    gaps: [
+      { options: ['who', 'where', 'which'], answer: 2, why: '"Which" is for animals and things, "who" is for people.' },
+      { options: ['quickly', 'more quickly', 'most quickly'], answer: 1, why: 'With "than" you need "more quickly".' },
+      { options: ['can', 'are', 'has'], answer: 0, why: '"Can" says what an animal is able to do.' },
+      { options: ['it', 'it\u2019s', 'its'], answer: 2, why: '"Its" says whose mother: the baby\u2019s mother. "It\u2019s" means "it is".' },
+      { options: ['watch', 'watching', 'watches'], answer: 1, why: 'After "love" you can use the -ing form: love watching.' },
+    ],
+  },
+  {
+    id: 'bats', title: 'Bats',
+    parts: [
+      'Bats can fly, but they are not birds. They sleep in the day and they wake up ', ' night. Then they fly out ',
+      ' find food. Some bats eat fruit and some eat flies. Baby bats drink milk from ', ' mothers. Farmers like bats ',
+      ' they eat a lot of flies. Bats sleep in trees or in old houses ', ' people do not live.',
+    ],
+    gaps: [
+      { options: ['in', 'at', 'on'], answer: 1, why: 'We say "at night", but "in the day".' },
+      { options: ['to', 'for', 'at'], answer: 0, why: '"To" + verb says why they go out: to find food.' },
+      { options: ['they', 'them', 'their'], answer: 2, why: '"Their" says whose mothers they are.' },
+      { options: ['but', 'because', 'so'], answer: 1, why: '"Because" gives the reason why farmers like bats.' },
+      { options: ['where', 'who', 'which'], answer: 0, why: '"Where" is for places.' },
+    ],
+  },
+  {
+    id: 'frogs', title: 'Frogs',
+    parts: [
+      'Baby frogs are very small and they live in the water. A baby frog ', ' a long tail, but no legs. Then it ',
+      ' legs and it loses its tail. Frogs can jump very ', '. They eat small flies ',
+      ' they catch near the water. Frogs ', ' wet places.',
+    ],
+    gaps: [
+      { options: ['have', 'has', 'having'], answer: 1, why: '"A baby frog" is one, so the verb has an s: has.' },
+      { options: ['grow', 'growing', 'grows'], answer: 2, why: '"It" takes the verb with an s: it grows.' },
+      { options: ['well', 'good', 'better'], answer: 0, why: 'After a verb like "jump" you need "well", not "good".' },
+      { options: ['who', 'which', 'where'], answer: 1, why: '"Which" is for animals and things: the flies which they catch.' },
+      { options: ['likes', 'liking', 'like'], answer: 2, why: '"Frogs" is more than one, so the verb has no s: frogs like.' },
+    ],
+  },
+  {
+    id: 'hospital', title: 'In the hospital',
+    parts: [
+      'A hospital is a place ', ' doctors and nurses help people ', ' are ill. In a hospital you ',
+      ' be quiet. Last week my grandma ', ' to hospital because she hurt her leg. Now she can walk ',
+      ' than last week, and she wants to come home.',
+    ],
+    gaps: [
+      { options: ['who', 'where', 'which'], answer: 1, why: '"Where" is for places: a place where\u2026' },
+      { options: ['who', 'which', 'where'], answer: 0, why: '"Who" is for people: people who are ill.' },
+      { options: ['mustn\u2019t', 'are', 'must'], answer: 2, why: '"Must" is for a rule: you must be quiet.' },
+      { options: ['go', 'went', 'goes'], answer: 1, why: '"Last week" is in the past, so you need "went".' },
+      { options: ['good', 'best', 'better'], answer: 2, why: 'With "than" you need "better".' },
+    ],
+  },
+  {
+    id: 'parrot', title: 'My aunt\u2019s parrot',
+    parts: [
+      'Parrots are birds from hot countries. They can ', ' words, and some parrots can sing songs. A parrot can live ',
+      ' than a dog or a cat. My aunt has a green parrot. ', ' name is Fred. Fred always says \u201cHello!\u201d ',
+      ' my aunt comes into the kitchen. It likes ', ' apples and bananas.',
+    ],
+    gaps: [
+      { options: ['says', 'say', 'saying'], answer: 1, why: 'After "can" the verb has no s and no -ing: can say.' },
+      { options: ['longer', 'long', 'longest'], answer: 0, why: 'With "than" you need "longer".' },
+      { options: ['It', 'It\u2019s', 'Its'], answer: 2, why: '"Its" says whose name it is. "It\u2019s" means "it is".' },
+      { options: ['where', 'when', 'who'], answer: 1, why: '"When" says at what moment he says it.' },
+      { options: ['eat', 'eats', 'eating'], answer: 2, why: 'After "likes" you can use the -ing form: likes eating.' },
+    ],
+  },
+  {
+    id: 'trains', title: 'Trains',
+    parts: [
+      'Trains are ', ' than buses, and they can carry a lot of people. In big cities, some trains go ',
+      ' the ground. The first trains were very slow, ', ' now some trains go very quickly. On a train you can read, sleep or look ',
+      ' the fields and the farms. My brother ', ' trains. He wants to be a train driver.',
+    ],
+    gaps: [
+      { options: ['big', 'bigger', 'biggest'], answer: 1, why: 'With "than" you need "bigger".' },
+      { options: ['under', 'on', 'in'], answer: 0, why: 'The ground is on top of these trains: they go under it.' },
+      { options: ['because', 'so', 'but'], answer: 2, why: '"But" joins two different ideas: slow then, quick now.' },
+      { options: ['to', 'at', 'for'], answer: 1, why: 'We say "look at" something.' },
+      { options: ['loves', 'love', 'loving'], answer: 0, why: '"My brother" is one person, so the verb has an s: he loves.' },
     ],
   },
 );

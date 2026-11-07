@@ -4,8 +4,7 @@ import { getTopic } from '../../data/topics.js';
 import { allPicturable } from '../../data/wordlist.js';
 import { buildRound, isCorrect } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
-import * as state from '../../core/state.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
 
 export const meta = { id: 'wordhunt', title: 'Word hunt' };
@@ -185,7 +184,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: correct, total: questions.length });
     const shields = shieldsFor(correct, questions.length);
     recordShields('wordhunt', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, correct);
 
     fill(stage, h('div', { class: 'result' }, [

@@ -5,7 +5,7 @@ import { renderScene } from '../../data/scenes/part6.js';
 import { buildRound, isCorrect } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
 import { shieldRow } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { practised } from '../../engine/progress.js';
 
 export const meta = { id: 'yesno', title: 'Yes or no?' };
 
@@ -21,7 +21,7 @@ export function mount(root, ctx = {}) {
   const marksChip = h('span', { class: 'marks-chip' });
   const picture = h('div', { class: 'p6-picture' });
   const sentence = h('p', { class: 'p6-prompt' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const head = h('div', { class: 'game-head' }, [
@@ -76,7 +76,7 @@ export function mount(root, ctx = {}) {
     cue('finish');
     const shields = shieldsFor(score, round.questions.length);
     if (ctx.onFinish) return ctx.onFinish({ score, total: round.questions.length });
-    state.touchStreak();
+    practised(meta.id);
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, `${score} out of ${round.questions.length}`),
       shieldRow(shields),

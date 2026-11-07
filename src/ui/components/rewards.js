@@ -1,3 +1,4 @@
+// @ts-check
 import { h } from '../../core/dom.js';
 import { topicProgress } from '../../engine/progress.js';
 

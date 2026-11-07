@@ -1,3 +1,4 @@
+// @ts-check
 // Simulacro completo. Encadena las 15 partes en el orden y con los tiempos
 // del examen real, y al final entrega un Statement of Results.
 //
@@ -7,7 +8,7 @@
 //   Speaking             5 a 7 minutos, 4 partes, cara a cara
 
 import { GAMES } from '../games/registry.js';
-import { shieldsFor } from './scoring.js';
+import { paperShields } from './scoring.js';
 import { scaleShields, validBands, capPronunciation } from './speakingScale.js';
 import { LISTENS_FOR } from '../data/speaking-scale.js';
 
@@ -113,12 +114,22 @@ function marksOf(run, paperId) {
   return { score, total };
 }
 
+/**
+ * La nota de una prueba del simulacro y sus escudos, con la tabla de Cambridge
+ * (engine/scoring.js). Si se acabo el tiempo, la prueba cuenta sobre todas sus
+ * notas: las partes sin hacer no llegaron a dar su total, pero en el examen
+ * valen cero, no desaparecen (si no, dos partes perfectas y el resto sin hacer
+ * darian 5 escudos).
+ * @param {any} run @param {string} paperId
+ */
 export function paperScore(run, paperId) {
-  const { score, total } = marksOf(run, paperId);
+  const { score, total: done } = marksOf(run, paperId);
   if (paperId === 'speaking' && run.scale) {
-    return { score, total, shields: scaleShields(run.scale), scale: run.scale };
+    return { score, total: done, shields: scaleShields(run.scale), scale: run.scale };
   }
-  return { score, total, shields: shieldsFor(score, total || 1) };
+  const paper = PAPERS.find((p) => p.id === paperId);
+  const total = run.ranOut[paperId] && paper ? Math.max(done, paper.marks) : done;
+  return { score, total, shields: paperShields(paperId, score, total || 1) };
 }
 
 export function statement(run) {

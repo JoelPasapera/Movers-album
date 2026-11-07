@@ -1,111 +1,72 @@
+// @ts-check
 import { h, mount as fill } from '../../core/dom.js';
 import { speak, speakLines, cue, stop as stopVoice } from '../../core/audio.js';
-import * as speech from '../../core/speech.js';
 import { renderPanel } from '../../data/scenes/pieces.js';
 import { buildRound, gradeTelling, MAX_PER_PANEL } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { recordShields } from '../../engine/progress.js';
-import * as state from '../../core/state.js';
+import { recordShields, practised } from '../../engine/progress.js';
 import { shieldRow } from '../../ui/components/rewards.js';
+import { voiceInput } from '../../ui/components/voiceInput.js';
+import { isQuiet, hideScoreInExam } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'story', title: 'Tell the story' };
 
-// Speaking, parte 2, como en el examen: cuatro dibujos en orden, el examinador
-// dice el titulo y cuenta el primero, y el nino cuenta los otros tres hablando.
-// Los puntos son orientativos (en el examen esta parte se valora con la escala
-// de Speaking); lo que importa es decir algo con sentido de cada dibujo.
+/**
+ * Speaking, parte 2, como en el examen: cuatro dibujos en orden, el
+ * examinador dice el titulo y cuenta el primero, y el nino cuenta los otros
+ * tres hablando. Los puntos son orientativos (en el examen esta parte se
+ * valora con la escala de Speaking); lo que importa es decir algo con sentido
+ * de cada dibujo.
+ * @param {HTMLElement} root
+ * @param {{ exam?: boolean, onExit?: () => void, onFinish?: (r: { score: number, total: number }) => void }} [ctx]
+ */
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   let round = buildRound();
   let panelIndex = 1;
   let busy = false;
-  let listening = false;
-  let stopListening = null;
-  let recorder = null;
   let score = 0;
+  /** @type {(() => void) | null} */
+  let stopIntro = null;
+  /** @type {{ panel: any, text: string, marks: number, how: string }[]} */
   const answers = [];
 
   const counter = h('span', { class: 'counter' });
   const marks = h('span', { class: 'marks-chip' });
+  hideScoreInExam(marks, ctx);
+  const title = h('span', { class: 'scene-label' });
   const strip = h('div', { class: 'story-strip' });
   const prompt = h('p');
-  const heard = h('p', { class: 'talk-heard' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const playback = h('div', { class: 'talk-playback hidden' });
   const stage = h('div');
   const work = h('div', { class: 'hidden' });
+  const ready = h('button', { class: 'btn', onClick: () => startTelling() }, 'I am ready →');
 
-  const typed = h('input', { type: 'text', maxlength: '120', autocomplete: 'off', placeholder: 'or type what you said' });
-  const mic = h('button', { class: 'mic', 'aria-label': 'Tap to talk' }, [h('span', { class: 'mic__dot' }), h('span', { class: 'mic__label' }, 'Tap to talk')]);
-  const canRecognise = speech.recognitionSupported() && speech.secureEnough();
-  const canRecord = speech.recorderSupported() && speech.secureEnough();
+  const voice = voiceInput({
+    placeholder: 'or type what you said',
+    isBusy: () => busy || panelIndex === 0,
+    doneLabel: 'I told it →',
+    onAnswer: (text, how) => grade(text, how),
+  });
 
   const head = h('div', { class: 'game-head' }, [
-    h('button', { class: 'btn', onClick: () => ctx.onExit?.() }, '\u2190 Album'),
+    h('button', { class: 'btn', onClick: () => ctx.onExit?.() }, '← Album'),
     h('h2', {}, 'Tell the story'),
-    h('span', { class: 'scene-label' }, round.title),
+    title,
     h('div', { class: 'spacer' }),
     marks,
     counter,
   ]);
 
-  const panelById = (id) => round.panels.find((p) => p.id === id);
+  /** @param {string} id */
+  const panelById = (id) => round.panels.find((/** @type {any} */ p) => p.id === id);
+  const total = () => (round.panels.length - 1) * MAX_PER_PANEL;
 
-  function setMic(mode) {
-    mic.classList.toggle('is-live', mode === 'live');
-    mic.querySelector('.mic__label').textContent = {
-      idle: canRecognise || canRecord ? 'Tap to talk' : 'No microphone',
-      live: 'Tap when you finish',
-    }[mode];
-  }
-
-  async function startTalking() {
-    if (busy || listening) return;
-    if (!canRecognise && !canRecord) {
-      feedback.textContent = 'This device has no microphone here. Say it out loud anyway, then type a few words of what you said.';
-      typed.focus();
-      return;
-    }
-    listening = true;
-    setMic('live');
-    if (speech.isRecognitionAllowed() && canRecognise) {
-      stopListening = speech.listen({
-        onEnd: (text) => { listening = false; setMic('idle'); grade(text, 'voice'); },
-        onError: () => { listening = false; setMic('idle'); feedback.textContent = 'I could not hear that. Try again or type it.'; },
-      });
-      return;
-    }
-    try {
-      recorder = await speech.record();
-    } catch {
-      listening = false;
-      setMic('idle');
-      feedback.textContent = 'The microphone is not allowed here. Type what you said instead.';
-    }
-  }
-
-  async function stopTalking() {
-    if (!listening) return;
-    listening = false;
-    setMic('idle');
-    if (stopListening) { stopListening(); stopListening = null; return; }
-    if (!recorder) return;
-    const blob = await recorder.stop();
-    recorder = null;
-    if (blob) {
-      fill(playback, [
-        h('p', { class: 'talk-playback__hint' }, 'Listen to yourself, then compare:'),
-        h('audio', { controls: 'controls', src: URL.createObjectURL(blob) }),
-        h('button', { class: 'btn btn--go', onClick: () => grade(typed.value.trim() || '\u2026spoken\u2026', 'recorded') }, 'I told it \u2192'),
-      ]);
-      playback.classList.remove('hidden');
-    }
-  }
-
-  mic.addEventListener('click', () => (listening ? stopTalking() : startTalking()));
-  typed.addEventListener('keydown', (e) => { if (e.key === 'Enter' && typed.value.trim()) grade(typed.value.trim(), 'typed'); });
-
+  /** @param {string} text @param {string} how */
   function grade(text, how) {
-    if (busy) return;
+    if (busy || panelIndex === 0) return;
     busy = true;
     const panel = panelById(round.order[panelIndex]);
     // Con grabacion no hay transcripcion: se confia en que ha contado el
@@ -115,8 +76,16 @@ export function mount(root, ctx = {}) {
       : gradeTelling(panel, text);
     score += result.marks;
     answers.push({ panel, text, marks: result.marks, how });
-    marks.textContent = `${score} / ${(round.panels.length - 1) * MAX_PER_PANEL} marks`;
-    heard.textContent = how === 'recorded' ? '' : text;
+    marks.textContent = `${score} / ${total()} marks`;
+    voice.heard.textContent = how === 'recorded' ? '' : text;
+    if (quiet) {
+      // En el simulacro ni nota ni frase modelo: el nino sigue cuando quiere.
+      fill(playback, h('div', { class: 'sayout__actions' }, h('button', {
+        class: 'btn btn--go', onClick: next,
+      }, panelIndex < round.panels.length - 1 ? 'Next picture \u2192' : 'Finish \u2192')));
+      playback.classList.remove('hidden');
+      return;
+    }
     feedback.textContent = result.note;
     feedback.className = `spell-feedback spell-feedback--${result.marks === MAX_PER_PANEL ? 'ok' : 'no'}`;
     cue(result.marks === MAX_PER_PANEL ? 'correct' : 'wrong');
@@ -124,7 +93,7 @@ export function mount(root, ctx = {}) {
       h('p', { class: 'talk-model' }, [h('b', {}, 'One way to say it: '), panel.sentence]),
       h('div', { class: 'sayout__actions' }, [
         h('button', { class: 'btn', onClick: () => speak(panel.sentence) }, 'Hear it'),
-        h('button', { class: 'btn btn--go', onClick: next }, panelIndex < round.panels.length - 1 ? 'Next picture \u2192' : 'Finish \u2192'),
+        h('button', { class: 'btn btn--go', onClick: next }, panelIndex < round.panels.length - 1 ? 'Next picture →' : 'Finish →'),
       ]),
     ]);
     playback.classList.remove('hidden');
@@ -139,7 +108,7 @@ export function mount(root, ctx = {}) {
   }
 
   function drawStrip() {
-    fill(strip, ...round.order.map((id, i) => h('div', {
+    fill(strip, ...round.order.map((/** @type {string} */ id, /** @type {number} */ i) => h('div', {
       class: `story-panel${i === panelIndex ? ' is-current' : ''}`,
       dataset: { id },
     }, [
@@ -153,55 +122,73 @@ export function mount(root, ctx = {}) {
     drawStrip();
     counter.textContent = `picture ${panelIndex + 1} of ${round.panels.length}`;
     prompt.textContent = `Now you tell the story. What is happening in picture ${panelIndex + 1}?`;
-    heard.textContent = '';
-    typed.value = '';
+    voice.reset();
     feedback.textContent = '';
     feedback.className = 'spell-feedback';
     playback.classList.add('hidden');
     fill(playback);
+    ready.classList.add('hidden');
     work.classList.remove('hidden');
     speak(`What is happening in picture ${panelIndex + 1}?`);
+  }
+
+  // El nino dice que esta listo, o el examinador termina de contar el primero.
+  function startTelling() {
+    if (panelIndex !== 0) return;
+    const cancel = stopIntro;
+    stopIntro = null;
+    cancel?.();
+    panelIndex = 1;
+    askPanel();
   }
 
   // El examinador: titulo, "mira los dibujos primero", y cuenta el dibujo 1.
   function intro() {
     panelIndex = 0;
+    busy = false;
+    title.textContent = round.title;
+    marks.textContent = `${score} / ${total()} marks`;
     drawStrip();
     counter.textContent = `picture 1 of ${round.panels.length}`;
-    prompt.textContent = `These pictures tell a story. It is called \u201c${round.title}\u201d. Look at the pictures first.`;
+    prompt.textContent = `These pictures tell a story. It is called “${round.title}”. Look at the pictures first.`;
     work.classList.add('hidden');
-    const first = panelById(round.order[0]);
-    speakLines([
-      { who: 'adult', text: `These pictures tell a story. It is called ${round.title}. Look at the pictures first.` },
-      { who: 'adult', text: first.sentence },
-      { who: 'adult', text: 'Now you tell the story.' },
-    ], { onEnd: () => { if (panelIndex === 0) { panelIndex = 1; askPanel(); } } });
+    ready.classList.remove('hidden');
     fill(stage, [
       h('div', { class: 'instruction instruction--clue' }, prompt),
       strip,
-      h('div', { class: 'result__actions' }, h('button', {
-        class: 'btn', onClick: () => { stopVoice(); if (panelIndex === 0) { panelIndex = 1; askPanel(); } },
-      }, 'I am ready \u2192')),
+      h('div', { class: 'result__actions' }, ready),
       work,
     ]);
     fill(work, [
-      h('div', { class: 'talk-row' }, [mic, typed]),
-      heard,
+      h('p', { class: 'bank-hint' }, voice.describe()),
+      h('div', { class: 'talk-row' }, [voice.mic, voice.typed, voice.send, voice.toggle]),
+      voice.privacy,
+      voice.heard,
+      voice.status,
+      voice.clip,
       feedback,
       playback,
     ]);
+    // La pantalla ya esta montada: si no hay voz, se pasa al dibujo 2 enseguida.
+    const first = panelById(round.order[0]);
+    const cancel = speakLines([
+      { who: 'adult', text: `These pictures tell a story. It is called ${round.title}. Look at the pictures first.` },
+      { who: 'adult', text: first.sentence },
+      { who: 'adult', text: 'Now you tell the story.' },
+    ], { onEnd: () => startTelling() });
+    if (panelIndex === 0) stopIntro = cancel;
   }
 
   function finish() {
     stopVoice();
+    voice.reset();
     cue('finish');
-    const total = (round.panels.length - 1) * MAX_PER_PANEL;
-    if (ctx.onFinish) return ctx.onFinish({ score, total });
-    const shields = shieldsFor(score, total);
+    if (ctx.onFinish) return ctx.onFinish({ score, total: total() });
+    const shields = shieldsFor(score, total());
     recordShields('story', shields);
-    state.touchStreak();
+    practised(meta.id);
     fill(stage, h('div', { class: 'result' }, [
-      h('h2', {}, score === total ? 'You told the whole story!' : `${score} out of ${total} marks`),
+      h('h2', {}, score === total() ? 'You told the whole story!' : `${score} out of ${total()} marks`),
       shieldRow(shields),
       h('p', {}, verdict(shields)),
       h('p', { class: 'spell-tip' }, 'The examiner is not looking for a perfect story. Say what you can see: who it is, where they are and what they are doing. If you get stuck, say a few words about the next picture.'),
@@ -210,7 +197,10 @@ export function mount(root, ctx = {}) {
         a.panel.sentence,
       ]))),
       h('div', { class: 'result__actions' }, [
-        h('button', { class: 'btn btn--go', onClick: () => { round = buildRound(); score = 0; answers.length = 0; intro(); } }, 'Another story'),
+        h('button', {
+          class: 'btn btn--go',
+          onClick: () => { round = buildRound(); score = 0; answers.length = 0; intro(); },
+        }, 'Another story'),
         h('button', { class: 'btn', onClick: () => ctx.onExit?.() }, 'Back to album'),
       ]),
     ]));
@@ -220,8 +210,9 @@ export function mount(root, ctx = {}) {
   intro();
   return {
     destroy() {
-      if (stopListening) stopListening();
+      if (stopIntro) stopIntro();
       stopVoice();
+      voice.destroy();
     },
   };
 }

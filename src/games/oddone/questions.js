@@ -1,4 +1,4 @@
-import { allSets, groupLabels, oddLabels } from '../../data/oddoneout.js';
+import { allSets, groupLabels, oddLabels, drawable } from '../../data/oddoneout.js';
 
 const shuffle = (arr) => {
   const copy = [...arr];
@@ -14,11 +14,12 @@ function optionsFor(correct, pool, count = 3) {
   return shuffle([correct, ...others.slice(0, count - 1)]);
 }
 
-// Cuatro conjuntos por partida, igual que en el examen.
-export function buildRound({ sets = 4 } = {}) {
+// Cuatro conjuntos por partida, igual que en el examen. Con `pictures`, solo
+// los que se entienden sin palabras (el Speaking cara a cara).
+export function buildRound({ sets = 4, pictures = false } = {}) {
   const groups = groupLabels();
   const odds = oddLabels();
-  return shuffle(allSets()).slice(0, sets).map((set) => ({
+  return shuffle(allSets().filter((set) => !pictures || drawable(set))).slice(0, sets).map((set) => ({
     ...set,
     items: shuffle(set.items),
     groupOptions: optionsFor(set.groupLabel, groups),

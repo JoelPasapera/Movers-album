@@ -164,7 +164,7 @@ export const BOARDS = [
     intro: 'Vicky and Peter go out of the city on a trip. First they take the bus from the bus station. '
       + 'In the countryside there are fields, a river and a waterfall. '
       + 'Then they climb to the top of a mountain where there is snow. '
-      + 'After that, they walk into the jungle to look for treasure. What are they going to find?',
+      + 'After that, they walk into the jungle to look for treasure. What can they find there?',
     talk: [
       { say: 'Where did you go on your last trip?', expect: 'past',
         model: 'I went to the mountains with my family.', hint: 'Say what you did: I went.' },

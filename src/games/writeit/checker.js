@@ -1,5 +1,5 @@
 import { inSyllabus } from '../../data/syllabus.js';
-import { lexiconOf } from '../../data/scenes/part6.js';
+import { lexiconOf, colourSubject, colourBe, capital, isPerson } from '../../data/scenes/part6.js';
 
 const FUNCTION_WORDS = new Set([
   'a', 'an', 'the', 'this', 'that', 'these', 'those', 'some', 'any', 'and', 'but', 'or',
@@ -10,6 +10,9 @@ const FUNCTION_WORDS = new Set([
   'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'lot', 'lots',
 ]);
 
+/** La ropa de las personas de las escenas: su color es el de la persona. */
+const CLOTHES = new Set(['t-shirt', 'shirt', 't-shirts', 'shirts']);
+
 const COLOURS = new Set([
   'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink',
   'brown', 'grey', 'gray', 'black', 'white',
@@ -18,7 +21,7 @@ const COLOURS = new Set([
 const clean = (text) => String(text)
   .toLowerCase()
   .replace(/\u2019/g, "'")
-  .replace(/[^a-z'\- ]/g, ' ')
+  .replace(/[^a-z0-9'\- ]/g, ' ')
   .replace(/\s+/g, ' ')
   .trim();
 
@@ -43,9 +46,13 @@ export function checkClosed(prompt, value) {
   return ok ? { marks: prompt.marks, kind: 'correct' } : { marks: 0, kind: 'wrong' };
 }
 
+/** "boy's" es "boy": el posesivo no cambia de quien se habla. @param {string} word */
+const owner = (word) => word.replace(/'s$/, '');
+
 function findEntity(scene, word) {
-  const base = singular(word);
-  return scene.entities.find((e) => e.noun === base || e.noun === word) ?? null;
+  const bare = owner(word);
+  const base = singular(bare);
+  return scene.entities.find((e) => e.noun === base || e.noun === bare || e.plural === bare) ?? null;
 }
 
 // Frases libres: preguntas 5 y 6. Dos puntos, uno por cada criterio del examen:
@@ -57,7 +64,8 @@ export function checkFree(scene, value, previous = []) {
     return { marks: 0, kind: 'tooShort', note: 'Write a whole sentence, not just one word.' };
   }
 
-  const outside = words.filter((w) => !inSyllabus(w));
+  // Las cifras valen: en el examen se puede escribir "2" en vez de "two".
+  const outside = words.filter((w) => !/^\d+$/.test(w) && !inSyllabus(w));
   if (outside.length) {
     return {
       marks: 0,
@@ -68,7 +76,7 @@ export function checkFree(scene, value, previous = []) {
 
   const content = words.filter((w) => !FUNCTION_WORDS.has(w) && !COLOURS.has(w));
   const lexicon = lexiconOf(scene);
-  const known = content.filter((w) => lexicon.has(singular(w)) || lexicon.has(w));
+  const known = content.filter((w) => lexicon.has(singular(owner(w))) || lexicon.has(owner(w)));
 
   if (!known.length) {
     return {
@@ -78,19 +86,25 @@ export function checkFree(scene, value, previous = []) {
     };
   }
 
-  // Cada color escrito se comprueba contra el objeto que le sigue.
+  // Cada color escrito se comprueba contra el objeto que le sigue. Si lo que
+  // sigue es ropa ("a red T-shirt"), el color es de la persona que se nombro
+  // antes, aunque este lejos ("The girl has got a red T-shirt").
   for (let i = 0; i < words.length; i += 1) {
     if (!COLOURS.has(words[i])) continue;
+    const clothes = CLOTHES.has(words[i + 1] ?? '');
+    const wearer = clothes
+      ? words.slice(0, i).reverse().find((w) => { const e = findEntity(scene, w); return Boolean(e && isPerson(e)); })
+      : undefined;
     const after = words.slice(i + 1, i + 4).find((w) => findEntity(scene, w));
     const before = words.slice(Math.max(0, i - 3), i).reverse().find((w) => findEntity(scene, w));
-    const entity = findEntity(scene, after ?? before ?? '');
+    const entity = findEntity(scene, wearer ?? after ?? before ?? '');
     if (!entity || !entity.colours.length) continue;
     const said = words[i] === 'gray' ? 'grey' : words[i];
     if (!entity.colours.includes(said)) {
       return {
         marks: 1,
         kind: 'wrongColour',
-        note: `The ${entity.noun} is not ${said}. One mark: it makes sense, but it is not true.`,
+        note: `${capital(colourSubject(entity))} ${colourBe(entity)} not ${said}. One mark: it makes sense, but it is not true.`,
       };
     }
   }

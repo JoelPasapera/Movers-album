@@ -1,4 +1,5 @@
 import { PERSONAL_QUESTIONS, EXPECT } from '../../data/personal-questions.js';
+import { inSyllabus } from '../../data/syllabus.js';
 
 const shuffle = (arr) => {
   const copy = [...arr];
@@ -42,8 +43,12 @@ export function checkAnswer(question, transcript) {
       : { marks: 1, kind: 'short', note: 'That works, but try two or three words.' };
   }
 
-  const pool = new Set(expected.map(stem));
-  const hit = said.some((w) => pool.has(stem(w)) || pool.has(w));
+  // Ademas del grupo de palabras: lo que la pregunta acepta por si misma
+  // ("No, I haven't" a "Have you got a pet?") y, si pide personas, cualquier
+  // nombre (un nombre que no es palabra inglesa, como Mateo, es un nombre).
+  const pool = new Set([...expected, ...(question.accept ?? [])].map(stem));
+  const isName = (/** @type {string} */ w) => question.names && w.length > 1 && !inSyllabus(w);
+  const hit = said.some((w) => pool.has(stem(w)) || pool.has(w) || isName(w));
 
   if (!hit) {
     return {

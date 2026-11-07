@@ -3,13 +3,15 @@ import { speak, cue, stop as stopVoice } from '../../core/audio.js';
 import { getTopic } from '../../data/topics.js';
 import { buildRound, isOddOne, checkReason } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
-import * as state from '../../core/state.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
+import { isQuiet, QUIET_PAUSE_MS, PICKED } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'oddone', title: 'The odd one out' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let questions = buildRound();
   let index = 0;
@@ -54,6 +56,16 @@ export function mount(root, ctx = {}) {
     const question = questions[index];
     const ok = isOddOne(question, itemId);
     answers.push({ question, part: 'pick', ok });
+    if (quiet) {
+      // El que eligio el nino, sin decir si es el diferente.
+      Array.from(cardGrid.children).forEach((card) => {
+        card.classList.add('is-done');
+        if (/** @type {HTMLElement} */ (card).dataset.item === itemId) card.classList.add(PICKED);
+      });
+      step = 'reason';
+      setTimeout(buildReason, QUIET_PAUSE_MS);
+      return;
+    }
     markCards(question, itemId);
     cue(ok ? 'correct' : 'wrong');
     toast(ok ? 'correct' : 'wrong', ok ? 'Yes, that one!' : 'It was this one');
@@ -113,6 +125,12 @@ export function mount(root, ctx = {}) {
     const question = questions[index];
     const ok = checkReason(question, groupChoice, oddChoice);
     answers.push({ question, part: 'reason', ok });
+    if (quiet) {
+      step = 'say';
+      reasonBox.classList.add('hidden');
+      sayOwn();
+      return;
+    }
     cue(ok ? 'correct' : 'wrong');
     toast(ok ? 'correct' : 'wrong', ok ? 'Good reason!' : 'Not quite');
     step = 'say';
@@ -139,6 +157,24 @@ export function mount(root, ctx = {}) {
     ]);
     sayBox.classList.remove('hidden');
     speak(question.sentence);
+  }
+
+  /**
+   * En el simulacro: la frase que armo el nino, para decirla en voz alta. Ni
+   * la buena ni si esta bien.
+   */
+  function sayOwn() {
+    prompt.textContent = 'Now say your sentence out loud.';
+    fill(sayBox, [
+      h('p', { class: 'sayout__line' }, `These are all ${groupChoice ?? '\u2026'}, but this is ${oddChoice ?? '\u2026'}.`),
+      h('div', { class: 'sayout__actions' }, [
+        h('button', {
+          class: 'btn btn--go',
+          onClick: () => { sayBox.classList.add('hidden'); next(); },
+        }, 'I said it \u2192'),
+      ]),
+    ]);
+    sayBox.classList.remove('hidden');
   }
 
   function next() {
@@ -176,7 +212,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: correct, total: total });
     const shields = shieldsFor(correct, total);
     recordShields('oddone', shields);
-    state.touchStreak();
+    practised(meta.id);
     const reasonMisses = answers.filter((a) => a.part === 'reason' && !a.ok).length;
     const unlocked = unlockNext(topic.id, Math.round(correct / 2));
 

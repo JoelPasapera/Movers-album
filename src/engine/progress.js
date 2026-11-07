@@ -1,4 +1,6 @@
+// @ts-check
 import * as state from '../core/state.js';
+import { emit } from '../core/events.js';
 import { TOPICS, getTopic } from '../data/topics.js';
 import { MAX_SHIELDS } from './scoring.js';
 import { GAMES } from '../games/registry.js';
@@ -70,4 +72,14 @@ export function totalShields() {
   if (!playable.length) return 0;
   const sum = playable.reduce((total, game) => total + (stored[game.id] ?? 0), 0);
   return Math.min(MAX_SHIELDS, Math.round(sum / playable.length));
+}
+
+/**
+ * Un juego de practica terminado: cuenta para la racha de dias y avisa con
+ * 'practice:done' (el plan del dia lo escucha para tachar la actividad).
+ * @param {string} gameId
+ */
+export function practised(gameId) {
+  state.touchStreak();
+  emit('practice:done', gameId);
 }

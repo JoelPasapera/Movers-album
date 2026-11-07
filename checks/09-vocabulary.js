@@ -1,5 +1,7 @@
 import { coverage, buildRound, taskFor, check } from '../src/games/vocab/questions.js';
-import { ALL_WORDS } from '../src/engine/vocabulary.js';
+import { ALL_WORDS, mark, statusOf, pickBatch, NEW_PER_ROUND } from '../src/engine/vocabulary.js';
+import * as state from '../src/core/state.js';
+import * as profiles from '../src/core/profiles.js';
 import { SOURCE_ENTRIES } from '../src/data/wordlist-source.js';
 import { PRACTICE } from '../src/games/registry.js';
 
@@ -55,6 +57,41 @@ export function run() {
   // 5. El gimnasio sigue dado de alta.
   if (!PRACTICE.some((g) => g.id === 'vocab' && g.ready)) {
     problems.push('el gimnasio de vocabulario ya no aparece en el album');
+  }
+
+  // 6. El repaso espaciado sube un escalon por dia: acertar tres veces la
+  // misma palabra en una tarde no la manda a repasar dentro de una semana.
+  // Y una ronda no mete mas palabras nuevas de la cuenta.
+  const before = state.activeProfile();
+  const kid = profiles.add('zzRepaso', { select: false });
+  try {
+    if (!kid) throw new Error('no se pudo crear el alumno de prueba');
+    state.useProfile(kid.id);
+    state.reset();
+    const word = ALL_WORDS[0].id;
+    mark(word, true);
+    mark(word, true);
+    mark(word, true);
+    if (statusOf(word).step !== 1) problems.push(`tres aciertos el mismo dia suben el repaso ${statusOf(word).step} escalones, no 1`);
+    // El dia siguiente (se finge moviendo atras lo guardado), el primer acierto sube otro.
+    state.update((s) => { s.vocab[word].u -= 1; s.vocab[word].d -= 1; });
+    mark(word, true);
+    if (statusOf(word).step !== 2) problems.push('el acierto de otro dia no sube el repaso');
+    mark(word, false);
+    if (statusOf(word).step !== 0) problems.push('un fallo no reinicia el repaso');
+    state.reset();
+    const fresh = pickBatch(10, null, null, { maxNew: NEW_PER_ROUND });
+    if (fresh.length !== NEW_PER_ROUND) problems.push(`a un alumno nuevo la ronda le da ${fresh.length} palabras nuevas y el tope es ${NEW_PER_ROUND}`);
+    for (const w of ALL_WORDS.slice(0, 4)) mark(w.id, false);
+    const mixed = pickBatch(10, null, null, { maxNew: NEW_PER_ROUND });
+    if (mixed.length !== 4 + NEW_PER_ROUND || mixed.filter((w) => statusOf(w.id).last === null).length !== NEW_PER_ROUND) {
+      problems.push('con palabras falladas, la ronda no las junta con las nuevas que caben');
+    }
+  } catch (error) {
+    problems.push(`la prueba del repaso se rompio: ${error instanceof Error ? error.message : String(error)}`);
+  } finally {
+    if (kid) profiles.remove(kid.id);
+    state.useProfile(before);
   }
 
   return {

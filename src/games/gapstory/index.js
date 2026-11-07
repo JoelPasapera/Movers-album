@@ -3,9 +3,9 @@ import { cue, stop as stopVoice } from '../../core/audio.js';
 import { getTopic } from '../../data/topics.js';
 import { randomGapStory } from '../../data/gap-stories.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { isQuiet, QUIET_PAUSE_MS, PICKED, hideScoreInExam } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'gapstory', title: 'Fill the story' };
 
@@ -19,6 +19,8 @@ const shuffle = (arr) => {
 };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let story = randomGapStory();
   let bank = shuffle(story.bank);
@@ -29,10 +31,11 @@ export function mount(root, ctx = {}) {
 
   const counter = h('span', { class: 'counter' });
   const marksChip = h('span', { class: 'marks-chip' });
+  hideScoreInExam(marksChip, ctx);
   const text = h('p', { class: 'gap-text' });
   const bankRow = h('div', { class: 'tiles' });
   const titleBox = h('div', { class: 'hidden' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const total = () => story.answers.length + 1;
@@ -53,7 +56,7 @@ export function mount(root, ctx = {}) {
           dataset: { gap: String(i) },
         }, answers[i] ? answers[i].chosen : '\u2026')
         : null;
-      if (gap && answers[i]) gap.classList.add(answers[i].ok ? 'is-ok' : 'is-no');
+      if (gap && answers[i]) gap.classList.add(quiet ? PICKED : answers[i].ok ? 'is-ok' : 'is-no');
       return [chunk, gap].filter(Boolean);
     }));
   }
@@ -64,12 +67,17 @@ export function mount(root, ctx = {}) {
     const want = story.answers[index];
     const ok = word === want;
     if (ok) score += 1;
-    answers[index] = { chosen: ok ? word : want, given: word, ok };
+    // En el simulacro el hueco se queda con lo que eligio el nino; al practicar, con la buena.
+    answers[index] = { chosen: ok || quiet ? word : want, given: word, ok };
     marksChip.textContent = `${score} / ${total()} marks`;
     paintText();
     qsa('.tile', bankRow).forEach((tile) => {
-      if (tile.dataset.word === want) tile.classList.add('is-used');
+      if (tile.dataset.word === (quiet ? word : want)) tile.classList.add('is-used');
     });
+    if (quiet) {
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
     feedback.textContent = ok ? 'Yes, that fits.' : `It was "${want}". Read the whole sentence again.`;
     feedback.className = `spell-feedback spell-feedback--${ok ? 'ok' : 'no'}`;
     cue(ok ? 'correct' : 'wrong');
@@ -102,6 +110,10 @@ export function mount(root, ctx = {}) {
           if (ok) score += 1;
           answers.push({ chosen: title, ok, isTitle: true });
           marksChip.textContent = `${score} / ${total()} marks`;
+          if (quiet) {
+            setTimeout(finish, QUIET_PAUSE_MS);
+            return;
+          }
           cue(ok ? 'correct' : 'wrong');
           feedback.textContent = ok
             ? 'Yes. The name has to fit the whole story, not just one line.'
@@ -120,7 +132,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total() });
     const shields = shieldsFor(score, total());
     recordShields('gapstory', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, Math.round(score / 2));
     const spare = story.bank.filter((w) => !story.answers.includes(w));
 

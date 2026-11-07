@@ -1,7 +1,9 @@
+// @ts-check
 import { h, mount as fill } from '../core/dom.js';
 import * as profiles from '../core/profiles.js';
 import * as state from '../core/state.js';
 import * as router from '../core/router.js';
+import { keepData } from '../core/offline.js';
 
 export function renderProfiles(container) {
   const input = h('input', {
@@ -11,7 +13,7 @@ export function renderProfiles(container) {
     placeholder: 'your name',
     'aria-label': 'Your name',
   });
-  const error = h('p', { class: 'spell-feedback' });
+  const error = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
 
   function addProfile() {
     const name = input.value.trim();
@@ -21,8 +23,17 @@ export function renderProfiles(container) {
       input.focus();
       return;
     }
+    const twin = profiles.findByName(name);
+    if (twin) {
+      // Dos albumes con el mismo nombre se confunden en el panel del profesor.
+      error.textContent = `There is already an album called ${twin.name}. Tap it above, or add a letter: ${twin.name} B.`;
+      error.className = 'spell-feedback spell-feedback--no';
+      input.focus();
+      return;
+    }
     const profile = profiles.add(name);
     state.useProfile(profile.id);
+    keepData();
     router.go('/');
   }
 

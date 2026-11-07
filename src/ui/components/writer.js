@@ -1,3 +1,4 @@
+// @ts-check
 // Esqueleto comun de los juegos de escribir una palabra con banco de dibujos:
 // una pregunta cada vez, el nino escribe (o copia del banco), se corrige la
 // ortografia exacta y al final hay resultado. Hermano de chooser() para los
@@ -7,7 +8,9 @@ import { h, mount as fill } from '../../core/dom.js';
 import { speak, cue, stop as stopVoice } from '../../core/audio.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
 import { shieldRow } from './rewards.js';
-import * as state from '../../core/state.js';
+import { practised } from '../../engine/progress.js';
+import { noteMistake } from '../../engine/mistakes.js';
+import { spellingFix } from './spellingFix.js';
 
 const normalise = (s) => String(s ?? '').toLowerCase().trim().replace(/\s+/g, ' ').replace(/[.!]+$/, '')
   .replace(/^(the|a|an|my) /, '');
@@ -46,12 +49,14 @@ export function speller(root, ctx, {
   const marks = h('span', { class: 'marks-chip' });
   const prompt = h('div', { class: 'instruction instruction--clue' });
   const bank = h('div', { class: 'bank' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
+  const fixSlot = h('div');
   const stage = h('div');
   const input = h('input', {
     type: 'text', maxlength: '24', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false',
     placeholder: 'write the word here', 'aria-label': 'Write the word',
   });
+  const writerRow = h('div', { class: 'writer' });
   const check = h('button', { class: 'btn btn--go', onClick: () => submit() }, 'Check');
   const again_ = h('button', { class: 'btn', onClick: () => !locked && speak(sayPrompt(round.questions[index])) }, 'Say it again');
 
@@ -83,7 +88,26 @@ export function speller(root, ctx, {
       : result.kind === 'spelling' ? `Right word, wrong spelling: ${answerOf(q)}` : `It was "${answerOf(q)}".`;
     feedback.className = `spell-feedback spell-feedback--${ok ? 'ok' : 'no'}`;
     cue(ok ? 'correct' : 'wrong');
-    for (const card of bank.children) if (card.dataset.word === answerOf(q)) card.classList.add('is-right');
+    for (const card of /** @type {HTMLElement[]} */ ([...bank.children])) if (card.dataset.word === answerOf(q)) card.classList.add('is-right');
+    if (!ok) {
+      // Aqui vale la palabra con o sin "the", "a" o "my" delante: alli tambien.
+      const bare = String(answerOf(q)).replace(/^(the|a|an|my) /i, '');
+      noteMistake({
+        game: id,
+        kind: 'write',
+        prompt: prompt.textContent ?? '',
+        say: sayPrompt(q),
+        answer: answerOf(q),
+        accept: [bare, `the ${bare}`, `a ${bare}`, `an ${bare}`, `my ${bare}`],
+        given: input.value,
+      });
+    }
+    // Casi bien escrita: se corrige ahora, escribiendola otra vez de memoria.
+    if (result.kind === 'spelling' && !ctx.exam && !ctx.onFinish) {
+      writerRow.classList.add('hidden');
+      fill(fixSlot, spellingFix({ typed: input.value, answer: answerOf(q), say: q.say ?? answerOf(q), onDone: () => next() }));
+      return;
+    }
     speak(q.say ?? answerOf(q));
     setTimeout(next, ok ? 1100 : 2400);
   }
@@ -102,6 +126,8 @@ export function speller(root, ctx, {
     input.value = '';
     feedback.textContent = '';
     feedback.className = 'spell-feedback';
+    writerRow.classList.remove('hidden');
+    fill(fixSlot);
     for (const card of bank.children) card.classList.remove('is-right');
     fill(prompt, renderPrompt(q));
     speak(sayPrompt(q));
@@ -126,7 +152,7 @@ export function speller(root, ctx, {
     const correct = answers.filter((a) => a.ok).length;
     if (ctx.onFinish) return ctx.onFinish({ score: correct, total: round.questions.length });
     const shields = shieldsFor(correct, round.questions.length);
-    state.touchStreak();
+    practised(id);
     const slips = answers.filter((a) => a.kind === 'spelling').length;
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, correct === round.questions.length ? 'All correct!' : `${correct} out of ${round.questions.length}`),
@@ -147,17 +173,18 @@ export function speller(root, ctx, {
 
   function start() {
     buildBank();
+    fill(writerRow, input, check, again_);
     fill(stage,
       h('p', { class: 'bank-hint' }, hint),
       prompt,
-      h('div', { class: 'writer' }, [input, check, again_]),
+      writerRow,
       feedback,
+      fixSlot,
       bank);
     render();
   }
 
   fill(root, h('div', { class: 'card' }, [head, stage]));
   start();
-  void id;
   return { destroy() { stopVoice(); } };
 }

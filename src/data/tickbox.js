@@ -10,11 +10,11 @@ export const TICKBOX = [
       { who: 'adult', text: 'Did you see the elephant at the zoo, Jim?' },
       { who: 'child', text: 'No, the elephant was asleep. But I saw a dolphin!' },
       { who: 'adult', text: 'A dolphin? Not the parrot?' },
-      { who: 'child', text: 'The parrot was in its cage. The dolphin jumped out of the water. It was great!' },
+      { who: 'child', text: 'We didn\u2019t see the parrot. The dolphin jumped out of the water. It was great!' },
     ],
   },
   {
-    id: 'lunch-vicky', question: 'What is Vicky going to eat?', options: ['pancake', 'sandwich', 'salad'], answer: 'salad',
+    id: 'lunch-vicky', question: 'What does Vicky want to eat?', options: ['pancake', 'sandwich', 'salad'], answer: 'salad',
     lines: [
       { who: 'adult', text: 'Do you want a pancake, Vicky?' },
       { who: 'child', text: 'No, thank you. I had a pancake at breakfast.' },
@@ -60,12 +60,12 @@ export const TICKBOX = [
     ],
   },
   {
-    id: 'farm-talk', question: 'Who did Sally talk to at the farm?', options: ['farmer', 'driver', 'cook'], answer: 'driver',
+    id: 'farm-talk', question: 'Who did Sally talk to at the farm?', options: ['farmer', 'teacher', 'cook'], answer: 'teacher',
     lines: [
       { who: 'adult', text: 'Did you talk to the farmer, Sally?' },
       { who: 'child', text: 'No, the farmer was busy with the cows.' },
       { who: 'adult', text: 'The cook, then?' },
-      { who: 'child', text: 'No. I talked to the tractor driver. He showed me the tractor!' },
+      { who: 'child', text: 'No. I talked to our teacher. She showed me the baby goats!' },
     ],
   },
   {
@@ -73,7 +73,7 @@ export const TICKBOX = [
     lines: [
       { who: 'adult', text: 'Is it sunny today?' },
       { who: 'child', text: 'No, it is not sunny. It is cloudy.' },
-      { who: 'adult', text: 'Is it going to rain?' },
+      { who: 'adult', text: 'Is it raining?' },
       { who: 'child', text: 'No rain today, Mum. Only clouds.' },
     ],
   },
@@ -81,18 +81,19 @@ export const TICKBOX = [
     id: 'drawing', question: 'Which animal is Peter drawing?', options: ['monkey', 'lion', 'kangaroo'], answer: 'kangaroo',
     lines: [
       { who: 'adult', text: 'Are you drawing a monkey, Peter?' },
-      { who: 'child', text: 'No, this is not a monkey. Look at its long tail.' },
+      { who: 'child', text: 'No, this is not a monkey. Look at its big feet.' },
       { who: 'adult', text: 'A lion?' },
       { who: 'child', text: 'It is a kangaroo! It can jump a lot.' },
     ],
   },
   {
-    id: 'clothes', question: 'What is Mary going to wear?', options: ['coat', 'scarf', 'sweater'], answer: 'sweater',
+    id: 'clothes', question: 'What does Mary want to wear?', options: ['coat', 'scarf', 'sweater'], answer: 'sweater',
     lines: [
       { who: 'adult', text: 'It is cold. Put on your coat, Mary.' },
       { who: 'child', text: 'I do not want my coat. Can I wear my new sweater?' },
       { who: 'adult', text: 'Your sweater and a scarf?' },
       { who: 'child', text: 'Only the sweater, please. It is not that cold.' },
+      { who: 'adult', text: 'OK, only the sweater.' },
     ],
   },
   {
@@ -150,3 +151,81 @@ export const TICKBOX = [
     ],
   },
 ];
+
+// Ocho dialogos mas (veinticuatro). El dibujo bueno casi siempre sale el
+// ultimo, y a veces lo que se descarta es de OTRA persona (el tio es profesor,
+// la cometa la regalo el tio): justo lo que hace dudar en el examen.
+TICKBOX.push(
+  {
+    id: 'dentist-day', question: 'When is Sally going to the dentist?', options: ['Monday', 'Wednesday', 'Friday'], answer: 'Friday',
+    lines: [
+      { who: 'adult', text: 'Are you going to the dentist on Monday, Sally?' },
+      { who: 'child', text: 'No, Mum. Monday is my swimming day.' },
+      { who: 'adult', text: 'Oh yes. Is it on Wednesday, then?' },
+      { who: 'child', text: 'No, I\u2019ve got a music lesson on Wednesday. It\u2019s on Friday, after school.' },
+    ],
+  },
+  {
+    id: 'grandma-present', question: 'What did Grandma give Peter for his birthday this year?', options: ['book', 'kite', 'robot'], answer: 'robot',
+    lines: [
+      { who: 'adult', text: 'Did Grandma give you a book for your birthday, Peter?' },
+      { who: 'child', text: 'No, she gave me a book last year.' },
+      { who: 'adult', text: 'Was it a kite, then?' },
+      { who: 'child', text: 'No, my uncle gave me a kite. Grandma gave me a robot. It can walk and talk!' },
+    ],
+  },
+  {
+    id: 'glasses', question: 'Where are Grandpa\u2019s glasses?', options: ['sofa', 'car', 'kitchen'], answer: 'kitchen',
+    lines: [
+      { who: 'adult', text: 'I can\u2019t find my glasses. Are they on the sofa?' },
+      { who: 'child', text: 'No, Grandpa. I looked on the sofa.' },
+      { who: 'adult', text: 'Are they in the car?' },
+      { who: 'child', text: 'No, but look! They\u2019re in the kitchen, next to your coffee.' },
+    ],
+  },
+  {
+    id: 'band', question: 'What does Zoe do in the school band?', options: ['guitar', 'piano', 'sing'], answer: 'sing',
+    lines: [
+      { who: 'adult', text: 'Do you play the guitar in the school band, Zoe?' },
+      { who: 'child', text: 'No, my friend Jack plays the guitar.' },
+      { who: 'adult', text: 'And you play the piano?' },
+      { who: 'child', text: 'I can play the piano, but in the band I sing!' },
+    ],
+  },
+  {
+    id: 'sunday-weather', question: 'What was the weather like on Sunday?', options: ['sun', 'rain', 'snow'], answer: 'snow',
+    lines: [
+      { who: 'adult', text: 'Was it sunny on Sunday, Fred?' },
+      { who: 'child', text: 'No, the sun didn\u2019t come out all day.' },
+      { who: 'adult', text: 'Did it rain?' },
+      { who: 'child', text: 'No, it was very cold and it snowed! We played in the snow.' },
+    ],
+  },
+  {
+    id: 'aunt-job', question: 'What does Daisy\u2019s aunt do?', options: ['doctor', 'nurse', 'teacher'], answer: 'nurse',
+    lines: [
+      { who: 'adult', text: 'Is your aunt a doctor, Daisy?' },
+      { who: 'child', text: 'No, but she works in a hospital.' },
+      { who: 'adult', text: 'Oh, is she a nurse?' },
+      { who: 'child', text: 'Yes! She\u2019s a nurse. My uncle is a teacher.' },
+    ],
+  },
+  {
+    id: 'breakfast-jim', question: 'What did Jim have for breakfast?', options: ['egg', 'bread', 'banana'], answer: 'banana',
+    lines: [
+      { who: 'adult', text: 'Did you have an egg for breakfast, Jim?' },
+      { who: 'child', text: 'No, I didn\u2019t want an egg today.' },
+      { who: 'adult', text: 'Some bread and cheese?' },
+      { who: 'child', text: 'No, there wasn\u2019t any bread. I had a banana and some milk.' },
+    ],
+  },
+  {
+    id: 'new-pet', question: 'Which pet does Mary want?', options: ['puppy', 'mouse', 'rabbit'], answer: 'rabbit',
+    lines: [
+      { who: 'adult', text: 'Do you want a puppy, Mary?' },
+      { who: 'child', text: 'I love puppies, but our flat is too small.' },
+      { who: 'adult', text: 'What about a mouse?' },
+      { who: 'child', text: 'No, Mum is afraid of mice. I want a rabbit, like my cousin.' },
+    ],
+  },
+);

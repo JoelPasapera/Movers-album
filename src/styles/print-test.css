@@ -1,0 +1,118 @@
+/* El examen de practica para imprimir (ui/printTest.js). En pantalla se ve
+   como hojas de papel; al imprimir se queda solo el cuadernillo del nino o
+   solo las hojas del profesor, segun el boton (body[data-print]). */
+
+.pt-player{display:flex;flex-direction:column;gap:6px;margin:4px 0 14px}
+.pt-player__buttons{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pt-status{font-family:var(--font-display);font-weight:700;font-size:15px}
+
+.pt-pupil,.pt-teacher{
+  background:#fff;border:2px solid var(--line);border-radius:8px;
+  padding:22px 26px;margin-top:14px;color:#111;
+}
+.pt-cover{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;
+  border-bottom:2px solid #111;padding-bottom:10px;margin-bottom:6px}
+.pt-cover p{font-size:16px;display:flex;align-items:flex-end;gap:6px}
+.pt-cover .pt-line{min-width:220px}
+
+.pt-section__title{font-family:var(--font-display);font-weight:800;font-size:26px;margin:18px 0 4px}
+.pt-part{margin:14px 0 22px;break-inside:avoid-page}
+.pt-part__title{font-family:var(--font-display);font-weight:800;font-size:19px;margin:0 0 4px}
+.pt-rubric{font-weight:700;font-size:15px;line-height:1.4;margin:2px 0 10px}
+.pt-small{font-size:12px;opacity:.75}
+.pt-form-title{font-family:var(--font-display);font-weight:700;font-size:17px;margin:6px 0}
+.pt-text{font-size:16px;line-height:2.1}
+.pt-num{font-family:var(--font-display);font-weight:800;min-width:1.2em}
+
+/* Lineas y cajas para escribir. El ejemplo va ya escrito, con otra letra. */
+.pt-line{display:inline-block;min-width:150px;border-bottom:1.5px solid #111;height:1.4em;
+  vertical-align:bottom;margin:0 4px;padding:0 4px;font-family:var(--font-display);font-weight:600}
+.pt-line--example,.pt-box--example{color:#555;font-style:italic}
+.pt-box{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;
+  border:1.5px solid #111;border-radius:4px;font-family:var(--font-display);font-weight:700;flex:none}
+.pt-gap{white-space:nowrap}
+.pt-gap .pt-line{min-width:110px}
+
+.pt-art{border:1.5px solid #111;border-radius:6px;overflow:hidden;background:#fff}
+.pt-art svg{display:block;width:100%;height:auto}
+/* En papel, sin el acabado de camara (grano y esquinas oscuras): en la
+   impresora el grano sale como motas grises y gasta tinta. */
+.pt-art .camera{display:none}
+.pt-colour,.pt-crowd{margin:8px 0}
+.pt-panel{width:220px;flex:none}
+.pt-panel--big{width:100%;max-width:520px;margin:6px auto 10px}
+
+/* Parte 1 de Listening: los nombres arriba y abajo del dibujo. */
+.pt-names{display:flex;flex-wrap:wrap;justify-content:space-around;gap:10px;margin:6px 0}
+.pt-name{font-family:var(--font-display);font-weight:700;font-size:18px;border:1.5px solid #111;border-radius:6px;padding:2px 14px}
+.pt-name--example{text-decoration:line-through;opacity:.6}
+
+/* Listening 2 */
+.pt-form{display:grid;gap:10px;max-width:560px}
+.pt-form__row{display:grid;grid-template-columns:1.4em minmax(120px,max-content) 1fr;gap:8px;align-items:end;font-size:16px}
+.pt-form__row .pt-line{width:100%;min-width:0}
+
+/* Tarjetas con dibujo (Listening 3 y 4, cajas de palabras de Reading) */
+.pt-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.pt-card{border:1.5px solid #111;border-radius:6px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:2px;break-inside:avoid}
+.pt-card b{align-self:flex-start;font-family:var(--font-display);font-weight:800}
+.pt-card__face{font-size:34px;line-height:1.1}
+.pt-card__word{font-family:var(--font-display);font-weight:700;font-size:14px;text-align:center}
+.pt-cards--bank{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));margin-bottom:10px}
+.pt-match{display:grid;grid-template-columns:minmax(160px,220px) 1fr;gap:18px;align-items:start}
+.pt-match__left{display:grid;gap:8px}
+.pt-match__row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:16px;border-bottom:1px dotted #888;padding-bottom:4px}
+
+/* Listening 4 */
+.pt-ticks{display:grid;gap:12px;padding-left:22px}
+.pt-ticks p{font-weight:700;margin-bottom:4px}
+.pt-tick-row{display:grid;grid-template-columns:repeat(3,minmax(0,150px));gap:10px}
+.pt-card--tick .pt-box{align-self:flex-end;width:24px;height:24px}
+
+/* Reading and Writing */
+.pt-list{display:grid;gap:12px;padding-left:22px;font-size:16px;line-height:1.5}
+.pt-list .pt-line{min-width:180px}
+.pt-list .pt-line--full{display:block;width:100%;height:1.9em;margin:2px 0 0}
+.pt-dialogue li > p{margin-bottom:4px}
+.pt-options{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid #bbb;border-radius:6px;padding:6px 10px}
+.pt-options p{line-height:1.5}
+.pt-titles{display:grid;gap:6px;max-width:420px}
+.pt-titles p{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:16px}
+.pt-choices{border-collapse:collapse;margin-top:10px;font-size:15px}
+.pt-choices th{padding:4px 10px 4px 0;font-family:var(--font-display)}
+.pt-choices td{padding:4px 18px 4px 0}
+.pt-story{display:flex;gap:14px;align-items:center;margin:8px 0;break-inside:avoid}
+.pt-story p{font-size:16px;line-height:1.55}
+
+/* Hojas del profesor */
+.pt-teacher p{line-height:1.45;margin:3px 0}
+.pt-script{margin:10px 0;break-inside:avoid}
+.pt-script__item{border-left:3px solid #ccc;padding-left:10px;margin:6px 0}
+.pt-key{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin:8px 0}
+.pt-key__part{border:1px solid #bbb;border-radius:6px;padding:8px 10px;font-size:14px;break-inside:avoid}
+
+@media(max-width:620px){
+  .pt-pupil,.pt-teacher{padding:14px 12px}
+  .pt-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pt-match{grid-template-columns:1fr}
+  .pt-tick-row{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pt-story{flex-direction:column;align-items:stretch}
+  .pt-panel{width:100%}
+  .pt-line{min-width:100px}
+  .pt-list .pt-line{min-width:120px}
+}
+
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff;padding:0;color:#000}
+  #shell,.footnote,.pt-tools,.voice-notice{display:none !important}
+  .app{max-width:none}
+  .card.print-test{border:none;border-radius:0;padding:0;box-shadow:none}
+  .pt-pupil,.pt-teacher{border:none;padding:0;margin:0}
+  body[data-print="pupil"] .pt-teacher,
+  body[data-print="teacher"] .pt-pupil{display:none}
+  /* Listening y Reading empiezan cada uno en su hoja. */
+  .pt-section + .pt-section{break-before:page}
+  .pt-section__title{break-after:avoid}
+  .pt-art,.pt-card,.pt-name,.pt-box{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}

@@ -1,3 +1,4 @@
+// @ts-check
 // Formacion de palabras: los tipos de actividad del libro de aula que
 // consisten en anadir -ly a un adjetivo, -ing a un verbo, y poner un verbo
 // en pasado simple.

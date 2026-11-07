@@ -4,6 +4,8 @@ import {
 } from '../src/engine/speakingScale.js';
 import { createRun, record, recordScale, statement, PAPERS } from '../src/engine/mock.js';
 import * as state from '../src/core/state.js';
+import { buildSpeakingTest, examinerScript, oddAnswer } from '../src/engine/examiner.js';
+import { allSets } from '../src/data/oddoneout.js';
 
 export const name = 'La escala de Speaking sigue el handbook';
 
@@ -97,10 +99,51 @@ export function run() {
   if (quiet.scale?.pronunciation !== 3) problems.push('con casi nada dicho, la pronunciacion deberia quedarse en 3 como mucho');
   if (runWith(6, { vocabulary: 7 }).scale) problems.push('el simulacro acepta una autoevaluacion invalida');
 
+  examiner(problems);
+
   return {
     ok: problems.length === 0,
     detail: `${SPEAKING_SCALE.length} criterios de 0 a ${BAND_MAX}, tope de pronunciacion en ${PRONUNCIATION_CAP.max}`,
     problems: [...new Set(problems)],
     numbers: { criteriosDeSpeaking: SPEAKING_SCALE.length },
   };
+}
+
+/**
+ * El Speaking cara a cara (engine/examiner.js), como el examen: parte 1 con un
+ * ejemplo que dice el examinador y cuatro diferencias (cada una con su linea y
+ * su respuesta, distintas); parte 2 con el titulo y el primer dibujo contados
+ * por el examinador y tres para el nino; parte 3 con cuatro conjuntos (el
+ * primero de ejemplo) cuyo distinto esta entre sus dibujos; parte 4 con cinco
+ * preguntas sin repetir y sin el nombre (se pregunta al empezar).
+ * @param {string[]} problems
+ */
+function examiner(problems) {
+  for (let i = 0; i < 200; i += 1) {
+    const test = buildSpeakingTest();
+    const [p1, p2, p3, p4] = examinerScript(test);
+    if (p1.lines.length !== 4) problems.push(`la parte 1 cara a cara tiene ${p1.lines.length} diferencias y son 4 mas el ejemplo`);
+    for (const l of p1.lines) {
+      if (!/^In my picture .*\. And in your picture\?$/.test(l.say) || !l.listen?.startsWith('In my picture ') || l.say.startsWith(l.listen ?? '')) {
+        problems.push(`una linea de la parte 1 cara a cara esta mal: ${l.say} / ${l.listen}`);
+      }
+    }
+    if (!/In my picture .* In your picture /.test(p1.intro[1]?.say ?? '')) problems.push('el ejemplo de la parte 1 cara a cara no dice los dos dibujos');
+    const given = test.story.panels.find((p) => p.given);
+    if (!given || !p2.intro.some((l) => l.say.includes(given.sentence)) || !p2.intro.some((l) => l.say.includes(test.story.title))) {
+      problems.push('la parte 2 cara a cara no cuenta el titulo y el primer dibujo');
+    }
+    if (p2.lines.length !== 3) problems.push('en la parte 2 cara a cara el nino no cuenta tres dibujos');
+    if (test.sets.length !== 4 || p3.lines.length !== 3) problems.push('la parte 3 cara a cara no tiene cuatro conjuntos con uno de ejemplo');
+    for (const set of test.sets) if (!set.items.some((it) => it.id === set.oddId) || set.items.length !== 4) problems.push(`el conjunto "${set.id}" no tiene cuatro dibujos con el distinto`);
+    if (p4.lines.length !== 5 || new Set(p4.lines.map((l) => l.say)).size !== 5) problems.push('la parte 4 cara a cara no tiene cinco preguntas distintas');
+    if (test.questions.some((q) => q.id === 'name')) problems.push('la parte 4 cara a cara vuelve a preguntar el nombre');
+  }
+  for (const set of allSets()) {
+    const text = oddAnswer(set);
+    const odd = set.items.find((it) => it.id === set.oddId);
+    if (!odd || !text.startsWith(`The ${odd.word} is different.`) || !text.includes(set.groupLabel) || !text.endsWith(`${set.oddLabel}.`)) {
+      problems.push(`la respuesta modelo del conjunto "${set.id}" no dice cual es ni por que: ${text}`);
+    }
+  }
 }

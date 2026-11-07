@@ -36,11 +36,14 @@ export function buildRound(scene, { colourCount = 4 } = {}) {
     shortSay: `Colour ${obj.phrase} ${colours[i].label}.`,
   }));
 
+  // Donde se escribe, con palabras del syllabus ("sign" no lo es): cada
+  // escena dice que es (the board, the toy box...) y donde va la palabra.
+  const target = scene.writeTarget;
   questions.push({
     kind: 'write',
-    word: scene.writeTarget.word,
-    say: `Now find the sign. Write the word "${scene.writeTarget.word}" on it.`,
-    shortSay: `Write "${scene.writeTarget.word}" on the sign.`,
+    word: target.word,
+    say: `Now find ${target.thing}. Write the word "${target.word}" ${target.where}.`,
+    shortSay: `Write "${target.word}" ${target.short}.`,
   });
 
   return questions;

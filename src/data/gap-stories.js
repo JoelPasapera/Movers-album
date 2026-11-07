@@ -6,13 +6,13 @@ export const GAP_STORIES = [
   {
     id: 'rabbit',
     parts: [
-      'Vicky has a small ', ' at home. Every morning she gives it some ',
+      'Vicky has a small ', ' at home. It has got long ears. Every morning she gives it some ',
       '. Last Sunday the animal was not in its ',
       '. Vicky looked in the garden and under the ',
       '. Then she opened her school bag \u2014 and it was ', ' inside!',
     ],
     answers: ['rabbit', 'carrots', 'cage', 'tree', 'asleep'],
-    bank: ['rabbit', 'carrots', 'cage', 'tree', 'asleep', 'kitten', 'milkshake', 'mountain', 'awake'],
+    bank: ['rabbit', 'carrots', 'cage', 'tree', 'asleep', 'kitten', 'milkshake', 'mountain', 'library'],
     titles: ['A day at school', 'Where is the rabbit?', 'Vicky\u2019s new bike'],
     title: 1,
   },
@@ -21,10 +21,10 @@ export const GAP_STORIES = [
     parts: [
       'Last Saturday Fred went to the ', ' with his family. It was very ',
       '. Fred\u2019s ', ' flew into the water and a big ',
-      ' took it. His sister was very ', ' and she got it for him.',
+      ' took it. His dad was very ', ' and he got it for him.',
     ],
     answers: ['beach', 'windy', 'hat', 'wave', 'brave'],
-    bank: ['beach', 'windy', 'hat', 'wave', 'brave', 'sunny', 'mountain', 'scarf', 'afraid'],
+    bank: ['beach', 'windy', 'hat', 'wave', 'brave', 'sunny', 'mountain', 'Tuesday', 'afraid'],
     titles: ['Fred goes fishing', 'A new hat for Fred', 'A windy day at the beach'],
     title: 2,
   },
@@ -37,10 +37,10 @@ GAP_STORIES.push(
     parts: [
       'On Monday there was a lot of ', ' in the garden. Peter put on his ',
       ' and his boots. He made a big man of snow and gave it a ',
-      '. Then his ', ' came out and they played all ', '.',
+      ' for its nose. Then his ', ' came out and they played all ', '.',
     ],
-    answers: ['snow', 'coat', 'hat', 'sister', 'morning'],
-    bank: ['snow', 'coat', 'hat', 'sister', 'morning', 'rain', 'swimsuit', 'beach', 'night'],
+    answers: ['snow', 'coat', 'carrot', 'sister', 'morning'],
+    bank: ['snow', 'coat', 'carrot', 'sister', 'morning', 'rain', 'swimsuit', 'beach', 'kitchen'],
     titles: ['A day at the beach', 'A cold morning in the garden', 'Peter goes to school'],
     title: 1,
   },
@@ -48,11 +48,11 @@ GAP_STORIES.push(
     id: 'library2',
     parts: [
       'Mary went to the ', ' to find a book about ',
-      '. The teacher helped her and she found a ', ' one with a lot of pictures. She read it in the ',
+      ' like lions and monkeys. The teacher helped her and she found a ', ' one with a lot of pictures. She read it in the ',
       ' with her friend ', '.',
     ],
     answers: ['library', 'animals', 'big', 'playground', 'Jane'],
-    bank: ['library', 'animals', 'big', 'playground', 'Jane', 'kitchen', 'boots', 'small', 'hospital'],
+    bank: ['library', 'animals', 'big', 'playground', 'Jane', 'boots', 'swim', 'tired', 'lemonade'],
     titles: ['Mary finds a book', 'A day at the hospital', 'Jane loses her boots'],
     title: 0,
   },
@@ -76,7 +76,7 @@ GAP_STORIES.push(
       '. In the end they found it asleep in a ', ' next to the ', '.',
     ],
     answers: ['kitten', 'bed', 'garden', 'box', 'window'],
-    bank: ['kitten', 'bed', 'garden', 'box', 'window', 'parrot', 'table', 'street', 'roof'],
+    bank: ['kitten', 'bed', 'garden', 'box', 'window', 'hungry', 'sing', 'quickly', 'dance'],
     titles: ['Where is the kitten?', 'Sally goes to the garden', 'A new parrot for Sally'],
     title: 0,
   },
@@ -124,13 +124,91 @@ GAP_STORIES.push(
   {
     id: 'dinnerhelp',
     parts: [
-      'Last night Sam helped his mum in the ', '. First he washed the ',
-      ' and put them in a bowl. Then he got some ', ' for everyone. His mum made soup with ',
+      'Last night Sam helped his mum in the ', '. First he washed his ',
+      '. Then he got some ', ' for everyone. His mum made soup with ',
       ' and onions. After dinner, Sam’s dad washed the ', ' and Sam went to bed.',
     ],
-    answers: ['kitchen', 'vegetables', 'bread', 'carrots', 'plates'],
-    bank: ['kitchen', 'vegetables', 'bread', 'carrots', 'plates', 'library', 'socks', 'kites', 'cows'],
+    answers: ['kitchen', 'hands', 'bread', 'carrots', 'plates'],
+    bank: ['kitchen', 'hands', 'bread', 'carrots', 'plates', 'swimming', 'sky', 'sing', 'yesterday'],
     titles: ['Sam helps with the dinner', 'A day at the library', 'Sam goes to the farm'],
+    title: 0,
+  },
+);
+
+// Seis historias mas: el viento, el dentista, un regalo, el rio, una isla y un
+// robot. Las palabras que sobran no caben en ningun hueco (ni por sentido ni
+// por gramatica), y solo uno de los tres titulos cuenta la historia entera.
+GAP_STORIES.push(
+  {
+    id: 'kite',
+    parts: [
+      'On Sunday it was very ', ', so Charlie went to the park with his new ',
+      '. His little ', ' wanted to fly it too. Charlie gave it to her, but the wind took it into a ',
+      '. A tall ', ' helped them, and they flew the kite again all afternoon.',
+    ],
+    answers: ['windy', 'kite', 'sister', 'tree', 'man'],
+    bank: ['windy', 'kite', 'sister', 'tree', 'man', 'bath', 'pencils', 'hungry', 'boat'],
+    titles: ['Charlie\u2019s new bike', 'A windy day in the park', 'A day at the beach'],
+    title: 1,
+  },
+  {
+    id: 'dentist',
+    parts: [
+      'Yesterday Jim had a bad ', ', so his mum took him to the ',
+      '. He waited and read a ', ' about pirates. The dentist was very ',
+      ' and Jim was not afraid. After that, he cleaned his ', ' before bed.',
+    ],
+    answers: ['toothache', 'dentist', 'comic', 'kind', 'teeth'],
+    bank: ['toothache', 'dentist', 'comic', 'kind', 'teeth', 'bottle', 'rain', 'wet', 'plates'],
+    titles: ['A wet day at school', 'Jim and the pirates', 'Jim goes to the dentist'],
+    title: 2,
+  },
+  {
+    id: 'present',
+    parts: [
+      'It was Mum\u2019s ', ' on Friday. Daisy and her dad went to the ',
+      ' to find a present. Daisy chose a green ', ' because green is Mum\u2019s favourite ',
+      '. At home, Daisy put the present in a ', ' and drew some flowers on it.',
+    ],
+    answers: ['birthday', 'market', 'scarf', 'colour', 'box'],
+    bank: ['birthday', 'market', 'scarf', 'colour', 'box', 'tooth', 'pirate', 'tired', 'hospital'],
+    titles: ['A present for Mum', 'Daisy goes to hospital', 'Dad\u2019s new scarf'],
+    title: 0,
+  },
+  {
+    id: 'river',
+    parts: [
+      'Paul plays ', ' with his friends every Wednesday after ',
+      '. Last Wednesday it was very ', ', so they drank a lot of ',
+      '. Paul kicked the ball and it went into the ', '! A man in a boat got it for them.',
+    ],
+    answers: ['football', 'school', 'hot', 'water', 'river'],
+    bank: ['football', 'school', 'hot', 'water', 'river', 'cheese', 'sheep', 'tired', 'bathroom'],
+    titles: ['A cold day at school', 'Paul\u2019s ball goes for a swim', 'Jack learns to swim'],
+    title: 1,
+  },
+  {
+    id: 'island',
+    parts: [
+      'Last Saturday Lily went on a ', ' with her uncle. They went to a small ',
+      '. There was a beautiful ', ' there with lots of ',
+      '. Lily took some shells home for her ', '.',
+    ],
+    answers: ['boat', 'island', 'beach', 'shells', 'cousin'],
+    bank: ['boat', 'island', 'beach', 'shells', 'cousin', 'blanket', 'stairs', 'bottle', 'kitchen'],
+    titles: ['A day in the kitchen', 'Lily\u2019s cousin goes to school', 'Lily\u2019s day on the island'],
+    title: 2,
+  },
+  {
+    id: 'robot',
+    parts: [
+      'On Saturday it was ', ', so Jack played at ',
+      '. He and his grandpa made a ', ' from old boxes. They painted it blue and gave it two big ',
+      '. Then Jack showed it to his ', ' at school on Monday.',
+    ],
+    answers: ['raining', 'home', 'robot', 'eyes', 'friends'],
+    bank: ['raining', 'home', 'robot', 'eyes', 'friends', 'beach', 'juice', 'soup', 'cinema'],
+    titles: ['Jack makes a robot', 'A sunny day at the beach', 'Grandpa goes to the cinema'],
     title: 0,
   },
 );

@@ -9,7 +9,7 @@
 }
 .tab:hover{transform:translateX(3px)}
 .tab .dot{width:14px;height:14px;border-radius:50%;border:var(--stroke);flex:none}
-.tab[aria-selected="true"]{background:var(--yellow);transform:translateX(5px)}
+.tab[aria-current="page"]{background:var(--yellow);transform:translateX(5px)}
 .tab small{margin-left:auto;font-family:var(--font-body);font-size:12px;opacity:.65}
 
 .album-head{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
@@ -22,7 +22,7 @@
 }
 .bar i{display:block;height:100%;background:var(--green);transition:width .4s}
 
-.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 .cromo{
   aspect-ratio:1/1.15;border:var(--stroke);border-radius:var(--r-sm);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
@@ -31,28 +31,43 @@
 .cromo:hover{transform:rotate(-3deg) scale(1.05)}
 .cromo b{font-family:var(--font-display);font-weight:800;font-size:13px;line-height:1.1;word-break:break-word}
 .cromo .face{font-size:26px;line-height:1}
-.cromo--locked{background:var(--page);border-style:dashed;opacity:.75}
-.cromo--locked b{opacity:.5}
+.cromo--locked{background:var(--page);border-style:dashed}
+.cromo--locked .face{opacity:.6}
+.cromo--locked b{opacity:.72}
 
-.games{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
 .game-card{
   border:var(--stroke-thick);border-radius:var(--r-md);padding:12px 14px;color:#fff;
-  text-align:left;transition:transform .1s;
+  background:var(--blue-deep);text-align:left;transition:transform .1s;
 }
+/* Fondo segun el color del juego. El amarillo lleva texto oscuro; el resto,
+   blanco sobre un tono con contraste suficiente. */
+.game-card--red{background:var(--red-deep)}
+.game-card--orange{background:var(--orange-deep)}
+.game-card--yellow{background:var(--yellow);color:var(--ink)}
+.game-card--green{background:var(--green-deep)}
+.game-card--blue{background:var(--blue-deep)}
+.game-card--purple{background:var(--purple)}
+.game-card--pink{background:var(--pink-deep)}
+.game-card--brown{background:var(--brown)}
+.game-card--grey{background:var(--grey-deep)}
 .game-card:hover{transform:translateY(-4px)}
 .game-card h3{font-family:var(--font-display);font-weight:800;font-size:19px;line-height:1.1}
 .game-card p{font-size:12px;line-height:1.35;margin-top:3px}
 .game-card .tag{
-  display:inline-block;font-size:11px;font-weight:700;background:rgba(255,255,255,.28);
+  display:inline-block;font-size:11px;font-weight:700;background:rgba(0,0,0,.24);
   border-radius:999px;padding:2px 9px;margin-top:8px;
 }
 .game-card--soon{opacity:.55;cursor:not-allowed}
+.game-card--yellow .tag{background:rgba(255,255,255,.65)}
 
 @media(max-width:860px){
-  .layout{grid-template-columns:1fr}
-  .tabs{flex-direction:row;overflow-x:auto;padding-bottom:4px}
-  .tab{flex:none}
-  .grid{grid-template-columns:repeat(4,1fr)}
+  .layout{grid-template-columns:1fr;min-width:0}
+  .layout > *{min-width:0}
+  .tabs{flex-direction:row;overflow-x:auto;padding:2px 2px 6px;scroll-snap-type:x proximity}
+  .tab{flex:none;width:auto;scroll-snap-align:center}
+  .tab:hover,.tab[aria-current="page"]{transform:none}
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
   .games{grid-template-columns:1fr}
 }
 
@@ -60,7 +75,7 @@
 .cromo--text b{font-size:16px;line-height:1.15}
 
 /* Tableros tematicos (picture boards) */
-.boards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:4px}
+.boards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:4px}
 .board-card{
   border:var(--stroke-thick);border-radius:var(--r-md);padding:12px 14px;
   background:var(--paper);text-align:left;position:relative;overflow:hidden;
@@ -94,7 +109,7 @@
 
 /* La lamina de un tablero dentro de Let's talk! */
 .board-picture{
-  display:grid;grid-template-columns:repeat(6,1fr);gap:8px;
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;
   background:var(--page);border:var(--stroke);border-radius:var(--r-md);padding:12px;
 }
 .board-tile{
@@ -107,6 +122,37 @@
 .board-tile--text b{font-size:15px}
 
 @media(max-width:860px){
-  .boards{grid-template-columns:repeat(2,1fr)}
-  .board-picture{grid-template-columns:repeat(4,1fr)}
+  .boards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .board-picture{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+/* Today's plan */
+.plan{
+  border:var(--stroke-thick);border-radius:var(--r-md);background:#FFF6D8;
+  padding:12px 14px 14px;margin:0 0 14px;
+}
+.plan--done{background:#DFF3E4}
+.plan__head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.plan__head h3{font-family:var(--font-display);font-weight:800;font-size:21px;line-height:1}
+.plan__count{font-family:var(--font-display);font-weight:700;font-size:14px;opacity:.75}
+.plan__steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.plan-step{
+  display:flex;align-items:flex-start;gap:10px;text-align:left;
+  background:var(--paper);border:var(--stroke);border-radius:var(--r-sm);padding:10px 12px;
+  transition:transform .1s;
+}
+.plan-step:hover{transform:translateY(-3px)}
+.plan-step__icon{font-size:26px;line-height:1;flex:none}
+.plan-step__text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.plan-step b{font-family:var(--font-display);font-weight:800;font-size:15px;line-height:1.15}
+.plan-step small{font-size:12px;opacity:.75;line-height:1.3}
+.plan-step.is-done{background:#EAF7EE;border-style:dashed}
+.plan-step.is-done b{text-decoration:line-through;text-decoration-thickness:2px}
+.plan__done{font-family:var(--font-display);font-weight:700;margin-top:10px}
+@media(max-width:860px){.plan__steps{grid-template-columns:1fr}}
+
+/* Moviles muy estrechos (320-360 px): tres cromos por fila, que con cuatro
+   las palabras largas no caben. Va al final para ganar a la regla de 860 px. */
+@media(max-width:360px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 }

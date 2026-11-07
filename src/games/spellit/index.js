@@ -4,13 +4,23 @@ import { getTopic } from '../../data/topics.js';
 import { definitionsFor, allDefinitions } from '../../data/definitions.js';
 import { buildRound, checkAnswer, feedbackFor } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
-import * as state from '../../core/state.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
+import { spellingFix } from '../../ui/components/spellingFix.js';
+import { noteMistake } from '../../engine/mistakes.js';
+import { mark, wordById } from '../../engine/vocabulary.js';
+import { isQuiet, QUIET_PAUSE_MS } from '../../ui/components/examQuiet.js';
+
+/** Fallos de copiar mal la palabra (no de elegir otra): se corrigen escribiendola. */
+const SLIPS = ['spelling', 'missing-article', 'wrong-article'];
+/** Fallos solo del articulo: la palabra si se sabe, asi que no cuentan en su repaso. */
+const ARTICLE_SLIPS = ['missing-article', 'wrong-article'];
 
 export const meta = { id: 'spellit', title: 'Spell it' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   const pool = allDefinitions();
   let round = buildRound(definitionsFor(topic.id), pool);
@@ -31,7 +41,8 @@ export function mount(root, ctx = {}) {
     placeholder: 'write the word here',
     'aria-label': 'Write the word',
   });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
+  const fixSlot = h('div');
   const stage = h('div');
 
   const readClue = h('button', {
@@ -73,7 +84,7 @@ export function mount(root, ctx = {}) {
 
     if (result.kind === 'empty') {
       feedback.textContent = 'Write the word first.';
-      feedback.className = 'spell-feedback spell-feedback--no';
+      feedback.className = quiet ? 'spell-feedback' : 'spell-feedback spell-feedback--no';
       input.focus();
       return;
     }
@@ -81,6 +92,20 @@ export function mount(root, ctx = {}) {
     locked = true;
     const ok = result.kind === 'correct';
     answers.push({ question, ok, kind: result.kind });
+
+    // La palabra cuenta en su repaso del Word gym (el articulo no es la palabra).
+    if (wordById(question.id) && !ARTICLE_SLIPS.includes(result.kind)) mark(question.id, ok);
+    // Y la pista vuelve otro dia en "Fix my mistakes", sin el banco delante.
+    if (!ok) {
+      noteMistake({
+        game: 'spellit', kind: 'write', prompt: question.clue, say: question.clue, answer: question.answer, given: input.value,
+      });
+    }
+    // En el simulacro se apunta y se sigue, sin decir nada.
+    if (quiet) {
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
 
     feedback.textContent = feedbackFor(result, question);
     feedback.className = `spell-feedback spell-feedback--${ok ? 'ok' : 'no'}`;
@@ -94,6 +119,13 @@ export function mount(root, ctx = {}) {
     Array.from(bankGrid.children).forEach((card) => {
       if (card.dataset.word === question.id) card.classList.add('is-right');
     });
+
+    // Casi bien copiada: se corrige ahora (mira, tapa, escribe).
+    if (!ok && SLIPS.includes(result.kind)) {
+      writer.classList.add('hidden');
+      fill(fixSlot, spellingFix({ typed: input.value, answer: question.answer, onDone: () => next() }));
+      return;
+    }
 
     setTimeout(next, ok ? 1100 : 2400);
   }
@@ -112,6 +144,8 @@ export function mount(root, ctx = {}) {
     input.value = '';
     feedback.textContent = '';
     feedback.className = 'spell-feedback';
+    writer.classList.remove('hidden');
+    fill(fixSlot);
     Array.from(bankGrid.children).forEach((card) => card.classList.remove('is-right'));
     speak(question.clue);
     setTimeout(() => input.focus(), 80);
@@ -140,7 +174,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: correct, total: round.questions.length });
     const shields = shieldsFor(correct, round.questions.length);
     recordShields('spellit', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, correct);
 
     const articleSlips = answers.filter(
@@ -193,6 +227,7 @@ export function mount(root, ctx = {}) {
       h('div', { class: 'instruction instruction--clue' }, clueText),
       writer,
       feedback,
+      fixSlot,
       h('p', { class: 'bank-hint' }, 'Eight words, five clues. Three of them are not used.'),
       bankGrid);
     render();

@@ -9,6 +9,7 @@ import { getGame } from '../games/registry.js';
 import { wordById, isMastered, progressOf } from '../engine/vocabulary.js';
 import { speak, stop as stopVoice } from '../core/audio.js';
 import * as router from '../core/router.js';
+import { tabNav, centreCurrent } from './components/tabNav.js';
 
 /** @param {import('../data/boards.js').Board} board */
 function tileGrid(board) {
@@ -43,8 +44,7 @@ function gameCards(board) {
     const game = getGame(id);
     if (!game) return null;
     return h('button', {
-      class: 'game-card',
-      style: `background:var(--${game.colour})`,
+      class: `game-card game-card--${game.colour}`,
       onClick: () => router.go(`/board/${board.id}/play/${id}`),
     }, [
       h('h3', {}, game.title),
@@ -54,19 +54,16 @@ function gameCards(board) {
   }));
 }
 
+/** @param {string} activeId */
 function boardNav(activeId) {
-  return h('nav', { class: 'tabs', 'aria-label': 'Picture boards' }, BOARDS.map((board) => {
-    const p = progressOf(board.words);
-    return h('button', {
-      class: 'tab',
-      'aria-selected': String(board.id === activeId),
-      onClick: () => router.go(`/board/${board.id}`),
-    }, [
-      h('span', { class: 'dot', style: `background:var(--${board.colour})` }),
-      board.title,
-      h('small', {}, `${p.mastered}/${p.total}`),
-    ]);
-  }));
+  return tabNav({
+    label: 'Picture boards',
+    activeId,
+    items: BOARDS.map((board) => {
+      const p = progressOf(board.words);
+      return { id: board.id, label: board.title, colour: board.colour, count: `${p.mastered}/${p.total}`, route: `/board/${board.id}` };
+    }),
+  });
 }
 
 /**
@@ -82,8 +79,9 @@ export function renderBoard(container, boardId) {
   const p = progressOf(board.words);
   const pct = p.total ? Math.round((p.mastered / p.total) * 100) : 0;
 
+  const tabs = boardNav(board.id);
   fill(container, h('div', { class: 'layout' }, [
-    boardNav(board.id),
+    tabs,
     h('div', { class: 'card' }, [
       h('div', { class: 'album-head' }, [
         h('button', { class: 'btn', onClick: () => router.go('/') }, '← Album'),
@@ -102,5 +100,6 @@ export function renderBoard(container, boardId) {
       gameCards(board),
     ]),
   ]));
+  centreCurrent(tabs);
   return { destroy() { stopVoice(); } };
 }

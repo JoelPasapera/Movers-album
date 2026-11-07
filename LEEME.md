@@ -8,14 +8,269 @@ Esta es la guía para el profesor: qué hace cada cosa y por qué. Lo técnico e
 
 ## Lo último
 
+- **Aprender de los errores: el cuaderno y *Fix my mistakes*.** Hasta ahora, lo que
+  un niño fallaba en un juego se le decía y se perdía. Ahora se apunta en su
+  **cuaderno de errores** y vuelve **otro día** en un juego nuevo, *Fix my mistakes*:
+  la pista de *Spell it*, la frase con hueco de *Choose the right word*, lo que dice
+  alguien en *What do you say?*, la frase de *Listen and write* (que vuelve a sonar),
+  los verbos en pasado, las preposiciones de tiempo, -ly e -ing, los lugares, el
+  cuerpo... (doce juegos; los que dependen de un dibujo o de un cuento entero no,
+  porque solos no se entienden). Vuelve sin el banco de palabras delante: hay que
+  sacarlo de memoria. Un error queda **arreglado cuando se acierta en dos días
+  distintos**; si se vuelve a fallar, empieza de nuevo. Por qué así: recordar la
+  respuesta (no releerla) y hacerlo en días separados es lo que más ayuda a
+  recordar a largo plazo, mucho más que repetir lo mismo el mismo día. Lo de hoy
+  vuelve mañana a propósito. También se apuntan los fallos del simulacro. En la
+  portada del álbum sale un botón rojo con cuántos esperan, y *Today's plan* lo
+  propone en cuanto hay tres o más de otros días.
+- **El Word gym enseña antes de preguntar.** Una palabra nueva ya no se pregunta a
+  ciegas: primero se presenta (dibujo, palabra y voz, y el niño la dice en voz alta) y
+  se pregunta dos pasos después, cuando hay que recordarla. Como mucho seis palabras
+  nuevas por ronda (con más, se retienen menos). La palabra fallada **vuelve tres
+  pasos después en la misma ronda**, para terminar acertándola. Y se ha corregido el
+  repaso espaciado: antes, acertar la misma palabra tres veces en una tarde la mandaba
+  a repasar dentro de una semana; ahora el repaso sube **como mucho un escalón al
+  día**, porque lo que demuestra que se recuerda es acertarla otro día.
+- **La ortografía se corrige letra a letra: mira, tapa, escribe.** En el examen la
+  ortografía tiene que ser perfecta, y un «mal» no enseña nada. Ahora, cuando el niño
+  escribe casi bien una palabra (en el Word gym, *Spell it*, *Where are they?*, *What's
+  the matter?* y *Fix my mistakes*), ve lo que escribió encima de la palabra buena con
+  la letra que falta, sobra o cambió marcada, y una pista (*This word has a double
+  letter: pp*, *Two letters are the wrong way round*). Después la palabra se tapa y
+  la escribe otra vez de memoria. Es el método de clase de toda la vida (look, cover,
+  write, check). En el simulacro no se corrige nada.
+- **Lo que la clase falla, para volver a explicarlo.** En *Class progress* hay una
+  lista nueva, *What the class gets wrong*: las preguntas que más niños tienen sin
+  arreglar, con la respuesta y quiénes son. Sirve para preparar la clase siguiente.
+  La tabla tiene una columna *To fix* con los errores pendientes de cada niño, y el
+  informe para la familia trae hasta seis preguntas para repasar en casa, con su
+  respuesta.
+- **El simulacro ya no dice si una respuesta está bien hasta el final**, como el
+  examen de verdad. Antes cada parte lo decía al momento (con un «Yes!», un sonido, los
+  colores verde y rojo, la nota que iba sumando, y a veces la respuesta buena escrita o
+  dicha en voz alta), aunque la pantalla de inicio prometía lo contrario. Ahora, dentro
+  del simulacro, las quince partes apuntan la respuesta y siguen: el niño solo ve lo que
+  él escribió o eligió, marcado igual esté bien o mal. En Speaking, el examinador
+  señala cada diferencia y dice su frase, como en el examen, y no aparece ninguna
+  respuesta modelo. El resultado se ve en el *Statement of Results*, y lo que falló
+  vuelve otro día en *Fix my mistakes*. Al practicar cada parte suelta, todo sigue
+  igual: se corrige al momento, que es cuando ayuda a aprender.
+- **Los escudos, con la tabla de Cambridge.** Hasta ahora la app daba los escudos
+  con una regla propia: 5 solo con todo bien, 4 desde el 80 %, 3 desde el 60 %. En
+  el examen no es así, y ahora la app usa la tabla que Cambridge da a los profesores
+  para corregir exámenes de práctica:
+
+  | Escudos | Listening (sobre 25) | Reading and Writing (sobre 39) |
+  |---|---|---|
+  | 5 | de 21 a 25 | de 33 a 39 |
+  | 4 | de 18 a 20 | de 29 a 32 |
+  | 3 | de 14 a 17 | de 24 a 28 |
+  | 2 | de 11 a 13 | de 18 a 23 |
+  | 1 | de 0 a 10 | de 0 a 17 |
+
+  Las partes sueltas y los juegos, que tienen menos preguntas, usan la misma tabla
+  en proporción (5 escudos desde el 84 %, 4 desde el 73 %, 3 desde el 59 %, 2 desde
+  el 45 %); Speaking sigue con la escala del examinador (la banda media de las tres
+  cosas que mira), como antes. Qué cambia para el niño: los 5 escudos ya no piden
+  acertarlo todo (21 de 25 en Listening ya son 5), y por abajo es algo más exigente
+  (10 de 25 es 1 escudo, no 2). Dónde se ve: en el simulacro, el **Statement of
+  Results** dice cuántas notas faltan para el escudo siguiente y para los 5 (*4
+  more marks for 5 shields*), y la pantalla de inicio dice desde cuánto son los 5 en
+  cada prueba; en *Practice tests on paper* está la tabla y, al escribir una nota,
+  cuánto falta para los 5; en las hojas del profesor del examen para imprimir, la
+  tabla para corregir; y en el informe para la familia, una línea que la explica.
+  De dónde sale: Cambridge la publica como imagen en su guía de exámenes de práctica
+  (*Mock test toolkit for young learners*). Los números son los de la transcripción
+  que circula citándola, y cumplen todos los ejemplos que Cambridge escribe con
+  palabras en esa guía (22 de 25 en Listening son 5 escudos; 20 en Reading and
+  Writing son 2). Hay otra tabla circulando que da 3 escudos por 20 en Reading and
+  Writing, contra el ejemplo de Cambridge: esa no se usa. Cambridge avisa de que es
+  orientativa: en el examen de verdad los cortes se fijan para cada examen. Si usted
+  tiene la imagen oficial y ve otros números, es una línea en
+  `src/data/shield-table.js` y todo lo demás se ajusta solo.
+- **El simulacro ya no regala escudos cuando se acaba el reloj.** Las partes que no
+  se llegaban a hacer no contaban en el total: dos partes perfectas y tres sin hacer
+  daban 10 de 10, 5 escudos. Ahora la prueba cuenta sobre sus 25 o 39 notas, como en
+  el examen (10 de 25, 1 escudo), y la pantalla de inicio lo avisa: *Questions you
+  did not answer get no marks.* Además, las partes del simulacro se apuntan en el
+  álbum con la misma regla que al jugarlas sueltas (antes con otro redondeo).
+- **Quién confunde qué, en la tabla de la clase.** *Class progress* tiene una
+  columna nueva, *Mixes up*: las letras y los números que cada niño falla una y otra
+  vez al oírlos en el dictado (*J G · 14/40*). Y *Today's plan* le propone el dictado
+  de letras y números un día de cada tres al niño que los confunde, con lo que tiene
+  que escuchar (*Listen again for G, J and 14*).
+- **Su propia voz en los juegos.** En *Class progress*, **Your voice** reúne las frases
+  fijas que dicen los juegos: las de Listening (*Listen and write*, *Listen and
+  match*, los diálogos de *Listen and tick*), las preguntas y respuestas de *Talk
+  about you*, los nombres deletreados y las letras del dictado, las instrucciones
+  del examen para imprimir y las pistas de *Spell it*. En total, 483 frases. Toca
+  *● Record*, dice la frase y toca *■ Stop*. Desde ese momento esa frase suena con
+  su voz en vez de la del navegador, en todos los juegos que la dicen. En el modo
+  lento suena algo más despacio y en el simulacro a velocidad normal. Se graba poco
+  a poco: lo que no está grabado sigue con la voz del navegador. Los diálogos de
+  *Listen and tick* tienen líneas de adulto y de niño, y las del niño puede grabarlas
+  un alumno. Las frases que la app inventa cada vez (las personas del parque, los
+  colores, los números del dictado) no se pueden grabar todas. Las grabaciones se
+  quedan en ese aparato. Para usarlas en las demás tablets, *Save my recordings to
+  a file* y, en cada tablet, *Open a recordings file*.
+- **Speaking cara a cara, como el examinador.** En el examen el Speaking es con un
+  examinador delante, no con una pantalla. En *Class progress*, el botón **Speaking
+  test** le guía para hacerlo usted con cada niño, con la tablet entre los dos: los
+  dibujos grandes son para el niño (las diferencias, la historia, el intruso) y la
+  caja gris es para usted, con lo que tiene que decir en cada parte y cómo suena una
+  buena respuesta. En una pantalla ancha se ven las dos cosas a la vez. Tras cada
+  respuesta toca *✓ Alone* o *Needed help*. Hay un reloj (el examen dura de 5 a 7
+  minutos) y al final pone la nota con la escala de Cambridge: se guarda en el álbum
+  del niño, sale en su informe y se propone sola en *Practice tests on paper* ese
+  día. Cada vez sale una prueba distinta. Al revisar los textos para esta pantalla
+  aparecieron cuatro títulos con palabras que no son de Movers (*plan*, *rainy*) y
+  conjuntos del intruso con dibujos repetidos (el brazo y el hombro con el mismo, el
+  río y el lago, una jirafa para *neck*): ya están arreglados, y una comprobación
+  nueva lo vigila.
+- **Un examen de práctica para imprimir, entero.** El examen de verdad es en papel:
+  colorear con lápices, unir con líneas, marcar casillas, escribir en las líneas. En
+  *Class progress*, el botón **Print a practice test** prepara un examen completo y
+  original: las cinco partes de Listening y las seis de Reading and Writing, con sus
+  dibujos, como en el examen (25 y 39 puntos). Se imprime el cuadernillo de los
+  niños con un botón y las hojas del profesor con otro: el guion de Listening y todas
+  las respuestas. El Listening se pone desde esa misma página, parte por parte, y
+  cada parte suena dos veces con tiempo para escribir, como en el examen (o se puede
+  leer el guion en voz alta). Cada examen tiene un número: abrir el mismo número da
+  siempre el mismo examen, así que se puede imprimir hoy y poner el audio mañana.
+  *Another test* da otro distinto. Las notas se apuntan luego en *Practice tests on
+  paper*. De paso, en *Listen and colour* la voz ya no dice *sign* (no es palabra
+  de Movers): dice dónde se escribe (*on the board*, *on the toy box*, *above the
+  door of the shop*).
+- **Exámenes de práctica en papel.** El examen de verdad es en papel, así que
+  conviene hacer en clase exámenes de muestra (los de Cambridge o los de un libro).
+  En *Class progress* hay ahora un sitio para apuntar las notas de cada niño:
+  Listening sobre 25, Reading and Writing sobre 39 y los escudos de Speaking (si ese
+  día ya le puntuó el Speaking con la escala, sale puesto). Antes de guardar ya se
+  ven los escudos, con la tabla de Cambridge (la misma del simulacro). Debajo, cada niño con su
+  último examen, si sube o baja respecto al anterior y **cuánto le falta para los 5
+  escudos en cada prueba** (*Listening +3 marks*). Sale también en el informe para la
+  familia y viaja en las copias de seguridad. Si se apunta algo mal, *Delete last*
+  lo quita. Y el informe ya se lee bien en un móvil: sus tablas caben enteras.
+- **Dictado de letras y números, para la parte 2 de Listening.** Un juego nuevo,
+  *Letters and numbers*: la voz deletrea letra a letra un nombre del examen o una
+  palabra de la página (*J-I-L-L*), o dice una frase con un número (*There are
+  fourteen children in the class*), y el niño lo escribe. En esa parte el nombre
+  deletreado tiene que quedar perfecto, y lo que falla no es el vocabulario sino el
+  oído: la A inglesa suena a nuestra E, la E a la I, la G y la J se cruzan, la B y
+  la V suenan igual, la R británica suena a A, y *fourteen* se confunde con *forty*.
+  Cuando el niño se equivoca, el juego le dice cuál era (*It is J, not G.*), le
+  marca en rojo la letra que falló y le hace oír las dos seguidas; y apunta lo que
+  confunde cada niño para traérselo más, en esa partida y en las siguientes. Si un
+  niño confunde de verdad una letra o una pareja de números (no un despiste
+  suelto), sale en su pantalla final y en el informe para la familia, con qué hacer
+  en casa. Escribir *jill*, *JILL* o *J-I-L-L* vale; el número en letra también,
+  pero le recuerda escribirlo en cifras, como recomienda el handbook. *Listen and
+  write* le manda aquí cuando falla un nombre deletreado.
+- **Casi como fotos.** Cada escena tiene ahora el acabado de una foto: el grano fino
+  de la cámara, las esquinas un poco más oscuras, la luz cálida del sol y unas
+  briznas cercanas desenfocadas abajo. Las sombras caen hacia un lado, como al sol;
+  el agua del lago y del río refleja la orilla de enfrente, los barcos y los patos;
+  la ropa tiene tejido; las caras tienen frente, pómulos y sienes con luz y sombra;
+  el pelo brilla en arco y las cejas tienen pelos; la pelota es de goma, la cometa de
+  tela, el barco de madera pintada con la vela de lona, y el hombre de nieve es de
+  nieve de verdad. Fotos de verdad no se usan: tendrían que ser de otras personas y
+  el proyecto solo lleva material propio; además cada escena se arma pieza a pieza
+  según la pregunta. Los colores que se preguntan («the girl with the pink T-shirt»)
+  siguen siendo los mismos.
+- **Dibujos casi de foto.** Ya no parecen dibujos hechos con regla: no hay
+  contornos negros y las formas las hacen la luz, la sombra y la textura, como en
+  una ilustración pintada. Las personas tienen cuerpos y caras de verdad, con el
+  pelo en mechones; los animales están dibujados por anatomía (el perro con su
+  pecho, su vientre recogido y sus patas con rodilla y corvejón; la vaca y la cabra
+  con su cadera y sus pezuñas; el gato con ojos de gato) y tienen pelo de verdad, y
+  las aves llevan las alas pluma a pluma. Los paisajes tienen hierba con textura,
+  agua con el cielo reflejado, arena con grano y colinas que se pierden en la bruma;
+  las nubes son nubes de verdad, la lluvia cae en hilos y la nieve en copos, la
+  montaña es de roca con nieve y la ola rompe con espuma. Lo que importa para el
+  examen sigue igual: cada cosa está en su sitio y del mismo tamaño, así que las
+  frases siguen diciendo la verdad (y ahora, además, el perro de la cocina y el gato
+  de la fiesta están de verdad debajo de la mesa). No se usa ninguna foto ni dibujo
+  de nadie: todo sigue siendo original.
+- **Dibujos mucho más realistas.** Las personas tienen proporciones de verdad (un
+  niño de nueve años, un adulto), ojos con iris y brillo, pestañas, nariz, labios,
+  orejas, manos con pulgar y ropa con costuras y pliegues; los animales, pelo,
+  plumas y patas con sus articulaciones; las cosas, vetas en la madera, mimbre en la
+  cesta, radios en la bici y reflejos en el cristal; y los fondos, briznas de
+  hierba, granos de arena, reflejos en el agua y suelo de tablas. Todo con la misma
+  luz. Además, los dibujos ahora hacen lo que dicen las frases: el niño que «is riding
+  a bike» va sentado en el sillín con los pies en los pedales, la cuerda de la cometa
+  sale de la mano en alto de quien la vuela, el helado, el sombrero o la cámara están
+  en la mano de quien los tiene, el hombre «sitting in the boat» va sentado dentro, y
+  el perro está sentado, corriendo o dormido según la escena. En las escenas de
+  colorear, lo que pinta el niño se ve redondo y con brillo, del color que elija.
+- **Dibujos nuevos, de libro ilustrado.** Todas las escenas se han redibujado con un
+  mismo estilo: contorno suave, luz, sombras y fondos con cielo, hierba, mar o suelo
+  de madera. Las niñas y los niños ya se distinguen (coletas y falda), igual que los
+  hombres y las mujeres y los abuelos (con gafas), con varios tonos de piel y caras
+  que se alegran, se asustan o lloran. Importa para el examen: en *Match the names*
+  se oye «the girl with the yellow T-shirt», y ahora se ve quién es la niña. Las
+  historias se cuentan solas (el hombre de nieve tiene nieve y sale el sol; la bolsa
+  de la compra, el pan y la fruta están en el dibujo) y en las escenas de colorear
+  lo que se pinta conserva sus sombras con el color que elija el niño.
+- **Más seguro en el día a día.** Una revisión del código encontró catorce cosas que
+  podían fallar con niños de verdad, y todas están arregladas: si se borra el álbum
+  del niño que estaba jugando, la app pregunta quién juega (antes lo que jugaba se
+  perdía); salir de un simulacro a medias lo para entero; apagar el reconocimiento de
+  voz mientras un niño habla lo corta en ese momento; si el aparato está lleno al
+  restaurar una copia, lo dice; la versión nueva sin internet se guarda siempre
+  entera y al día; y el plan del día solo tacha las palabras si se juega el *Word
+  gym* de esa página.
+- ***Yes or no* y *Let's talk!* hablan como en el examen.** De una persona se dice
+  el color de su camiseta («The boy's T-shirt is green»), lo que hay varias veces va
+  en plural («The ducks are swimming») y lo que hace lleva su complemento («The girl
+  is flying a kite»). Se arreglaron tres dibujos que podían confundir: el sombrero de
+  la playa parecía puesto en el perro, la pelota del jardín tapaba las piernas de la
+  niña y la manzana «debajo de la silla» estaba delante. Al escribir, *The girl has
+  got a purple T-shirt* ya cuenta como frase verdadera.
+- **Today's plan, el plan del día.** Encima del simulacro, en el álbum, cada niño ve
+  tres actividades para hoy elegidas con lo que su perfil sabe de él: la página con
+  más palabras falladas (o las que toca repasar), la parte del examen que peor lleva
+  (o una que no ha probado) y algo distinto cada día (un tablero, o el simulacro
+  cuando ya ha probado casi todas las partes y hace dos semanas del último). Se tacha
+  solo al terminar cada juego y no cambia en todo el día.
+- **Se instala y funciona sin internet.** En Chrome, Edge o Android sale la opción de
+  instalar la app (también desde *Settings*); en iPad, *Compartir → Añadir a pantalla
+  de inicio*. Después de abrirla una vez con internet, funciona sin conexión. Cuando
+  hay una versión nueva, sale un aviso azul con *Reload*.
+- **Copias de seguridad.** En *Class progress* (y en *Settings*), *Save a backup of
+  the class* descarga un archivo con todos los álbumes de ese aparato; *Restore from
+  a backup file* lo carga en otro. Al restaurar **se junta**, no se sustituye: nunca se
+  pierde un cromo ni un escudo. Desde el informe de un alumno, *Save this album*
+  guarda solo el suyo, para que siga en otra tablet o en casa.
+- **Settings (el engranaje de arriba).** Elegir la voz inglesa del aparato y probarla,
+  velocidad de práctica normal o lenta (el simulacro va siempre a la velocidad del
+  examen), quitar el sonido, encender o apagar el reconocimiento de voz, instalar la
+  app y hacer copias.
+- **Mucho más contenido**: 16 diálogos de Reading 2, 16 historias con huecos, 16
+  textos de gramática, 12 historias de lectura, 12 formularios de Listening 2, 10
+  juegos de emparejar, 24 diálogos de *Listen and tick*, 12 historias de Speaking 2,
+  diez escenas de la Parte 6 y seis de colorear (nuevas: granja y dormitorio).
+- **Todo el contenido revisado por un segundo par de ojos.** Se corrigieron 26
+  problemas que ninguna comprobación automática podía ver: datos de animales que no
+  eran verdad, palabras sobrantes que también encajaban en un hueco, explicaciones que
+  enseñaban una regla falsa, dibujos que enseñaban la respuesta, un niño que se metía
+  en un río… Y *Yes or no* ya no marca como falsa una frase que el dibujo hace verdad.
+- ***Talk about you* acepta respuestas naturales**: «No, I haven't» a *Have you got a
+  pet?*, el nombre de un amigo (aunque no sea un nombre inglés) o «It is big and
+  quiet» a *What is your town like?*. Como en
+  el examen, las grabaciones nombran cosas que no son la respuesta («Not on Tuesday.
+  It's on Thursday»).
+- **Se ve bien en un móvil** y se puede usar con teclado o lector de pantalla:
+  contraste de lectura en todos los textos, avisos que se leen en voz alta, el foco no
+  se pierde al contestar y cada pantalla pone su nombre en la pestaña.
+- **La voz ya no se cuelga** en tablets: si el navegador pierde el final de una frase,
+  la app sigue sola; los textos largos se leen por frases.
+- **Las fechas son las de Lima**: la racha ya no se rompe al jugar por la tarde.
 - **Los ocho tableros del picture book.** En el álbum hay una sección nueva, *Picture
   boards*: la juguetería, la fiesta, el médico, la casa de vacaciones del tío Charlie,
   la excursión al campo, el tiempo, la ciudad y los sueños de vacaciones. Cada tablero
   enseña sus palabras con el dibujo del álbum, un texto que se puede escuchar, cuatro
   preguntas de *Let's talk!* y tres juegos que solo usan esas palabras.
-- **Más contenido donde hacía falta.** Diez diálogos de Reading 2 (había 3), diez
-  historias con huecos de Reading 3 (había 6), diez textos de gramática de Reading 4
-  (había 6) y ocho historias de Reading 5 (había 4), todas con sus viñetas.
 - **Informe imprimible para las familias.** Desde *Class progress*, botón *Report* junto
   a cada alumno: una hoja con lo que sabe, cómo va cada parte del examen, la escala de
   Speaking, los simulacros hechos y qué practicar en casa. Botón *Print* o Ctrl+P.
@@ -33,21 +288,21 @@ Esta es la guía para el profesor: qué hace cada cosa y por qué. Lo técnico e
 
 ## Cuánto contenido hay
 
-591 piezas distintas, repartidas así:
+639 piezas distintas, repartidas así:
 
 | Parte | Piezas |
 |---|---|
 | Reading 1, definiciones | 123 |
-| Reading 2, diálogos | 10 |
-| Reading 3, historias con huecos | 10 |
-| Reading 4, textos de gramática | 10 |
-| Reading 5, historias de lectura | 8 |
-| Reading 6, escenas | 4 |
-| Listening 2, formularios | 8 |
-| Listening 3, emparejamientos | 8 |
-| Listening 4, diálogos de Listen and tick | 16 |
-| Listening 5, escenas de colorear | 4 |
-| Speaking 2, historias | 8 |
+| Reading 2, diálogos | 16 |
+| Reading 3, historias con huecos | 16 |
+| Reading 4, textos de gramática | 16 |
+| Reading 5, historias de lectura | 12 |
+| Reading 6, escenas | 10 |
+| Listening 2, formularios | 12 |
+| Listening 3, emparejamientos | 10 |
+| Listening 4, diálogos de Listen and tick | 24 |
+| Listening 5, escenas de colorear | 6 |
+| Speaking 2, historias | 12 |
 | Speaking 3, conjuntos de intruso | 32 |
 | Speaking 4, preguntas personales | 24 |
 | Tableros del picture book | 8, con 32 preguntas y 48 frases |
@@ -57,9 +312,10 @@ Esta es la guía para el profesor: qué hace cada cosa y por qué. Lo técnico e
 | Palabras compuestas | 24 |
 | Lugares de Where are they? | 22 |
 
-Las escenas están dibujadas a mano en SVG: parque, playa, clase y cocina para
-colorear; jardín, cocina, feria y playa para la Parte 6, que además alimentan
-Yes or no; y 27 piezas con 6 fondos para las viñetas de las historias.
+Las escenas están dibujadas a mano en SVG: parque, playa, clase, cocina, granja y
+dormitorio para colorear; jardín, cocina, feria, playa, parque, granja, clase, río,
+lago y fiesta de cumpleaños para la Parte 6, que además alimentan Yes or no; y unas 35 piezas con 7 fondos para
+las 36 viñetas de Reading 5 y las 48 de Speaking 2.
 
 Más los generadores, que no se agotan: las diferencias salen de una escena
 paramétrica con seis ranuras, el gimnasio recorre las 883 palabras, y -ly / -ing
@@ -72,9 +328,13 @@ La comprobación 11 vigila que ninguna de estas cifras baje de su mínimo.
 En el álbum, encima de los juegos de examen, hay una sección aparte:
 **«Practise the words on this page»**.
 
-Diez palabras por ronda, elegidas así: primero las que ha fallado, luego las que
-nunca ha visto, luego las que toca repasar. Repaso espaciado sencillo: cada
-acierto duplica la espera, un fallo la reinicia.
+Diez palabras por ronda (menos si hay muchas nuevas: como mucho seis nuevas),
+elegidas así: primero las que ha fallado, luego las que nunca ha visto, luego las
+que toca repasar. Las nuevas se presentan antes de preguntarlas (dibujo, palabra y
+voz) y las falladas vuelven tres pasos después en la misma ronda. Repaso espaciado:
+cada acierto alarga la espera hasta el repaso siguiente (0, 1, 3, 7, 16 y 35 días) y
+un fallo la reinicia; la espera sube como mucho una vez al día, así que lo que cuenta
+es acertar en días distintos.
 
 Cada palabra se pregunta de la forma que admite:
 
@@ -207,13 +467,19 @@ Dentro del simulacro cambian las reglas, a propósito:
   apaga: *Say it again (1)*, luego *No more plays*. Fuera del simulacro se puede
   repetir sin límite, porque ahí se está aprendiendo, no examinando.
 - **El texto de las instrucciones no se puede mostrar.** Desaparece el botón.
-- **Nadie dice si una respuesta está bien** hasta el final.
+- **Nadie dice si una respuesta está bien** hasta el final: ni mensajes, ni sonidos, ni
+  colores, ni la nota que va sumando, ni la respuesta buena. Solo se ve lo que el niño
+  escribió o eligió. Lo que falla se apunta en el cuaderno de errores y vuelve otro día
+  en *Fix my mistakes*.
 - **Cuando se acaba el reloj, esa prueba se corta** y lo que falta cuenta cero,
   con un aviso explicando por qué.
 
 Al terminar sale un **Statement of Results** con los escudos de cada prueba y el
-desglose parte por parte, con el mismo formato que el certificado real. Se guarda
-en el perfil del alumno (los diez últimos) y sale en su informe.
+desglose parte por parte, con el mismo formato que el certificado real. Listening y
+Reading and Writing pasan de notas a escudos con la tabla de Cambridge (5 escudos
+desde 21 de 25 y desde 33 de 39; la tabla entera está en «Lo último»), y debajo de
+cada prueba se dice cuántas notas faltan para el escudo siguiente y para los 5. Se
+guarda en el perfil del alumno (los diez últimos) y sale en su informe.
 
 ## La escala de Speaking
 
@@ -242,7 +508,14 @@ En *Class progress*, cada alumno tiene un botón **Report**. Abre una hoja con:
 - la tabla de las 15 partes con sus escudos y una palabra: *Ready* (4 o 5 escudos),
   *Nearly there* (3), *Needs practice* (1 o 2) o *Not tried yet*;
 - la escala de Speaking, con quién la puso y el comentario del profesor;
-- los simulacros hechos, por fecha y prueba;
+- los simulacros hechos, por fecha y prueba, con una línea que explica desde cuánto
+  son los 5 escudos en cada prueba (la tabla de Cambridge);
+- los exámenes de práctica en papel, con sus escudos y lo que le faltó para los 5;
+- lo que **confunde al oído**, si lo hay: las letras (la J y la G, la E y la I...) y
+  las parejas de números (14 y 40) que falla una y otra vez en el dictado, para
+  practicarlas en casa;
+- **preguntas para repasar en casa**: hasta seis de su cuaderno de errores (las que
+  más falla), con la respuesta, para preguntárselas en voz alta;
 - las palabras que sabe en cada una de las 24 páginas;
 - dos líneas para firmar.
 
@@ -253,9 +526,51 @@ aparato: se imprime desde el mismo navegador donde juega el niño.
 ## El panel del profesor
 
 `#/teacher`, o desde la pantalla de perfiles. Tabla con los escudos de cada alumno
-en cada parte del examen, cromos, racha, la nota de Speaking y en qué parte va peor.
-Desde ahí se abre el informe de cada alumno, se puntúa Speaking con la escala y se
-borran álbumes.
+en cada parte del examen, cromos, racha, la nota de Speaking, en qué parte va peor,
+qué letras y números confunde al oírlos y cuántos errores tiene por arreglar. Debajo,
+*What the class gets wrong*: las preguntas que más niños tienen sin arreglar.
+Desde ahí se abre el informe de cada alumno, se puntúa Speaking con la escala, se
+apuntan los **exámenes de práctica en papel** (las notas de cada prueba, que la app
+convierte en escudos y compara con el examen anterior), se **imprime un examen de
+práctica** entero (con su Listening para poner y sus respuestas), se hace el
+**Speaking cara a cara** con cada niño (*Speaking test*: usted hace de examinador y
+pone la nota con la escala), se graban las frases de los juegos con **su propia
+voz** (*Your voice*), se borran álbumes y se hacen las **copias de
+seguridad** de la clase (guardar y restaurar). Conviene guardar una copia de vez en cuando y siempre antes de cambiar de
+tablet o de borrar los datos del navegador.
+
+## Settings: los ajustes de cada aparato
+
+El engranaje de la barra de arriba. Lo que se cambia aquí vale para ese aparato y
+para todos los niños que juegan en él:
+
+- **Voice**: la voz inglesa que se oye en los juegos, con botón para probarla. Si el
+  aparato no tiene ninguna voz inglesa, lo dice y explica dónde se añade (Android,
+  iPad, Windows). Debajo, cuántas frases tiene grabadas con su voz y el botón *Your
+  voice* para grabar más.
+- **Speed for practice**: normal o lenta. El simulacro va siempre a la velocidad del
+  examen, para que no haya sorpresas el día de verdad.
+- **Sound**: quitar el sonido (también con el botón del altavoz de la barra).
+- **Speech recognition**: apagado por defecto (ver Speaking, parte 4). Mientras está
+  encendido sale un aviso en todas las pantallas con un botón para apagarlo. Si se
+  apaga mientras un niño está hablando, se corta en ese momento y lo oído se tira.
+- **Without internet**: si la app ya funciona sin conexión y el botón *Install the
+  album on this device*. En un iPad, instalarla además evita que Safari borre los
+  álbumes tras una semana sin usarla.
+- **Backups**: guardar y restaurar la copia de la clase.
+
+## Today's plan
+
+Tres actividades al día por niño. La primera es de palabras (la página con más
+palabras falladas; si no hay, la que toca repasar; si no, palabras nuevas), la segunda
+es la parte del examen más floja (o la primera que no ha probado) y la tercera cambia
+cada día: un tablero del picture book, o el simulacro si ya ha probado diez partes y
+hace catorce días o más del último, o *Fix my mistakes* si tiene tres errores o más
+de otros días esperando, o (un día de cada tres) el dictado de letras y
+números si confunde alguno al oírlo. El plan se decide una vez al día y se guarda, así
+que no cambia aunque el niño mejore por la tarde; cada actividad se tacha sola al
+terminar su juego (las palabras, con el *Word gym* de esa página; el tablero, en ese
+tablero; la parte del examen, el dictado y los errores, desde cualquier página). Si las hace las tres, la tarjeta se pone verde: *All done!*
 
 ## Antes de tocar nada: la revisión
 
@@ -263,8 +578,11 @@ borran álbumes.
 npm run check
 ```
 
-Dieciséis comprobaciones y un trinquete, 35 en total. Si sale **TODO EN VERDE**, se
-puede seguir construyendo. Si sale algo rojo, se arregla antes de entregar.
+Veintidós comprobaciones y un trinquete, 43 en total. Si sale **TODO EN VERDE**, se
+puede seguir construyendo. Si sale algo rojo, se arregla antes de entregar. Entre
+ellas hay una que **juega los 33 juegos de principio a fin** como lo haría un niño,
+otra que prueba la voz y el micrófono, otra que prueba la web sin internet, otra las
+copias de seguridad y las fechas, otra el plan del día y otra el cuaderno de errores.
 
 Las reglas completas están en `REVIEW.md`. La versión corta: cada comprobación
 está ahí porque ese error ya ocurrió de verdad en este proyecto.
@@ -285,6 +603,10 @@ Desde la carpeta del proyecto, cualquiera de estas dos:
 
 Y abrir la dirección que aparezca en la terminal.
 
+Publicada en una web con https (por ejemplo GitHub Pages), basta con abrir la
+dirección una vez con internet: desde ahí se puede **instalar** como una app y
+funciona sin conexión. En el aula, lo más cómodo es instalarla en cada tablet.
+
 ## Qué hay hecho
 
 - Álbum completo: 24 páginas, 883 cromos, progreso guardado en el navegador por alumno.
@@ -292,12 +614,14 @@ Y abrir la dirección que aparezca en la terminal.
 - **Quince juegos: el examen entero.** Listening 5 de 5, Reading and Writing 6 de 6 y
   Speaking 4 de 4. Los 64 puntos escritos del examen están cubiertos. En el álbum
   salen en el mismo orden que en el examen real.
-- **Dieciséis entrenamientos**: Word gym, Word hunt, Story order, Yes or no?, Add -ly
-  and -ing, What did you do yesterday?, Word pairs, A busy day, What's the matter?,
-  Where are they?, Which number?, Find the words, Opposites, What are they doing
-  today?, Let's talk! y Use the word.
+- **Diecisiete entrenamientos**: Word gym, Word hunt, Letters and numbers, Story
+  order, Yes or no?, Add -ly and -ing, What did you do yesterday?, Word pairs, A busy
+  day, What's the matter?, Where are they?, Which number?, Find the words, Opposites,
+  What are they doing today?, Let's talk! y Use the word.
 - Ocho tableros del picture book, simulacro completo, escala de Speaking, panel del
   profesor e informe imprimible.
+- Plan del día por niño, ajustes de voz y sonido, instalación y uso sin internet, y
+  copias de seguridad de un alumno o de la clase.
 
 ## Cómo funciona cada parte de Listening
 
@@ -317,14 +641,24 @@ corrección sigue tres reglas distintas del handbook:
 - Los números en letra puntúan, pero se le recomienda escribirlos en cifras, que es
   lo que dice el handbook para no perder el punto por ortografía.
 
-**Parte 3, Listen and match.** Siete imágenes con letra, cinco respuestas. Las dos que
-sobran también se mencionan en el audio, igual que en el examen, y al terminar se le
-explica por qué: hay que escuchar la frase entera, no cazar la primera palabra.
+Como en la grabación real, a veces se dice primero lo que no es (*Not a hat. We want
+to buy him a scarf*): hay que escuchar hasta el final de la frase. Doce formularios.
+Para entrenar el oído de esta parte está *Letters and numbers*: nombres deletreados
+letra a letra y números como *fourteen* y *forty*, con lo que confunde cada niño
+apuntado para que le salga más.
+
+**Parte 3, Listen and match.** Ocho imágenes con letra, seis personas o días (la
+primera es el ejemplo) y cinco respuestas. Las dos imágenes que sobran también se
+mencionan en el audio, igual que en el examen, y a veces se nombra una imagen que es
+de otra persona (*My dad wanted to take the bus too, but he goes by train*). Al
+terminar se le explica por qué: hay que escuchar la frase entera, no cazar la primera
+palabra. Diez juegos.
 
 **Parte 4, Listen and tick.** Cinco diálogos entre un adulto y un niño, una pregunta y
 tres dibujos (A, B, C). En cada diálogo se nombran los tres y se descartan dos, así que
-hay que escuchar hasta el final. *Word hunt* (oír la palabra y tocar el dibujo) sigue
-como entrenamiento de vocabulario.
+hay que escuchar hasta el final; a veces lo descartado es de otra persona (*My uncle
+gave me a kite. Grandma gave me a robot*). Veinticuatro diálogos. *Word hunt* (oír la
+palabra y tocar el dibujo) sigue como entrenamiento de vocabulario.
 
 **Parte 5, Listen and colour.** Cinco preguntas: cuatro de colorear y una de escribir,
 como en el examen real. La voz lee la instrucción con `speechSynthesis` del navegador,
@@ -354,17 +688,17 @@ puntos cuesta en esa parte del examen. Las 123 definiciones están en
 contesta el segundo. Seis puntos. Cada respuesta lleva su explicación: por qué esa y no
 las otras. El detalle que trabaja: **no todas las líneas son preguntas**. A veces la otra
 persona solo te cuenta algo, le ofrece ayuda o se despide, y ahí no vale contestar sí
-o no. Es el fallo que señala el handbook. Diez diálogos.
+o no. Es el fallo que señala el handbook. Dieciséis diálogos.
 
 **Parte 3, Fill the story.** Nueve palabras, cinco huecos, cuatro palabras que sobran.
 Y al final, elegir el mejor título entre tres. Seis puntos. Al terminar se le dice qué
-cuatro palabras no se usaban nunca. Diez historias.
+cuatro palabras no se usaban nunca. Dieciséis historias.
 
 **Parte 4, Choose the right word.** Cinco huecos y tres opciones cada uno, con **foco
 gramatical**, que es lo que mide esta parte. Los huecos no son de vocabulario: son
 `can't` frente a `don't`, `where` frente a `which`, `better than`, `because`, `their`.
 Cada acierto y cada fallo llevan la regla escrita: *"Where" is for places*, *With "than"
-you need the comparative*. Diez textos.
+you need the comparative*. Dieciséis textos.
 
 **Parte 5, Read and answer.** 7 puntos. Una historia en tres secciones, cada una con
 su viñeta, y siete frases que completar con una, dos o tres palabras. Dos reglas del
@@ -372,7 +706,7 @@ handbook que el juego respeta y explica al alumno: **los dibujos no dan la respu
 (acompañan, nada más; todas las respuestas están en el texto) y **la ortografía tiene
 que ser exacta** (si escribe la palabra correcta mal escrita, se lo dice con ese
 mensaje concreto). El texto queda siempre visible mientras responde, como en el
-examen. Las ocho historias están enteras en pasado simple, que es justo la gramática
+examen. Las doce historias están enteras en pasado simple, que es justo la gramática
 que separa Movers de Starters. Al añadir una, comprobar que cada respuesta aparezca
 literalmente en el texto y que no pase de tres palabras.
 
@@ -395,14 +729,16 @@ paramétrica: `src/data/scenes/garden.js` define seis ranuras (cielo, pelota, co
 flores, gato, pájaro) y cada partida cambia cuatro de ellas. El examinador describe su
 dibujo (*In my picture the ball is under the tree. And in your picture?*), el niño dice
 la diferencia y después oye el modelo. Si toca algo que es igual, se lo dice y cuenta:
-cada tres toques equivocados pierde un punto.
+cada tres toques equivocados pierde un punto. En el simulacro no se busca tocando: el
+examinador señala cada diferencia y dice su frase, el niño dice la suya y no hay modelo,
+como en el examen.
 
 **Parte 2, Tell the story.** La tarea real: los cuatro dibujos en orden, el examinador
 dice el título y cuenta el primero, y el niño cuenta los otros tres hablando
 (micrófono, grabación, o escribiendo lo que dijo si no hay micrófono). Después de cada
 dibujo oye una forma de decirlo. Contar el dibujo puntúa silencio 0, algo 1, frase con
 sentido 2. La antigua versión (ordenar los dibujos y montar las frases) sigue como
-entrenamiento, *Story order*. Las ocho historias están en `src/data/stories.js`; las
+entrenamiento, *Story order*. Las doce historias están en `src/data/stories.js`; las
 viñetas se componen con las piezas de `src/data/scenes/pieces.js`.
 
 **Parte 3, The odd one out.** Tres pasos por conjunto, porque en el examen no basta con
@@ -432,6 +768,12 @@ un punto por contestar y otro por contestar algo que tenga que ver con la pregun
 frases de socorro: *Sorry?*, *Can you say that again, please?*, *I don't understand*.
 El handbook insiste en que callarse cuesta puntos de interacción y pedir ayuda no.
 
+**Y cara a cara.** Los cuatro juegos preparan al niño, pero en el examen hay una
+persona delante. *Speaking test*, en *Class progress*, le guía para hacer usted de
+examinador: saludo, las cuatro partes con sus dibujos para el niño y su guion para
+usted (con cómo suena una buena respuesta), y la nota con la escala al final. Los
+dibujos del intruso son solo los que se entienden sin palabras, como en el examen.
+
 ## El álbum cubre el 100 % del wordlist
 
 `src/data/wordlist.js` se genera **extrayendo el PDF oficial con `pdftotext`**, no a
@@ -458,23 +800,27 @@ que ha escrito no entra en su examen.
 
 ## Estructura
 
-    index.html
+    index.html, manifest.webmanifest, sw.js, precache-list.js, icons/
     src/
       main.js              arranque y rutas
-      core/                dom, eventos, almacenamiento, estado, router, audio, voz
+      core/                dom, eventos, almacenamiento, estado, router, audio, voz,
+                           grabaciones del profesor, ajustes, fechas, sin internet
       data/                vocabulario, temas, tableros, contenido de cada juego,
                            escenas SVG
-      engine/              puntuación, progreso, vocabulario, formas de palabra,
-                           escala de Speaking, simulacro, informe
+      engine/              puntuación, progreso, vocabulario, lo que se
+                           confunde al oído, formas de palabra, escala de
+                           Speaking, simulacro, exámenes en papel, examen para
+                           imprimir, Speaking cara a cara, informe, copias, plan,
+                           cuaderno de errores y ortografía letra a letra
       games/               registro + un módulo por juego (15 del examen,
-                           16 de entrenamiento)
+                           18 de entrenamiento)
       ui/                  barra superior, álbum, tablero, perfiles, panel del
-                           profesor, informe, simulacro, contenedor de juegos,
-                           componentes compartidos
+                           profesor, informe, simulacro, ajustes, copias,
+                           contenedor de juegos, componentes compartidos
       styles/              fuentes, tokens, base, shell, álbum, juego, informe
       fonts/               woff2 empaquetados (Baloo 2, Atkinson Hyperlegible)
-    checks/                las 16 comprobaciones y la línea base del trinquete
-    tools/                 el generador del álbum desde el PDF oficial
+    checks/                las 22 comprobaciones y la línea base del trinquete
+    tools/                 el generador del álbum desde el PDF oficial y ayudas
 
 Cada juego expone la misma interfaz (`mount(root, ctx)` que devuelve `{ destroy }`),
 así que añadir uno nuevo solo requiere crear su carpeta en `games/` y darlo de alta
@@ -505,5 +851,17 @@ actividades son originales.
 
 Todo se guarda en el navegador del dispositivo, en `localStorage`. No hay servidor,
 no hay cuentas y nada sale del aparato. Si borras los datos del navegador, se van
-los álbumes. El panel del profesor y el informe solo leen lo que hay en ese mismo
-dispositivo.
+los álbumes: por eso existen las **copias de seguridad**, que son un archivo que se
+guarda donde uno quiera (no se envía a ningún sitio). Al crear el primer álbum, la app
+pide al navegador que no borre sus datos por falta de espacio; si aun así el aparato
+se llena, sale un aviso en todas las pantallas para hacer una copia. El panel del profesor y el informe
+solo leen lo que hay en ese mismo dispositivo.
+
+La única excepción es el reconocimiento de voz, apagado por defecto: si se enciende,
+Chrome y Edge envían el sonido a sus servidores para transcribirlo, y mientras está
+encendido lo dice un aviso en todas las pantallas.
+
+Las grabaciones de *Your voice* (su voz, o la de un alumno si le pide que grabe las
+líneas del niño) se guardan solo en ese aparato, en el almacén del navegador. No van
+en las copias de los álbumes. Solo salen de ahí si usted las guarda en un archivo
+para llevarlas a otra tablet.

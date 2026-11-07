@@ -3,7 +3,7 @@ import { GAMES } from '../src/games/registry.js';
 export const name = 'Fidelidad al examen real';
 
 // Las 15 partes del examen y lo que vale cada una, segun el handbook oficial.
-const EXAM = [
+export const EXAM = [
   ['Listening \u00b7 part 1', 5], ['Listening \u00b7 part 2', 5], ['Listening \u00b7 part 3', 5],
   ['Listening \u00b7 part 4', 5], ['Listening \u00b7 part 5', 5],
   ['Reading \u00b7 part 1', 5], ['Reading \u00b7 part 2', 6], ['Reading \u00b7 part 3', 6],

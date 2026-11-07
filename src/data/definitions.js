@@ -6,7 +6,7 @@ import { WORDS } from './wordlist.js';
 
 export const DEFINITIONS = {
   animals: [
-    { id: 'bee', answer: 'a bee', clue: 'This small animal makes a lot of noise and it can fly. Do not catch it!' },
+    { id: 'bee', answer: 'a bee', clue: 'This small yellow and black animal can fly. Do not catch it!' },
     { id: 'cow', answer: 'a cow', clue: 'This big farm animal gives us milk.' },
     { id: 'crocodile', answer: 'a crocodile', clue: 'This long green animal lives in the river and it has a lot of teeth.' },
     { id: 'giraffe', answer: 'a giraffe', clue: 'This animal has a very long neck and it can eat the leaves at the top of a tree.' },
@@ -42,7 +42,7 @@ export const DEFINITIONS = {
     { id: 'plate', answer: 'a plate', clue: 'You put your food on this before you eat.' },
     { id: 'bowl', answer: 'a bowl', clue: 'This is round and you eat soup from it.' },
     { id: 'picnic', answer: 'a picnic', clue: 'You eat this outside, in a park or in a field.' },
-    { id: 'vegetable', answer: 'a vegetable', clue: 'Carrots and potatoes are this kind of food.' },
+    { id: 'vegetable', answer: 'a vegetable', clue: 'A carrot is this kind of food.' },
     { id: 'milkshake', answer: 'a milkshake', clue: 'This cold drink is made with milk and it is very sweet.' },
   ],
   town: [
@@ -67,7 +67,7 @@ export const DEFINITIONS = {
     { id: 'lake', answer: 'a lake', clue: 'This water is not the sea. There is grass and trees all around it.' },
     { id: 'forest', answer: 'a forest', clue: 'There are a lot of trees in this place.' },
     { id: 'waterfall', answer: 'a waterfall', clue: 'The water in the river falls down here.' },
-    { id: 'moon', answer: 'the moon', clue: 'You can see this in the sky at night.' },
+    { id: 'moon', answer: 'the moon', clue: 'You can see this in the sky at night. There is only one.' },
   ],
   health: [
     { id: 'cough', answer: 'a cough', clue: 'You have this when your neck hurts and you make a noise.' },
@@ -104,7 +104,7 @@ export const DEFINITIONS = {
     { id: 'rainbow', answer: 'a rainbow', clue: 'You see this in the sky after the rain. It has a lot of colours.' },
     { id: 'cloud', answer: 'a cloud', clue: 'This is white or grey and you can see it in the sky.' },
     { id: 'snow', answer: 'snow', clue: 'This is white and cold and it falls when the weather is very cold.' },
-    { id: 'ice', answer: 'ice', clue: 'This is very cold water. You can put it in your drink.' },
+    { id: 'ice', answer: 'ice', clue: 'When water is very, very cold, it is this. You can put it in your drink.' },
     { id: 'wind', answer: 'wind', clue: 'You can\u2019t see this, but it moves the leaves on the trees.' },
   ],
   transport: [
@@ -156,7 +156,7 @@ export const DEFINITIONS = {
     { id: 'kite', answer: 'a kite', clue: 'You take this to the park when it is windy and it flies in the sky.' },
     { id: 'balloon', answer: 'a balloon', clue: 'This is round and children play with it at a party.' },
     { id: 'robot', answer: 'a robot', clue: 'This toy is a machine and it can walk and talk.' },
-    { id: 'helicopter', answer: 'a helicopter', clue: 'This flies in the sky but it is not a plane.' },
+    { id: 'helicopter', answer: 'a helicopter', clue: 'People can fly in this, but it is not a plane.' },
   ],
 };
 

@@ -8,8 +8,10 @@ import { h, mount as fill } from '../core/dom.js';
 import { reportFor, READY_AT, HOME_TIPS } from '../engine/report.js';
 import { SPEAKING_SCALE } from '../data/speaking-scale.js';
 import { PAPERS } from '../engine/mock.js';
-import { MAX_SHIELDS } from '../engine/scoring.js';
+import { MAX_SHIELDS, marksToGo } from '../engine/scoring.js';
 import * as router from '../core/router.js';
+import { saveBackup } from './backup.js';
+import { testShields, MARKS } from '../engine/paperTests.js';
 
 /** @typedef {import('../engine/report.js').Report} Report */
 /** @typedef {import('../engine/report.js').PartLine} PartLine */
@@ -73,6 +75,17 @@ function speakingBlock(report) {
   ]);
 }
 
+/**
+ * Como se pasa de notas a escudos en una prueba entera (simulacros y examenes
+ * en papel): la tabla de Cambridge, con los numeros de data/shield-table.js.
+ */
+function tableNote() {
+  const five = (/** @type {'listening' | 'reading'} */ id) => `${marksToGo(id, 0).fiveAt} of ${PAPERS.find((p) => p.id === id)?.marks}`;
+  return h('p', { class: 'report-small' },
+    `A whole paper gets its shields from Cambridge’s table for practice tests: 5 shields from ${five('listening')} in Listening `
+    + `and from ${five('reading')} in Reading and Writing. Speaking has no marks: its shields come from the examiner’s scale.`);
+}
+
 /** @param {Report} report */
 function mocksBlock(report) {
   if (!report.mocks.length) return h('p', { class: 'report-muted' }, 'No mock test finished yet.');
@@ -106,6 +119,75 @@ function practiseBlock(report) {
   ])));
 }
 
+/**
+ * Los examenes de practica en papel: los ultimos, con los escudos de cada
+ * prueba, y cuanto falta para los 5.
+ * @param {Report} report
+ */
+function paperBlock(report) {
+  if (!report.paperTests.length) return h('p', { class: 'report-muted' }, 'No practice test on paper recorded yet.');
+  const last = report.paperTests.slice(-5);
+  /** @param {number | null} marks @param {number | null} n @param {number} [outOf] */
+  const cell = (marks, n, outOf) => (n === null
+    ? h('td', { class: 'report-muted' }, '–')
+    : h('td', {}, [shields(n), marks === null ? null : h('small', {}, `${marks}/${outOf}`)]));
+  const gaps = report.paperProgress.filter((p) => p.toFive).map((p) => `${p.label} ${p.toFive} more mark${p.toFive === 1 ? '' : 's'}`);
+  return h('div', {}, [
+    h('table', { class: 'report-table report-table--mocks' }, [
+      h('thead', {}, h('tr', {}, [h('th', {}, 'Date'), ...PAPERS.map((p) => h('th', {}, p.label)), h('th', {}, 'Total')])),
+      h('tbody', {}, last.map((t) => {
+        const s = testShields(t);
+        return h('tr', {}, [
+          h('td', {}, [t.when, t.name ? h('small', {}, t.name) : null]),
+          cell(t.listening, s.listening, MARKS.listening),
+          cell(t.reading, s.reading, MARKS.reading),
+          cell(null, s.speaking),
+          h('td', {}, h('b', {}, `${s.total} / ${s.outOf}`)),
+        ]);
+      })),
+    ]),
+    gaps.length ? h('p', { class: 'report-small' }, `For 5 shields in the last test it needed: ${gaps.join(', ')}.`) : null,
+  ]);
+}
+
+/**
+ * Las preguntas del cuaderno de errores que mas falla, con su respuesta, para
+ * que la familia se las pregunte en casa. Nada si no tiene ninguna.
+ * @param {Report} report
+ */
+function mistakesBlock(report) {
+  if (!report.mistakes.length) return null;
+  return h('div', { class: 'report-mistakes' }, [
+    h('p', {}, [
+      h('b', {}, 'Questions to go over at home: '),
+      `${report.mistakesWaiting} question${report.mistakesWaiting === 1 ? '' : 's'} the child got wrong and has not fixed yet. `
+      + 'Ask these out loud; the answer is after the arrow.',
+    ]),
+    h('ol', {}, report.mistakes.map((m) => h('li', {}, [m.prompt, ' \u2192 ', h('b', {}, m.answer)]))),
+  ]);
+}
+
+/** "J, E and G" @param {string[]} list */
+const listOf = (list) => (list.length > 1 ? `${list.slice(0, -1).join(', ')} and ${list[list.length - 1]}` : list.join(''));
+
+/**
+ * Lo que confunde al oido (del dictado de letras y numeros), si hay algo.
+ * @param {Report} report
+ */
+function hearingBlock(report) {
+  const { letters, numbers } = report.hearing;
+  if (!letters.length && !numbers.length) return null;
+  const what = [
+    letters.length ? `the letter${letters.length > 1 ? 's' : ''} ${listOf(letters)}` : '',
+    numbers.length ? `numbers like ${numbers.map(([a, b]) => `${a} and ${b}`).join(', or ')}` : '',
+  ].filter(Boolean).join(', and ');
+  return h('p', { class: 'report-hearing' }, [
+    h('b', {}, 'Listening for spelling: '),
+    `when they are spoken, the child often mixes up ${what}. `
+    + 'Spell names letter by letter for the child to write, and say those numbers for the child to write.',
+  ]);
+}
+
 /** @param {Report} report */
 function pagesBlock(report) {
   return h('div', { class: 'report-pages' }, report.pages.map((page) => {
@@ -136,6 +218,7 @@ export function renderReport(container, profileId) {
     h('div', { class: 'game-head report-actions' }, [
       h('button', { class: 'btn', onClick: () => router.go('/teacher') }, '← Class progress'),
       h('div', { class: 'spacer' }),
+      h('button', { class: 'btn', onClick: () => saveBackup([profileId]) }, 'Save this album'),
       h('button', { class: 'btn btn--go', onClick: () => window.print() }, 'Print'),
     ]),
     h('header', { class: 'report-head' }, [
@@ -146,13 +229,18 @@ export function renderReport(container, profileId) {
     summary(report),
     h('h3', { class: 'report-title' }, 'What to practise at home'),
     practiseBlock(report),
+    hearingBlock(report),
+    mistakesBlock(report),
     h('h3', { class: 'report-title' }, 'The test, part by part'),
     h('p', { class: 'report-small' }, `Shields show the best result in each part: ${READY_AT} or ${MAX_SHIELDS} means the child is ready for that part.`),
     partsTable(report),
     h('h3', { class: 'report-title' }, 'Speaking, with the examiner’s scale'),
     speakingBlock(report),
     h('h3', { class: 'report-title' }, 'Mock tests'),
+    tableNote(),
     mocksBlock(report),
+    h('h3', { class: 'report-title' }, 'Practice tests on paper'),
+    paperBlock(report),
     h('h3', { class: 'report-title' }, 'Words known, page by page'),
     pagesBlock(report),
     h('footer', { class: 'report-foot' }, [

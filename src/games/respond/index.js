@@ -3,13 +3,16 @@ import { speak, cue, stop as stopVoice } from '../../core/audio.js';
 import { getTopic } from '../../data/topics.js';
 import { randomDialogue } from '../../data/dialogues.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
+import { noteMistake } from '../../engine/mistakes.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { isQuiet, QUIET_PAUSE_MS, PICKED, hideScoreInExam } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'respond', title: 'What do you say?' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let dialogue = randomDialogue();
   let index = 0;
@@ -19,9 +22,10 @@ export function mount(root, ctx = {}) {
 
   const counter = h('span', { class: 'counter' });
   const marksChip = h('span', { class: 'marks-chip' });
+  hideScoreInExam(marksChip, ctx);
   const thread = h('div', { class: 'chat' });
   const options = h('div', { class: 'chat-options' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const head = h('div', { class: 'game-head' }, [
@@ -50,9 +54,27 @@ export function mount(root, ctx = {}) {
     answers.push({ turn, ok, chosen: i });
     marksChip.textContent = `${score} / ${dialogue.turns.length} marks`;
 
-    addBubble('b', turn.options[i], ok ? 'is-ok' : 'is-no');
-    if (!ok) addBubble('b', turn.options[turn.answer], 'is-fix');
+    // En el simulacro, solo lo que eligio el nino, sin color ni la respuesta buena.
+    addBubble('b', turn.options[i], quiet ? PICKED : ok ? 'is-ok' : 'is-no');
+    if (!ok && !quiet) addBubble('b', turn.options[turn.answer], 'is-fix');
+    // El fallo vuelve otro dia en "Fix my mistakes", con su porque.
+    if (!ok) {
+      noteMistake({
+        game: 'respond',
+        kind: 'choose',
+        prompt: `${dialogue.speakers[0]}: ${turn.line}`,
+        options: turn.options,
+        answer: turn.options[turn.answer],
+        why: turn.why,
+        after: turn.options[turn.answer],
+        given: turn.options[i],
+      });
+    }
 
+    if (quiet) {
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
     feedback.textContent = ok ? `Yes. ${turn.why}` : `Not this one. ${turn.why}`;
     feedback.className = `spell-feedback spell-feedback--${ok ? 'ok' : 'no'}`;
     cue(ok ? 'correct' : 'wrong');
@@ -88,7 +110,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total });
     const shields = shieldsFor(score, total);
     recordShields('respond', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, Math.round(score / 2));
 
     fill(stage, h('div', { class: 'result' }, [

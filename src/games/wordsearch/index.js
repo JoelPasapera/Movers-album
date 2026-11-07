@@ -4,7 +4,7 @@ import { getTopic } from '../../data/topics.js';
 import { buildGrid, matchSelection, cellsOf } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
 import { shieldRow } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { practised } from '../../engine/progress.js';
 
 export const meta = { id: 'wordsearch', title: 'Find the words' };
 
@@ -18,7 +18,7 @@ export function mount(root, ctx = {}) {
   const counter = h('span', { class: 'counter' });
   const grid = h('div', { class: 'ws-grid' });
   const list = h('div', { class: 'ws-list' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const head = h('div', { class: 'game-head' }, [
@@ -66,7 +66,7 @@ export function mount(root, ctx = {}) {
     const score = Math.max(0, total - Math.floor(misses / 3));
     const shields = shieldsFor(score, total);
     if (ctx.onFinish) return ctx.onFinish({ score, total });
-    state.touchStreak();
+    practised(meta.id);
     fill(stage, h('div', { class: 'result' }, [
       h('h2', {}, `All ${total} words found`),
       shieldRow(shields),
@@ -89,7 +89,7 @@ export function mount(root, ctx = {}) {
       dataset: { r: String(r), c: String(c) },
       onClick: () => tap(r, c),
     }, letter))));
-    grid.style.gridTemplateColumns = `repeat(${round.grid.length}, 1fr)`;
+    grid.style.gridTemplateColumns = `repeat(${round.grid.length}, minmax(0, 1fr))`;
     fill(list, ...round.words.map((w) => h('span', { class: 'ws-word', dataset: { word: w.word } }, w.word.toLowerCase())));
     fill(stage,
       h('p', { class: 'bank-hint' }, 'Find the words. Tap the first letter, then the last letter. Words go across, down or diagonal.'),

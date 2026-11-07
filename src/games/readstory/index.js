@@ -5,13 +5,15 @@ import { randomStory } from '../../data/reading-stories.js';
 import { renderPanel } from '../../data/scenes/pieces.js';
 import { buildRound, checkAnswer, feedbackFor } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { isQuiet, QUIET_PAUSE_MS, hideScoreInExam } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'readstory', title: 'Read and answer' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let source = randomStory();
   let round = buildRound(source);
@@ -22,10 +24,11 @@ export function mount(root, ctx = {}) {
 
   const counter = h('span', { class: 'counter' });
   const marksChip = h('span', { class: 'marks-chip' });
+  hideScoreInExam(marksChip, ctx);
   const toastSlot = h('span');
   const storyBox = h('div', { class: 'read-story' });
   const promptLine = h('p', { class: 'p6-prompt' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const input = h('input', {
@@ -34,7 +37,7 @@ export function mount(root, ctx = {}) {
     autocomplete: 'off',
     autocapitalize: 'off',
     spellcheck: 'false',
-    placeholder: 'one, two or three words',
+    placeholder: 'up to three words',
     'aria-label': 'Complete the sentence',
   });
 
@@ -76,7 +79,7 @@ export function mount(root, ctx = {}) {
       feedback.textContent = result.kind === 'empty'
         ? 'Write the missing words.'
         : 'Use one, two or three words only.';
-      feedback.className = 'spell-feedback spell-feedback--no';
+      feedback.className = quiet ? 'spell-feedback' : 'spell-feedback spell-feedback--no';
       input.focus();
       return;
     }
@@ -86,6 +89,10 @@ export function mount(root, ctx = {}) {
     if (ok) score += 1;
     answers.push({ question, value: input.value.trim(), ok, kind: result.kind });
     marksChip.textContent = `${score} / ${round.questions.length} marks`;
+    if (quiet) {
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
 
     feedback.textContent = feedbackFor(result, question);
     feedback.className = `spell-feedback spell-feedback--${ok ? 'ok' : 'no'}`;
@@ -122,7 +129,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total });
     const shields = shieldsFor(score, total);
     recordShields('readstory', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, Math.round(score / 2));
     const spellingSlips = answers.filter((a) => a.kind === 'spelling').length;
 

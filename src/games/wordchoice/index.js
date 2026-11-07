@@ -3,13 +3,16 @@ import { cue, stop as stopVoice } from '../../core/audio.js';
 import { getTopic } from '../../data/topics.js';
 import { randomCloze } from '../../data/cloze.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
+import { noteMistake, gapSentence } from '../../engine/mistakes.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
-import * as state from '../../core/state.js';
+import { isQuiet, QUIET_PAUSE_MS, PICKED, hideScoreInExam } from '../../ui/components/examQuiet.js';
 
 export const meta = { id: 'wordchoice', title: 'Choose the right word' };
 
 export function mount(root, ctx = {}) {
+  // En el simulacro no se dice si una respuesta esta bien (ui/components/examQuiet.js).
+  const quiet = isQuiet(ctx);
   const topic = getTopic(ctx.topicId);
   let cloze = randomCloze();
   let index = 0;
@@ -19,9 +22,10 @@ export function mount(root, ctx = {}) {
 
   const counter = h('span', { class: 'counter' });
   const marksChip = h('span', { class: 'marks-chip' });
+  hideScoreInExam(marksChip, ctx);
   const text = h('p', { class: 'gap-text' });
   const options = h('div', { class: 'chat-options' });
-  const feedback = h('p', { class: 'spell-feedback' });
+  const feedback = h('p', { class: 'spell-feedback', 'aria-live': 'polite' });
   const stage = h('div');
 
   const head = h('div', { class: 'game-head' }, [
@@ -39,8 +43,9 @@ export function mount(root, ctx = {}) {
       const filled = answers[i];
       const slot = h('span', {
         class: `gap-slot${i === index ? ' is-active' : ''}`,
-      }, filled ? filled.word : '\u2026');
-      if (filled) slot.classList.add(filled.ok ? 'is-ok' : 'is-no');
+      }, filled ? (quiet ? filled.given : filled.word) : '\u2026');
+      // En el simulacro, la palabra que eligio el nino y sin color.
+      if (filled) slot.classList.add(quiet ? PICKED : filled.ok ? 'is-ok' : 'is-no');
       return [chunk, slot];
     }));
   }
@@ -52,8 +57,24 @@ export function mount(root, ctx = {}) {
     const ok = i === gap.answer;
     if (ok) score += 1;
     answers[index] = { word: gap.options[gap.answer], given: gap.options[i], ok };
+    // La frase del hueco vuelve otro dia en "Fix my mistakes", con su regla.
+    if (!ok) {
+      noteMistake({
+        game: 'wordchoice',
+        kind: 'choose',
+        prompt: gapSentence(cloze.parts[index] ?? '', cloze.parts[index + 1] ?? ''),
+        options: gap.options,
+        answer: gap.options[gap.answer],
+        why: gap.why,
+        given: gap.options[i],
+      });
+    }
     marksChip.textContent = `${score} / ${cloze.gaps.length} marks`;
     paintText();
+    if (quiet) {
+      setTimeout(next, QUIET_PAUSE_MS);
+      return;
+    }
     feedback.textContent = ok ? `Yes. ${gap.why}` : `Not that one. ${gap.why}`;
     feedback.className = `spell-feedback spell-feedback--${ok ? 'ok' : 'no'}`;
     cue(ok ? 'correct' : 'wrong');
@@ -85,7 +106,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total });
     const shields = shieldsFor(score, total);
     recordShields('wordchoice', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, Math.round(score / 2));
 
     fill(stage, h('div', { class: 'result' }, [

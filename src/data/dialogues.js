@@ -25,13 +25,13 @@ export const DIALOGUES = [
         line: 'There was a baby elephant, too.',
         options: ['I know, I saw it!', 'Yes, it does.', 'No, it isn\u2019t.'],
         answer: 0,
-        why: 'This is not a question, it is news. You answer news, you do not say yes or no.',
+        why: 'This is not a question, it is news. Your answer must go with the news.',
       },
       {
         line: 'Would you like to go again next week?',
         options: ['Yes, I was.', 'Yes, please!', 'Yes, I like.'],
         answer: 1,
-        why: '"Would you like\u2026?" always takes "Yes, please" or "No, thank you".',
+        why: '"Would you like\u2026?" is an offer. You can say "Yes, please" or "No, thank you".',
       },
       {
         line: 'Let\u2019s ask my mum first.',
@@ -59,10 +59,10 @@ export const DIALOGUES = [
         why: '"Would you like\u2026?" is an offer, so you ask for the thing you want.',
       },
       {
-        line: 'Can I have a milkshake too?',
+        line: 'Can you carry this bag, Jack?',
         options: ['Yes, I can.', 'Yes, you can.', 'Yes, it is.'],
-        answer: 1,
-        why: 'Jack asked about himself, so his mum answers about him: "you can".',
+        answer: 0,
+        why: 'Mum asks about you, so you answer about you: "I can".',
       },
       {
         line: 'This bread is bigger than that one.',
@@ -77,7 +77,7 @@ export const DIALOGUES = [
         why: '"How many\u2026?" asks for a number, not for yes or no.',
       },
       {
-        line: 'I\u2019m very thirsty, Mum.',
+        line: 'I\u2019m very thirsty, Jack. Can I have some water?',
         options: ['Here you are.', 'Here I am.', 'Thank you.'],
         answer: 0,
         why: 'When you give someone something, you say "Here you are".',
@@ -127,7 +127,7 @@ DIALOGUES.push({
       line: 'Can you give my book to the teacher?',
       options: ['Yes, I can give it to her.', 'Yes, I give her it.', 'Yes, to her I give.'],
       answer: 0,
-      why: 'You give something TO someone. The thing comes first, then "to" and the person.',
+      why: 'You give something TO someone. With "it", you say "give it to her".',
     },
     {
       line: 'Let\u2019s go for a walk on Saturday.',
@@ -230,7 +230,7 @@ DIALOGUES.push(
   },
   {
     id: 'party',
-    title: 'Peter and Lily plan a party',
+    title: 'Peter and Lily talk about a party',
     speakers: ['Peter', 'Lily'],
     turns: [
       {
@@ -240,7 +240,7 @@ DIALOGUES.push(
         why: '"When…?" asks about the day or the time.',
       },
       {
-        line: 'Are you going to have a party?',
+        line: 'Are you having a party?',
         options: ['Yes, I am.', 'Yes, I do.', 'Yes, I have.'],
         answer: 0,
         why: 'The question starts with "Are you…?", so the short answer is "Yes, I am".',
@@ -261,7 +261,7 @@ DIALOGUES.push(
         line: 'My mum says I must be home before eight.',
         options: ['That’s OK. The party ends at seven.', 'Yes, she does.', 'No, you aren’t.'],
         answer: 0,
-        why: 'This is news about his mum. You answer the news, you do not say yes or no.',
+        why: 'This is news about his mum. Your answer must go with the news.',
       },
       {
         line: 'See you on Friday, then!',
@@ -289,20 +289,20 @@ DIALOGUES.push(
         why: 'When someone gives you two things to choose, you say which one.',
       },
       {
-        line: 'The black ones are bigger than the brown ones.',
+        line: 'The brown ones are bigger than the black ones.',
         options: ['Yes, they’re brown.', 'Then I want the brown ones.', 'No, it isn’t.'],
         answer: 1,
-        why: 'She is comparing the shoes. Your answer must make sense with "bigger".',
+        why: 'Your old shoes are too small, so you want the bigger ones.',
       },
       {
         line: 'Would you like an ice cream after this?',
         options: ['Yes, I would like.', 'Yes, I like.', 'Yes, please!'],
         answer: 2,
-        why: '"Would you like…?" always takes "Yes, please" or "No, thank you".',
+        why: '"Would you like…?" is an offer. You can say "Yes, please" or "No, thank you".',
       },
       {
         line: 'Oh no, I haven’t got my bag!',
-        options: ['Look! It’s in the car.', 'Yes, you have.', 'It’s a bag.'],
+        options: ['Look! It’s in the car.', 'No, you aren’t.', 'It’s a bag.'],
         answer: 0,
         why: 'This is a problem. You help her.',
       },
@@ -359,7 +359,7 @@ DIALOGUES.push(
   },
   {
     id: 'rainyday',
-    title: 'Mary and Vicky on a rainy day',
+    title: 'Mary and Vicky on a wet day',
     speakers: ['Mary', 'Vicky'],
     turns: [
       {
@@ -402,11 +402,11 @@ DIALOGUES.push(
   },
   {
     id: 'picnic',
-    title: 'Jack and his grandma plan a picnic',
+    title: 'Jack and his grandma talk about a picnic',
     speakers: ['Grandma', 'Jack'],
     turns: [
       {
-        line: 'Would you like to go for a picnic on Sunday, Jack?',
+        line: 'Would you like to go for a picnic today, Jack?',
         options: ['Yes, I went.', 'Yes, that’s a great idea.', 'Yes, I would like.'],
         answer: 1,
         why: '"Would you like…?" You say yes or no, and you can say why.',
@@ -440,6 +440,270 @@ DIALOGUES.push(
         options: ['Yes, it was.', 'No, I’m a coat.', 'OK, Grandma.'],
         answer: 2,
         why: 'She is telling you what to do. You say OK.',
+      },
+    ],
+  },
+);
+
+// Seis dialogos mas (otono de 2026): biblioteca, piscina, cocina, granja,
+// una mascota nueva y una bici. Mitad preguntas, mitad frases que no son
+// preguntas, y la respuesta buena en cualquiera de las tres posiciones.
+DIALOGUES.push(
+  {
+    id: 'library',
+    title: 'Clare at the library',
+    speakers: ['Mr Green', 'Clare'],
+    turns: [
+      {
+        line: 'Good morning, Clare. What are you looking for today?',
+        options: ['Yes, I’m looking.', 'A book about dolphins.', 'It was in the morning.'],
+        answer: 1,
+        why: '"What…?" asks for a thing. Say which thing you want.',
+      },
+      {
+        line: 'Do you come to the library every week?',
+        options: ['Yes, I come.', 'Yes, I am.', 'Yes, I do.'],
+        answer: 2,
+        why: 'The question starts with "Do", so the short answer is "Yes, I do".',
+      },
+      {
+        line: 'The books about sea animals are next to the window.',
+        options: ['Thank you! I can see them now.', 'Yes, the window is big.', 'No, they aren’t animals.'],
+        answer: 0,
+        why: 'He is helping you find the books, so you say thank you.',
+      },
+      {
+        line: 'Which one would you like, the big one or the small one?',
+        options: ['Yes, I would.', 'It’s bigger.', 'The big one, please.'],
+        answer: 2,
+        why: '"Which one…?" asks you to choose one of the two things.',
+      },
+      {
+        line: 'You can take it home for two weeks.',
+        options: ['It’s my home.', 'That’s great!', 'I’m two.'],
+        answer: 1,
+        why: 'This is good news, not a question. Say that you are happy.',
+      },
+      {
+        line: 'Please bring it back in two weeks.',
+        options: ['OK. See you then!', 'Yes, it was Saturday.', 'No, I didn’t bring it.'],
+        answer: 0,
+        why: 'He asks you to do something. You say OK.',
+      },
+    ],
+  },
+  {
+    id: 'swimming',
+    title: 'Peter’s swimming lesson',
+    speakers: ['Teacher', 'Peter'],
+    turns: [
+      {
+        line: 'Hello, Peter. Can you swim?',
+        options: ['Yes, I do.', 'Yes, I can. I love it!', 'Yes, I swam.'],
+        answer: 1,
+        why: '"Can you…?" takes "Yes, I can" or "No, I can’t".',
+      },
+      {
+        line: 'Where is your towel?',
+        options: ['It’s in my bag.', 'It’s blue and white.', 'Yes, it is.'],
+        answer: 0,
+        why: '"Where…?" asks for a place.',
+      },
+      {
+        line: 'You swim more quickly than your friends now!',
+        options: ['Yes, they are my friends.', 'No, I don’t swim.', 'Thanks! I love swimming.'],
+        answer: 2,
+        why: 'She is saying something nice about you. You say thank you.',
+      },
+      {
+        line: 'How often do you come to the swimming pool?',
+        options: ['At ten o’clock.', 'Every Saturday.', 'Yes, I often come.'],
+        answer: 1,
+        why: '"How often…?" asks how many times, like "every Saturday".',
+      },
+      {
+        line: 'Shall I help you in the big pool?',
+        options: ['No, thank you. I can do it.', 'No, I shall.', 'Yes, it is big.'],
+        answer: 0,
+        why: '"Shall I…?" is an offer. Say "Yes, please" or "No, thank you".',
+      },
+      {
+        line: 'Well done, Peter! That was your best swim.',
+        options: ['Yes, it was your swim.', 'Thank you! Can I go again?', 'Well, I’m Peter.'],
+        answer: 1,
+        why: 'She says "Well done!". You say thank you.',
+      },
+    ],
+  },
+  {
+    id: 'pancakes',
+    title: 'Lily and her dad make pancakes',
+    speakers: ['Dad', 'Lily'],
+    turns: [
+      {
+        line: 'Shall we make pancakes for breakfast, Lily?',
+        options: ['Yes, we made them.', 'No, it’s breakfast.', 'Yes! I love pancakes.'],
+        answer: 2,
+        why: '"Shall we…?" is a plan. Say yes or no to the plan.',
+      },
+      {
+        line: 'Can you get me the milk, please?',
+        options: ['Here you are.', 'Yes, I got.', 'It’s milk.'],
+        answer: 0,
+        why: 'When someone asks you for a thing, you give it and say "Here you are".',
+      },
+      {
+        line: 'How many eggs do we need?',
+        options: ['Yes, we need.', 'Two, I think.', 'They’re white.'],
+        answer: 1,
+        why: '"How many…?" asks for a number.',
+      },
+      {
+        line: 'This pancake is better than the first one.',
+        options: ['Yes, I’m better.', 'No, it’s the first one.', 'Yes, and it’s bigger too!'],
+        answer: 2,
+        why: 'Dad is talking about two pancakes. Your answer must talk about the pancake.',
+      },
+      {
+        line: 'Oh no! I dropped a plate.',
+        options: ['That’s OK, Dad. I can help you.', 'Yes, you dropped it.', 'It’s a plate.'],
+        answer: 0,
+        why: 'Something bad happened. Say something kind and help.',
+      },
+      {
+        line: 'Go and tell your brother. We’re having breakfast now.',
+        options: ['Yes, I told him yesterday.', 'OK, I’m going now.', 'He isn’t hungry.'],
+        answer: 1,
+        why: 'Dad asks you to do something now, so you say OK.',
+      },
+    ],
+  },
+  {
+    id: 'farm',
+    title: 'Fred’s class at the farm',
+    speakers: ['Miss Hill', 'Fred'],
+    turns: [
+      {
+        line: 'Have you got your coat, Fred? It’s cold at the farm.',
+        options: ['Yes, it’s a farm.', 'Yes, it’s in my bag.', 'Yes, I’m cold.'],
+        answer: 1,
+        why: 'She asks about your coat. The answer must talk about the coat.',
+      },
+      {
+        line: 'Look! What are those animals behind the tree?',
+        options: ['They’re behind the tree.', 'Yes, they are.', 'They’re goats.'],
+        answer: 2,
+        why: '"What…?" asks for a name. Say what the animals are.',
+      },
+      {
+        line: 'The farmer wants us to give the chickens some food.',
+        options: ['Can I do it first?', 'Yes, he is a farmer.', 'No, I’m not a chicken.'],
+        answer: 0,
+        why: 'This is not a question. It is a plan, and you want to help.',
+      },
+      {
+        line: 'Whose bag is this on the grass?',
+        options: ['It’s on the grass.', 'It’s mine.', 'Yes, it’s a bag.'],
+        answer: 1,
+        why: '"Whose…?" asks who has got it: mine, yours, his or hers.',
+      },
+      {
+        line: 'We must go back to the bus at three o’clock.',
+        options: ['It’s a big bus.', 'No, it was three.', 'OK, I’m coming.'],
+        answer: 2,
+        why: '"Must" means you have to do it. You say OK.',
+      },
+      {
+        line: 'Did you like the farm, Fred?',
+        options: ['Yes, I did. It was great!', 'Yes, I like.', 'Yes, I was.'],
+        answer: 0,
+        why: 'The question starts with "Did", so the answer is "Yes, I did".',
+      },
+    ],
+  },
+  {
+    id: 'kitten',
+    title: 'Julia’s new kitten',
+    speakers: ['Grandpa', 'Julia'],
+    turns: [
+      {
+        line: 'What a beautiful kitten, Julia! What’s it called?',
+        options: ['It’s a kitten.', 'It’s called Lucy.', 'Yes, it is.'],
+        answer: 1,
+        why: '"What’s it called?" asks for a name.',
+      },
+      {
+        line: 'How old is it?',
+        options: ['Ten weeks old.', 'It’s very small.', 'Yes, it’s old.'],
+        answer: 0,
+        why: '"How old…?" asks for a number of weeks or years.',
+      },
+      {
+        line: 'Your kitten is sleeping in my hat!',
+        options: ['Yes, it’s your hat.', 'No, it isn’t a hat.', 'Sorry, Grandpa! I can take it out.'],
+        answer: 2,
+        why: 'Grandpa needs his hat. Say sorry and help.',
+      },
+      {
+        line: 'What does it like eating?',
+        options: ['It likes eat fish.', 'Fish and chicken.', 'Yes, it does.'],
+        answer: 1,
+        why: '"What…?" asks for things. Say which food.',
+      },
+      {
+        line: 'Shall I buy it a ball to play with?',
+        options: ['Yes, please! It loves playing.', 'Yes, you shall.', 'No, it’s a cat.'],
+        answer: 0,
+        why: '"Shall I…?" is an offer. Say "Yes, please" or "No, thank you".',
+      },
+      {
+        line: 'Bring it to my house next Sunday.',
+        options: ['I brought it.', 'Yes, it’s your house.', 'OK, Grandpa!'],
+        answer: 2,
+        why: 'Grandpa asks you to do something. You say OK.',
+      },
+    ],
+  },
+  {
+    id: 'bike',
+    title: 'Daisy’s new bike',
+    speakers: ['Paul', 'Daisy'],
+    turns: [
+      {
+        line: 'Is that your new bike, Daisy?',
+        options: ['Yes, I am.', 'Yes, it is. Do you like it?', 'Yes, it does.'],
+        answer: 1,
+        why: '"Is that…?" takes "Yes, it is" or "No, it isn’t".',
+      },
+      {
+        line: 'Who gave it to you?',
+        options: ['My uncle did.', 'I gave it to him.', 'It’s for you.'],
+        answer: 0,
+        why: '"Who…?" asks for a person.',
+      },
+      {
+        line: 'I like the colour. Green is my favourite!',
+        options: ['No, it’s green.', 'Yes, it’s my bike.', 'Mine too!'],
+        answer: 2,
+        why: 'Paul is not asking a question. He tells you what he likes, and you can say you like it too.',
+      },
+      {
+        line: 'Where shall we ride?',
+        options: ['On Monday.', 'In the park.', 'Yes, we shall.'],
+        answer: 1,
+        why: '"Where…?" asks for a place, not a day.',
+      },
+      {
+        line: 'My mum says we must ride slowly near the road.',
+        options: ['OK, we can do that.', 'No, the road is near.', 'Yes, she rides slowly.'],
+        answer: 0,
+        why: '"Must" is a rule. You say OK.',
+      },
+      {
+        line: 'Let’s go to the park at four o’clock.',
+        options: ['It’s four o’clock.', 'Yes, I went there.', 'Great! See you there.'],
+        answer: 2,
+        why: 'Paul makes a plan. You say yes to the plan.',
       },
     ],
   },

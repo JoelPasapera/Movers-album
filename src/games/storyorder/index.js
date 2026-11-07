@@ -4,8 +4,7 @@ import { getTopic } from '../../data/topics.js';
 import { renderPanel } from '../../data/scenes/pieces.js';
 import { buildRound, scoreOrder, checkSentence } from './questions.js';
 import { shieldsFor, verdict } from '../../engine/scoring.js';
-import { unlockNext, recordShields } from '../../engine/progress.js';
-import * as state from '../../core/state.js';
+import { unlockNext, recordShields, practised } from '../../engine/progress.js';
 import { shieldRow, stickerBlock } from '../../ui/components/rewards.js';
 
 // Entrenamiento: ordenar las cuatro vinetas y reconstruir cada frase. Era la
@@ -169,7 +168,7 @@ export function mount(root, ctx = {}) {
     if (ctx.onFinish) return ctx.onFinish({ score: score, total: total });
     const shields = shieldsFor(score, total);
     recordShields('storyorder', shields);
-    state.touchStreak();
+    practised(meta.id);
     const unlocked = unlockNext(topic.id, Math.round(score / 2));
 
     fill(stage, h('div', { class: 'result' }, [

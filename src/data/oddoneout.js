@@ -54,7 +54,7 @@ export const SETS = [
   {
     id: 'water-trees',
     groupLabel: 'places with water', oddLabel: 'a place with trees',
-    group: ['river', 'lake', 'waterfall'], odd: 'forest',
+    group: ['river', 'sea', 'waterfall'], odd: 'forest',
   },
   {
     id: 'table-travel',
@@ -63,7 +63,7 @@ export const SETS = [
   },
   {
     id: 'travel-clothes',
-    groupLabel: 'things about trains and buses', oddLabel: 'clothes',
+    groupLabel: 'things about trains and buses', oddLabel: 'a thing you wear',
     group: ['bus stop', 'station', 'ticket'], odd: 'helmet',
   },
   {
@@ -93,11 +93,11 @@ export const SETS = [
 SETS.push(
   { id: 'fruit-vegetable', groupLabel: 'fruit', oddLabel: 'a vegetable',
     group: ['apple', 'banana', 'grape'], odd: 'carrot' },
-  { id: 'body-clothes', groupLabel: 'parts of your body', oddLabel: 'clothes',
-    group: ['arm', 'neck', 'shoulder'], odd: 'scarf' },
+  { id: 'body-clothes', groupLabel: 'parts of your body', oddLabel: 'a thing you wear',
+    group: ['arm', 'leg', 'hand'], odd: 'scarf' },
   { id: 'farm-sea', groupLabel: 'animals on a farm', oddLabel: 'an animal in the sea',
     group: ['cow', 'goat', 'sheep'], odd: 'dolphin' },
-  { id: 'school-kitchen', groupLabel: 'things you write with', oddLabel: 'a thing in the kitchen',
+  { id: 'school-kitchen', groupLabel: 'things in your school bag', oddLabel: 'a thing in the kitchen',
     group: ['pencil', 'ruler', 'eraser'], odd: 'plate' },
   { id: 'wear-eat', groupLabel: 'things you wear', oddLabel: 'a thing you eat',
     group: ['coat', 'helmet', 'sweater'], odd: 'pancake' },
@@ -106,11 +106,11 @@ SETS.push(
   { id: 'sky-ground2', groupLabel: 'things that can fly', oddLabel: 'a thing on the road',
     group: ['bird', 'plane', 'kite'], odd: 'bus' },
   { id: 'drink-food2', groupLabel: 'things you drink', oddLabel: 'a thing you eat',
-    group: ['juice', 'lemonade', 'water'], odd: 'sausage' },
+    group: ['juice', 'milk', 'water'], odd: 'sausage' },
   { id: 'family-friend', groupLabel: 'people in your family', oddLabel: 'a person at school',
     group: ['aunt', 'uncle', 'cousin'], odd: 'teacher' },
-  { id: 'wet-dry', groupLabel: 'things with water', oddLabel: 'a very dry place',
-    group: ['river', 'lake', 'sea'], odd: 'field' },
+  { id: 'wet-dry', groupLabel: 'places with water', oddLabel: 'a place with grass',
+    group: ['lake', 'sea', 'waterfall'], odd: 'field' },
   { id: 'toys-food', groupLabel: 'toys', oddLabel: 'food',
     group: ['doll', 'robot', 'balloon'], odd: 'burger' },
   { id: 'hot-cold', groupLabel: 'things you do when it is cold', oddLabel: 'a thing you do when it is hot',
@@ -146,6 +146,15 @@ export function buildSet(set) {
 }
 
 export const allSets = () => SETS.map(buildSet);
+
+/**
+ * Los conjuntos que se pueden ensenar solo con dibujos (el Speaking cara a
+ * cara, como en el examen): los cuatro con dibujo y los cuatro distintos. Los
+ * demas (la familia, lo que haces cuando hace frio) se juegan con palabras.
+ * @param {ReturnType<typeof buildSet>} set
+ */
+export const drawable = (set) => set.items.every((i) => i.icon && i.icon !== '\u2753')
+  && new Set(set.items.map((i) => i.icon)).size === set.items.length;
 
 export const groupLabels = () => SETS.map((s) => s.groupLabel);
 export const oddLabels = () => SETS.map((s) => s.oddLabel);

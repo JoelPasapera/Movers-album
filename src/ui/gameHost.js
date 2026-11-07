@@ -1,10 +1,16 @@
+// @ts-check
 import { h, mount as fill } from '../core/dom.js';
 import { getGame } from '../games/registry.js';
 import * as router from '../core/router.js';
+import { setPageTitle } from './pageTitle.js';
 
 let active = null;
+/** Cada vez que se abre (o se deja) un juego, cambia: un juego que termina de
+ * cargar cuando ya no se quiere no se monta. */
+let ticket = 0;
 
 export function unmountActive() {
+  ticket += 1;
   if (active?.destroy) active.destroy();
   active = null;
 }
@@ -25,13 +31,17 @@ export async function renderGame(container, gameId, topicId, extra = {}) {
     return;
   }
   fill(container, h('div', { class: 'card' }, h('p', {}, 'Loading\u2026')));
+  const mine = ticket;
   try {
     const module = await game.load();
+    // Mientras cargaba, el nino se fue a otra pantalla (o abrio otro juego).
+    if (mine !== ticket) return;
     active = module.mount(container, {
       ...extra,
       topicId,
       onExit: () => router.go(back),
     });
+    setPageTitle(game.title);
   } catch (error) {
     console.error('[gameHost] could not start', gameId, error);
     fill(container, h('div', { class: 'card' }, [
