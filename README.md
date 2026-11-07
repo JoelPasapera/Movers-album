@@ -4,8 +4,9 @@ Web de práctica para el examen **Cambridge English A1 Movers**, para niños de 
 años. Interfaz en inglés. Sin build, sin dependencias. Se instala como una app y
 funciona sin internet.
 
-Este archivo es el punto de entrada. Si eres una sesión nueva de Claude, léelo
-entero antes de tocar nada, y después lee `CLAUDE.md` y `REVIEW.md`.
+Web de práctica para el examen **Cambridge English A1 Movers**, para niños de 7 a 11
+años. Interfaz en inglés. Sin build, sin dependencias, sin conexión a internet.
+ 
 
 ---
 
